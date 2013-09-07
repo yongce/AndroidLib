@@ -1,0 +1,8 @@
+bin/*
+gen/*
+.classpath
+.project
+local.properties
+libs/*.properties
+tests/bin/*
+tests/gen/*
