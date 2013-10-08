@@ -1,9 +1,9 @@
-package me.tyc.androidlib.internalapi.android.os;
+package me.ycdev.androidlib.internalapi.android.os;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import me.tyc.androidlib.internalapi.utils.LibLogger;
+import me.ycdev.androidlib.internalapi.utils.LibLogger;
 
 public class SystemPropertiesIA {
     private static final String TAG = "SystemBuildPropCompat";

@@ -1,7 +1,7 @@
-package me.tyc.androidlib.internalapi.tests.android.os;
+package me.ycdev.androidlib.internalapi.tests.android.os;
 
-import me.tyc.androidlib.internalapi.android.os.SystemPropertiesIA;
-import me.tyc.androidlib.internalapi.tests.utils.Logger;
+import me.ycdev.androidlib.internalapi.android.os.SystemPropertiesIA;
+import me.ycdev.androidlib.internalapi.tests.utils.Logger;
 
 import android.os.Build;
 import android.test.AndroidTestCase;

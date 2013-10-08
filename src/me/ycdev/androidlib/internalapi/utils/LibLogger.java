@@ -1,12 +1,12 @@
-package me.tyc.androidlib.internalapi.tests.utils;
+package me.ycdev.androidlib.internalapi.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import android.util.Log;
 
-public class Logger {
-    public static final String  TAG = "InternalApisTest";
+public class LibLogger {
+    public static final String  TAG = "InternalApis";
 
     public static void v(String subTag, String msg) {
         Log.v(TAG, getLogMsg(subTag, msg));
