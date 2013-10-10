@@ -1,4 +1,4 @@
-AndroidInternalApis
-===================
+AndroidLib
+==========
 
-This library is provided to access Android internal classes and hidden methods.
+Common utils for Android apps development

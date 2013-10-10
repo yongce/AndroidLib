@@ -4,8 +4,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import me.ycdev.androidlib.internalapi.LibConfigs;
-import me.ycdev.androidlib.internalapi.utils.LibLogger;
+import me.ycdev.androidlib.LibConfigs;
+import me.ycdev.androidlib.utils.LibLogger;
 
 import android.os.Environment;
 

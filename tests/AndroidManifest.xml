@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- package name must be unique so suffix with "tests" so package loader doesn't ignore us -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.ycdev.androidlib.internalapi.tests"
+    package="me.ycdev.androidlib.tests"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -21,7 +21,7 @@
     -->
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
-        android:label="Tests for me.ycdev.androidlib.internalapi"
-        android:targetPackage="me.ycdev.androidlib.internalapi.tests" />
+        android:label="Tests for me.ycdev.androidlib"
+        android:targetPackage="me.ycdev.androidlib.tests" />
 
 </manifest>
