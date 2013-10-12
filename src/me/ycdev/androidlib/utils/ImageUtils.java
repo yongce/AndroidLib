@@ -182,4 +182,19 @@ public class ImageUtils {
         }
         return inSampleSize;
     }
+
+
+    /**
+     * Get the size in bytes of a bitmap.
+     * @param value
+     * @return size in bytes
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+    public static int getBitmapSize(Bitmap bitmap) {
+        if (AndroidVersionUtils.hasHoneycombMR1()) {
+            return bitmap.getByteCount();
+        }
+        return bitmap.getRowBytes() * bitmap.getHeight();
+    }
+
 }
