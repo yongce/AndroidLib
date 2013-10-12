@@ -1,8 +1,11 @@
 package me.ycdev.androidlib.utils;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.StrictMode;
 
 public class DebugUtils {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void enableStrictMode() {
         if (AndroidVersionUtils.hasGingerbread()) {
             StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
