@@ -74,6 +74,7 @@ public class StorageUtils {
      * @return true if the external storage is emulated, false otherwise.
      * @see Environment#isExternalStorageEmulated()
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static boolean isExternalStorageEmulated() {
         if (AndroidVersionUtils.hasHoneycomb()) {
             return Environment.isExternalStorageEmulated();
