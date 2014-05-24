@@ -20,6 +20,13 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    /**
+     * @return null will be returned if no data set.
+     */
+    public List<T> getData() {
+        return mList;
+    }
+
     @Override
     public int getCount() {
         return mList != null ? mList.size(): 0;
