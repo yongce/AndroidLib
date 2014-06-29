@@ -90,9 +90,9 @@
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
     <!-- Rules for creating jar -->
-    <property name="custom.out.jar.file" value="${out.dir}/AndroidInternalApis.jar" />
+    <property name="custom.out.jar.file" value="${out.dir}/AndroidLib.jar" />
     <property name="custom.sh.gen_version" value="${basedir}/gen_version.sh" />
-    <property name="custom.out.version.file" value="${out.dir}/AndroidInternalApis-version" />
+    <property name="custom.out.version.file" value="${out.dir}/AndroidLib-version" />
 
     <target name="jar" depends="clean, debug"
             description="Compile the library source files to a jar file" >
