@@ -1,4 +1,4 @@
-package me.ycdev.androidlib.base;
+package me.ycdev.androidlib.utils;
 
 import java.lang.ref.WeakReference;
 
