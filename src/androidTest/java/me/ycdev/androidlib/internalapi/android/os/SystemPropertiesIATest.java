@@ -1,10 +1,9 @@
-package me.ycdev.androidlib.tests.internalapi.android.os;
-
-import me.ycdev.androidlib.internalapi.android.os.SystemPropertiesIA;
-import me.ycdev.androidlib.tests.utils.Logger;
+package me.ycdev.androidlib.internalapi.android.os;
 
 import android.os.Build;
 import android.test.AndroidTestCase;
+
+import me.ycdev.androidlib.utils.Logger;
 
 public class SystemPropertiesIATest extends AndroidTestCase {
     private static final String TAG = "SystemPropertiesIATest";

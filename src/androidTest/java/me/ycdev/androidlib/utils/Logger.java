@@ -1,4 +1,4 @@
-package me.ycdev.androidlib.tests.utils;
+package me.ycdev.androidlib.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
