@@ -40,4 +40,8 @@ public class PowerManagerIATest extends AndroidTestCase {
     public void testCrash() {
         assertTrue(PowerManagerIA.checkCrashReflect());
     }
+
+    public void testGoToSleep() {
+        assertTrue(PowerManagerIA.checkGoToSleepReflect());
+    }
 }

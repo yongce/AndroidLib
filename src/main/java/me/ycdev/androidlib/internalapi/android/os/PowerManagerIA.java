@@ -1,5 +1,7 @@
 package me.ycdev.androidlib.internalapi.android.os;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.IBinder;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +17,11 @@ public class PowerManagerIA {
     private static final int API_VERSION_1 = 1;
     private static final int API_VERSION_2 = 2;
 
+    /**
+     * Go to sleep reason code: Going to sleep due by user request.
+     */
+    private static final int GO_TO_SLEEP_REASON_USER = 0;
+
     private static Method sMtdAsInterface;
 
     private static Class<?> sPowerMgrClass;
@@ -22,6 +29,7 @@ public class PowerManagerIA {
     private static int sMtdRebootVersion;
     private static Method sMtdShutdown;
     private static Method sMtdCrash;
+    private static Method sMtdGoToSleep;
 
     static {
         try {
@@ -57,6 +65,14 @@ public class PowerManagerIA {
         return null;
     }
 
+    public static Object getIPowerManager() {
+        IBinder binder = ServiceManagerIA.getService(Context.POWER_SERVICE);
+        if (binder != null) {
+            return asInterface(binder);
+        }
+        return null;
+    }
+
     private static void reflectMethodReboot() {
         if (sMtdReboot != null || sPowerMgrClass == null) {
             return;
@@ -64,7 +80,7 @@ public class PowerManagerIA {
 
         try {
             try {
-                // Android 4.1 and older versions: void reboot(String reason);
+                // Android 2.2 ~ Android 4.1: void reboot(String reason);
                 sMtdReboot = sPowerMgrClass.getMethod("reboot", String.class);
                 sMtdRebootVersion = API_VERSION_1;
             } catch (NoSuchMethodException e) {
@@ -155,7 +171,7 @@ public class PowerManagerIA {
         }
 
         try {
-            // void crash(String message);
+            // Android 2.2 and next versions: void crash(String message);
             sMtdCrash = sPowerMgrClass.getMethod("crash", String.class);
         } catch (NoSuchMethodException e) {
             if (DEBUG) LibLogger.w(TAG, "method not found", e);
@@ -185,4 +201,51 @@ public class PowerManagerIA {
         return sMtdCrash != null;
     }
 
+    private static void reflectGoToSleep() {
+        if (sMtdGoToSleep != null || sPowerMgrClass == null) {
+            return;
+        }
+
+        try {
+            try {
+                // Android 2.2 ~ Android 4.1: void goToSleepWithReason(long time, int reason);
+                sMtdGoToSleep = sPowerMgrClass.getMethod("goToSleepWithReason", long.class, int.class);
+            } catch (NoSuchMethodException e) {
+                // Android 4.2: void goToSleep(long time, int reason);
+                sMtdGoToSleep = sPowerMgrClass.getMethod("goToSleep", long.class, int.class);
+            }
+        } catch (NoSuchMethodException e) {
+            if (DEBUG) LibLogger.w(TAG, "method not found", e);
+        }
+    }
+
+    /**
+     * Forces the device to go to sleep.
+     * @param service
+     * @param time The time when the request to go to sleep was issued,
+     *             in the {@link android.os.SystemClock#uptimeMillis()} time base.
+     *             This timestamp is used to correctly order the go to sleep request with
+     *             other power management functions. It should be set to the timestamp
+     *             of the input event that caused the request to go to sleep.
+     * @see android.os.PowerManager#goToSleep(long)
+     */
+    public static void goToSleep(Object service, long time) {
+        reflectGoToSleep();
+        if (sMtdGoToSleep != null) {
+            try {
+                sMtdGoToSleep.invoke(service, time, GO_TO_SLEEP_REASON_USER);
+            } catch (IllegalAccessException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
+            }
+        } else {
+            if (DEBUG) LibLogger.w(TAG, "#crash() not available");
+        }
+    }
+
+    static boolean checkGoToSleepReflect() {
+        reflectGoToSleep();
+        return sMtdGoToSleep != null;
+    }
 }
