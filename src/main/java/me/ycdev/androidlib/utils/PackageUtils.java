@@ -1,6 +1,8 @@
 package me.ycdev.androidlib.utils;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
 public class PackageUtils {
@@ -13,5 +15,13 @@ public class PackageUtils {
             // the app had been uninstalled already
         }
         return true; // by default
+    }
+
+    public static boolean isPkgEnabled(ApplicationInfo appInfo) {
+        return appInfo.enabled;
+    }
+
+    public static boolean isPkgSystem(ApplicationInfo appInfo) {
+        return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 }
