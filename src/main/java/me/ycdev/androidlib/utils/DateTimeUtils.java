@@ -1,5 +1,6 @@
 package me.ycdev.androidlib.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -11,6 +12,14 @@ public class DateTimeUtils {
      */
     public static String generateFileName(long sysTime) {
         return new SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).format(new Date(sysTime));
+    }
+
+    /**
+     * Parse system time from string in the format "yyyyMMdd-HHmmss-SSS",
+     * @param timeStr Time string in the format "yyyyMMdd-HHmmss-SSS"
+     */
+    public static long parseFileName(String timeStr) throws ParseException {
+        return new SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).parse(timeStr).getTime();
     }
 
     /**
