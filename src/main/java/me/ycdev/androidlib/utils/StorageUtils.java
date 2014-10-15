@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.os.StatFs;
 
 public class StorageUtils {
-
     /**
      * Returns the number of usable free bytes on the partition containing this path.
      * Returns 0 if this path does not exist.
