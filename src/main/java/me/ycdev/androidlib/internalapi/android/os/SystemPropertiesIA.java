@@ -8,28 +8,32 @@ import me.ycdev.androidlib.utils.LibLogger;
 public class SystemPropertiesIA {
     private static final String TAG = "SystemBuildPropCompat";
 
-    private static Method sMtdGet2;
-    private static Method sMtdGetInt;
-    private static Method sMtdGetLong;
-    private static Method sMtdGetBoolean;
+    private static Method sMtd_get;
+    private static Method sMtd_getInt;
+    private static Method sMtd_getLong;
+    private static Method sMtd_getBoolean;
 
     static {
         try {
             Class<?> classObj = Class.forName("android.os.SystemProperties", false,
                     Thread.currentThread().getContextClassLoader());
-            sMtdGet2 = classObj.getMethod("get", String.class, String.class);
-            sMtdGetInt = classObj.getMethod("getInt", String.class, int.class);
-            sMtdGetLong = classObj.getMethod("getLong", String.class, long.class);
-            sMtdGetBoolean = classObj.getMethod("getBoolean", String.class, boolean.class);
+            sMtd_get = classObj.getMethod("get", String.class, String.class);
+            sMtd_getInt = classObj.getMethod("getInt", String.class, int.class);
+            sMtd_getLong = classObj.getMethod("getLong", String.class, long.class);
+            sMtd_getBoolean = classObj.getMethod("getBoolean", String.class, boolean.class);
         } catch (Exception e) {
             LibLogger.w(TAG, "Failed to reflect SystemProperties", e);
         }
     }
 
+    private SystemPropertiesIA() {
+        // nothing to do
+    }
+
     public static String get(String key, String def) {
-        if (sMtdGet2 != null) {
+        if (sMtd_get != null) {
             try {
-                Object result = sMtdGet2.invoke(null, key, def);
+                Object result = sMtd_get.invoke(null, key, def);
                 return (String) result;
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, String)", e);
@@ -45,9 +49,9 @@ public class SystemPropertiesIA {
     }
 
     public static int getInt(String key, int def) {
-        if (sMtdGetInt != null) {
+        if (sMtd_getInt != null) {
             try {
-                Object result = sMtdGetInt.invoke(null, key, def);
+                Object result = sMtd_getInt.invoke(null, key, def);
                 return (Integer) result;
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, int)", e);
@@ -63,9 +67,9 @@ public class SystemPropertiesIA {
     }
 
     public static long getLong(String key, long def) {
-        if (sMtdGetLong != null) {
+        if (sMtd_getLong != null) {
             try {
-                Object result = sMtdGetLong.invoke(null, key, def);
+                Object result = sMtd_getLong.invoke(null, key, def);
                 return (Long) result;
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, long)", e);
@@ -81,9 +85,9 @@ public class SystemPropertiesIA {
     }
 
     public static boolean getBoolean(String key, boolean def) {
-        if (sMtdGetBoolean != null) {
+        if (sMtd_getBoolean != null) {
             try {
-                Object result = sMtdGetBoolean.invoke(null, key, def);
+                Object result = sMtd_getBoolean.invoke(null, key, def);
                 return (Boolean) result;
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, boolean)", e);

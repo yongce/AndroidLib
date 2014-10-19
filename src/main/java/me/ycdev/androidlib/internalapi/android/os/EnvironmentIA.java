@@ -12,15 +12,15 @@ import android.os.Environment;
 public class EnvironmentIA {
     private static final String TAG = "EnvironmentIA";
 
-    private static Method sMtdGetExternalStorageAndroidDataDir;
-    private static Method sMtdIsEncryptedFilesystemEnabled;
-    private static Method sMtdGetSecureDataDirectory;
-    private static Method sMtdGetSystemSecureDirectory;
+    private static Method sMtd_getExternalStorageAndroidDataDir;
+    private static Method sMtd_isEncryptedFilesystemEnabled;
+    private static Method sMtd_getSecureDataDirectory;
+    private static Method sMtd_getSystemSecureDirectory;
 
     static {
         try {
             // API 8: File getExternalStorageAndroidDataDir()
-            sMtdGetExternalStorageAndroidDataDir = Environment.class.getMethod(
+            sMtd_getExternalStorageAndroidDataDir = Environment.class.getMethod(
                     "getExternalStorageAndroidDataDir");
         } catch (NoSuchMethodException e) {
             if (LibConfigs.DEBUG_LOG) {
@@ -30,7 +30,7 @@ public class EnvironmentIA {
 
         try {
             // API 9: boolean isEncryptedFilesystemEnabled()
-            sMtdIsEncryptedFilesystemEnabled = Environment.class.getMethod(
+            sMtd_isEncryptedFilesystemEnabled = Environment.class.getMethod(
                     "isEncryptedFilesystemEnabled");
         } catch (NoSuchMethodException e) {
             if (LibConfigs.DEBUG_LOG) {
@@ -40,7 +40,7 @@ public class EnvironmentIA {
 
         try {
             // API 9: File getSecureDataDirectory()
-            sMtdGetSecureDataDirectory = Environment.class.getMethod(
+            sMtd_getSecureDataDirectory = Environment.class.getMethod(
                     "getSecureDataDirectory");
         } catch (NoSuchMethodException e) {
             if (LibConfigs.DEBUG_LOG) {
@@ -50,7 +50,7 @@ public class EnvironmentIA {
 
         try {
             // API 9: File getSystemSecureDirectory()
-            sMtdGetSystemSecureDirectory = Environment.class.getMethod(
+            sMtd_getSystemSecureDirectory = Environment.class.getMethod(
                     "getSystemSecureDirectory");
         } catch (NoSuchMethodException e) {
             if (LibConfigs.DEBUG_LOG) {
@@ -59,14 +59,18 @@ public class EnvironmentIA {
         }
     }
 
+    private EnvironmentIA() {
+        // nothing to do
+    }
+
     /**
      * Same to the hided method Environment#getExternalStorageAndroidDataDir() (API 8)
      * @return null may be returned if the method not supported or failed to invoke it
      */
     public static File getExternalStorageAndroidDataDir() {
-        if (sMtdGetExternalStorageAndroidDataDir != null) {
+        if (sMtd_getExternalStorageAndroidDataDir != null) {
             try {
-                return (File) sMtdGetExternalStorageAndroidDataDir.invoke(null);
+                return (File) sMtd_getExternalStorageAndroidDataDir.invoke(null);
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke #getExternalStorageAndroidDataDir()", e);
             } catch (IllegalAccessException e) {
@@ -84,9 +88,9 @@ public class EnvironmentIA {
      * Same to the hided Environment#isEncryptedFilesystemEnabled() (API 9)
      */
     public static boolean isEncryptedFilesystemEnabled() {
-        if (sMtdIsEncryptedFilesystemEnabled != null) {
+        if (sMtd_isEncryptedFilesystemEnabled != null) {
             try {
-                return (Boolean) sMtdIsEncryptedFilesystemEnabled.invoke(null);
+                return (Boolean) sMtd_isEncryptedFilesystemEnabled.invoke(null);
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke #isEncryptedFilesystemEnabled()", e);
             } catch (IllegalAccessException e) {
@@ -105,9 +109,9 @@ public class EnvironmentIA {
      * @return null may be returned if the method not supported or failed to invoke it
      */
     public static File getSecureDataDirectory() {
-        if (sMtdGetSecureDataDirectory != null) {
+        if (sMtd_getSecureDataDirectory != null) {
             try {
-                return (File) sMtdGetSecureDataDirectory.invoke(null);
+                return (File) sMtd_getSecureDataDirectory.invoke(null);
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke #getSecureDataDirectory()", e);
             } catch (IllegalAccessException e) {
@@ -126,9 +130,9 @@ public class EnvironmentIA {
      * @return null may be returned if the method not supported or failed to invoke it
      */
     public static File getSystemSecureDirectory() {
-        if (sMtdGetSystemSecureDirectory != null) {
+        if (sMtd_getSystemSecureDirectory != null) {
             try {
-                return (File) sMtdGetSystemSecureDirectory.invoke(null);
+                return (File) sMtd_getSystemSecureDirectory.invoke(null);
             } catch (IllegalArgumentException e) {
                 LibLogger.w(TAG, "Failed to invoke #getSystemSecureDirectory()", e);
             } catch (IllegalAccessException e) {

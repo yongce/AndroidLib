@@ -12,13 +12,13 @@ public class ServiceManagerIA {
     private static final String TAG = "ServiceManagerIA";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
 
-    private static Method sMtdGetService;
+    private static Method sMtd_getService;
 
     static {
         try {
             Class<?> smClass = Class.forName("android.os.ServiceManager", false,
                     Thread.currentThread().getContextClassLoader());
-            sMtdGetService = smClass.getMethod("getService", String.class);
+            sMtd_getService = smClass.getMethod("getService", String.class);
         } catch (ClassNotFoundException e) {
             if (DEBUG) LibLogger.w(TAG, "class not found", e);
         } catch (NoSuchMethodException e) {
@@ -26,10 +26,14 @@ public class ServiceManagerIA {
         }
     }
 
+    private ServiceManagerIA() {
+        // nothing to do
+    }
+
     public static IBinder getService(Object name) {
-        if (sMtdGetService != null) {
+        if (sMtd_getService != null) {
             try {
-                return (IBinder) sMtdGetService.invoke(null, name);
+                return (IBinder) sMtd_getService.invoke(null, name);
             } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getService()", e);
             } catch (InvocationTargetException e) {

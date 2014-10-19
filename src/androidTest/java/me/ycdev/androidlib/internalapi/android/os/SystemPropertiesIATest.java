@@ -22,7 +22,7 @@ public class SystemPropertiesIATest extends AndroidTestCase {
         Logger.i(TAG, "tearDown");
     }
 
-    public void testGet() {
+    public void test_get() {
         String defValue = "test.defValue";
         String actual = SystemPropertiesIA.get(TEST_KEY_NONE, defValue);
         assertEquals(defValue, actual);
@@ -34,7 +34,7 @@ public class SystemPropertiesIATest extends AndroidTestCase {
         assertEquals(Build.FINGERPRINT, actual);
     }
 
-    public void testGetInt() {
+    public void test_getInt() {
         int defValue = 123;
         int actual = SystemPropertiesIA.getInt(TEST_KEY_NONE, defValue);
         assertEquals(defValue, actual);
@@ -43,7 +43,7 @@ public class SystemPropertiesIATest extends AndroidTestCase {
         assertEquals(Build.VERSION.SDK_INT, actual);
     }
 
-    public void testGetLong() {
+    public void test_getLong() {
         long defValue = 123;
         long actual = SystemPropertiesIA.getLong(TEST_KEY_NONE, defValue);
         assertEquals(defValue, actual);
@@ -53,7 +53,7 @@ public class SystemPropertiesIATest extends AndroidTestCase {
         assertEquals(Build.TIME, actual);
     }
 
-    public void testGetBoolean() {
+    public void test_getBoolean() {
         boolean defValue = true;
         boolean actual = SystemPropertiesIA.getBoolean(TEST_KEY_NONE, defValue);
         assertEquals(defValue, actual);

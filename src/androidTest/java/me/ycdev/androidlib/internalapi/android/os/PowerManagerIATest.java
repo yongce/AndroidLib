@@ -21,7 +21,7 @@ public class PowerManagerIATest extends AndroidTestCase {
         Logger.i(TAG, "tearDown");
     }
 
-    public void testAsInterface() {
+    public void test_asInterface() {
         IBinder binder = ServiceManagerIA.getService(Context.POWER_SERVICE);
         assertTrue(binder != null);
 
@@ -29,19 +29,23 @@ public class PowerManagerIATest extends AndroidTestCase {
         assertTrue(service != null);
     }
 
-    public void testReboot() {
-        assertTrue(PowerManagerIA.checkRebootReflect());
+    public void test_getIPowerManager() {
+        assertTrue(PowerManagerIA.getIPowerManager() != null);
     }
 
-    public void testShutdown() {
-        assertTrue(PowerManagerIA.checkShutdownReflect());
+    public void test_reboot() {
+        assertTrue(PowerManagerIA.checkReflect_reboot());
     }
 
-    public void testCrash() {
-        assertTrue(PowerManagerIA.checkCrashReflect());
+    public void test_shutdown() {
+        assertTrue(PowerManagerIA.checkReflect_shutdown());
     }
 
-    public void testGoToSleep() {
-        assertTrue(PowerManagerIA.checkGoToSleepReflect());
+    public void test_crash() {
+        assertTrue(PowerManagerIA.checkReflect_crash());
+    }
+
+    public void test_goToSleep() {
+        assertTrue(PowerManagerIA.checkReflect_goToSleep());
     }
 }
