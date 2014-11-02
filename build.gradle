@@ -1,9 +1,9 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.2'
+        classpath 'com.android.tools.build:gradle:0.14.0'
     }
 }
 apply plugin: 'com.android.library'
@@ -13,11 +13,16 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.0"
 
     defaultConfig {
         minSdkVersion 8
+    }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
     }
 }
 

@@ -90,13 +90,13 @@
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
     <target name="build-test" depends="clean, debug, install" >
-        <!-- adb shell am instrument -w me.ycdev.androidlib.tests/android.test.InstrumentationTestRunner -->
+        <!-- adb shell am instrument -w me.ycdev.android.lib.androidlib.tests/android.test.InstrumentationTestRunner -->
         <exec executable="${adb}" failonerror="true" >
             <arg value="shell" />
             <arg value="am" />
             <arg value="instrument" />
             <arg value="-w" />
-            <arg value="me.ycdev.androidlib.tests/android.test.InstrumentationTestRunner" />
+            <arg value="me.ycdev.android.lib.common.tests/android.test.InstrumentationTestRunner" />
         </exec>
     </target>
 
