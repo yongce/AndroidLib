@@ -29,6 +29,7 @@ public class PowerManagerIA {
     private static Method sMtd_shutdown;
     private static Method sMtd_crash;
     private static Method sMtd_goToSleep;
+    private static int sVersion_goToSleep;
 
     static {
         try {
@@ -217,9 +218,18 @@ public class PowerManagerIA {
             try {
                 // Android 2.2 ~ Android 4.1: void goToSleepWithReason(long time, int reason);
                 sMtd_goToSleep = sClass_IPowerManager.getMethod("goToSleepWithReason", long.class, int.class);
+                sVersion_goToSleep = API_VERSION_1;
             } catch (NoSuchMethodException e) {
-                // Android 4.2: void goToSleep(long time, int reason);
-                sMtd_goToSleep = sClass_IPowerManager.getMethod("goToSleep", long.class, int.class);
+                try {
+                    // Android 4.2: void goToSleep(long time, int reason);
+                    sMtd_goToSleep = sClass_IPowerManager.getMethod("goToSleep", long.class, int.class);
+                    sVersion_goToSleep = API_VERSION_1;
+                } catch (NoSuchMethodException e1) {
+                    // Android 5.0: void goToSleep(long time, int reason, int flags);
+                    sMtd_goToSleep = sClass_IPowerManager.getMethod("goToSleep", long.class, int.class, int.class);
+                    sVersion_goToSleep = API_VERSION_2;
+                }
+
             }
         } catch (NoSuchMethodException e) {
             if (DEBUG) LibLogger.w(TAG, "method not found", e);
@@ -240,7 +250,11 @@ public class PowerManagerIA {
         reflect_goToSleep();
         if (sMtd_goToSleep != null) {
             try {
-                sMtd_goToSleep.invoke(service, time, GO_TO_SLEEP_REASON_USER);
+                if (sVersion_goToSleep == API_VERSION_1) {
+                    sMtd_goToSleep.invoke(service, time, GO_TO_SLEEP_REASON_USER);
+                } else if (sVersion_goToSleep == API_VERSION_2) {
+                    sMtd_goToSleep.invoke(service, time, GO_TO_SLEEP_REASON_USER, 0);
+                }
             } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
             } catch (InvocationTargetException e) {
