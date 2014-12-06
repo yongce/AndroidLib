@@ -1,5 +1,7 @@
 package me.ycdev.android.lib.common.ui.base;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -17,6 +19,11 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
 
     public void setData(List<T> data) {
         mList = data;
+        notifyDataSetChanged();
+    }
+
+    public void sort(Comparator<T> comparator) {
+        Collections.sort(mList, comparator);
         notifyDataSetChanged();
     }
 

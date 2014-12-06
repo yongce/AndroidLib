@@ -23,11 +23,19 @@ public class DateTimeUtils {
     }
 
     /**
+     * Generate file name from system time in the format "yyyy-MM-dd HH:mm:ss:SSS",
+     * @param timeStamp System time in milliseconds
+     */
+    public static String getReadableTimeStamp(long timeStamp) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.US).format(new Date(timeStamp));
+    }
+
+    /**
      * Format the time usage to string like "1d17h37m3s728ms"
      * @param timeUsageMs
      * @return
      */
-    public static String getReadeableTimeUsage(long timeUsageMs) {
+    public static String getReadableTimeUsage(long timeUsageMs) {
         long millisecondsLeft = timeUsageMs % 1000;
         if (timeUsageMs == millisecondsLeft) {
             return millisecondsLeft + "ms";
