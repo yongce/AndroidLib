@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
-import me.ycdev.android.lib.common.LibConfigs;
+import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.LibLogger;
 

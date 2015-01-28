@@ -5,7 +5,7 @@ import android.os.IBinder;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import me.ycdev.android.lib.common.LibConfigs;
+import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
 public class ServiceManagerIA {
@@ -34,9 +34,7 @@ public class ServiceManagerIA {
         if (sMtd_getService != null) {
             try {
                 return (IBinder) sMtd_getService.invoke(null, name);
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getService()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getService()", e);
             }
         } else {

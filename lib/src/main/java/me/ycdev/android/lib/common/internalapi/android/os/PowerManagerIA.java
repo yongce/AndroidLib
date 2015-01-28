@@ -6,7 +6,7 @@ import android.os.IBinder;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import me.ycdev.android.lib.common.LibConfigs;
+import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
 public class PowerManagerIA {
@@ -58,9 +58,7 @@ public class PowerManagerIA {
         if (sMtd_asInterface != null) {
             try {
                 return sMtd_asInterface.invoke(null, binder);
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface()", e);
             }
         } else {
@@ -119,9 +117,7 @@ public class PowerManagerIA {
                 } else {
                     if (DEBUG) LibLogger.e(TAG, "reboot, unknown api version: " + sVersion_reboot);
                 }
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #reboot()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #reboot()", e);
             }
         } else {
@@ -155,9 +151,7 @@ public class PowerManagerIA {
         if (sMtd_shutdown != null) {
             try {
                 sMtd_shutdown.invoke(service, false, false);
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #shutdown()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #shutdown()", e);
             }
         } else {
@@ -191,9 +185,7 @@ public class PowerManagerIA {
         if (sMtd_crash != null) {
             try {
                 sMtd_crash.invoke(service, msg);
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
             }
         } else {
@@ -255,9 +247,7 @@ public class PowerManagerIA {
                 } else if (sVersion_goToSleep == API_VERSION_2) {
                     sMtd_goToSleep.invoke(service, time, GO_TO_SLEEP_REASON_USER, 0);
                 }
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
             }
         } else {

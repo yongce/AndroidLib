@@ -8,6 +8,16 @@ android {
         minSdkVersion 8
     }
 
+    buildTypes {
+        release {
+            buildConfigField "boolean", "DEBUG_LOG", "false"
+        }
+
+        debug {
+            buildConfigField "boolean", "DEBUG_LOG", "true"
+        }
+    }
+
     lintOptions {
         textReport true
         textOutput 'stdout'

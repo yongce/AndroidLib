@@ -6,7 +6,7 @@ import android.os.IBinder;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import me.ycdev.android.lib.common.LibConfigs;
+import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
 public class ActivityManagerIA {
