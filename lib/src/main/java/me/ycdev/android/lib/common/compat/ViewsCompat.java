@@ -4,6 +4,7 @@ import me.ycdev.android.lib.common.utils.AndroidVersionUtils;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 public class ViewsCompat {
@@ -14,7 +15,7 @@ public class ViewsCompat {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @SuppressWarnings("deprecation")
-    public static void setImageViewAlpha(ImageView imageView, int alpha) {
+    public static void setImageViewAlpha(@NonNull ImageView imageView, int alpha) {
         if (AndroidVersionUtils.hasJellyBean()) {
             imageView.setImageAlpha(alpha);
         } else {

@@ -7,10 +7,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class ImageUtils {
     public interface IReusableBitmapProvider {
-        public Bitmap getReusableBitmap(BitmapFactory.Options options);
+        public Bitmap getReusableBitmap(@NonNull BitmapFactory.Options options);
     }
 
     /**
@@ -25,8 +28,9 @@ public class ImageUtils {
      * @return A bitmap sampled down from the original with the same aspect ratio and dimensions
      *         that are equal to or greater than the requested width and height
      */
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-            int reqWidth, int reqHeight, IReusableBitmapProvider provider) {
+    @Nullable
+    public static Bitmap decodeSampledBitmapFromResource(@NonNull Resources res, @DrawableRes int resId,
+            int reqWidth, int reqHeight, @Nullable IReusableBitmapProvider provider) {
         // Based on https://github.com/yongce/BitmapFun/blob/master/src/com/example/android/bitmapfun/util/ImageResizer.java
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -56,8 +60,9 @@ public class ImageUtils {
      * @return A bitmap sampled down from the original with the same aspect ratio and dimensions
      *         that are equal to or greater than the requested width and height
      */
-    public static Bitmap decodeSampledBitmapFromFile(String filename,
-            int reqWidth, int reqHeight, IReusableBitmapProvider provider) {
+    @Nullable
+    public static Bitmap decodeSampledBitmapFromFile(@NonNull String filename,
+            int reqWidth, int reqHeight, @Nullable IReusableBitmapProvider provider) {
         // Based on https://github.com/yongce/BitmapFun/blob/master/src/com/example/android/bitmapfun/util/ImageResizer.java
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -87,9 +92,10 @@ public class ImageUtils {
      * @return A bitmap sampled down from the original with the same aspect ratio and dimensions
      *         that are equal to or greater than the requested width and height
      */
+    @Nullable
     public static Bitmap decodeSampledBitmapFromDescriptor(
-            FileDescriptor fileDescriptor, int reqWidth, int reqHeight,
-            IReusableBitmapProvider provider) {
+            @NonNull FileDescriptor fileDescriptor, int reqWidth, int reqHeight,
+            @Nullable IReusableBitmapProvider provider) {
         // Based on https://github.com/yongce/BitmapFun/blob/master/src/com/example/android/bitmapfun/util/ImageResizer.java
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -110,8 +116,8 @@ public class ImageUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static void addInBitmapOptionsIfPossible(BitmapFactory.Options options,
-            IReusableBitmapProvider provider) {
+    private static void addInBitmapOptionsIfPossible(@NonNull BitmapFactory.Options options,
+            @Nullable IReusableBitmapProvider provider) {
         // Based on https://github.com/yongce/BitmapFun/blob/master/src/com/example/android/bitmapfun/util/ImageResizer.java
 
         if (!AndroidVersionUtils.hasHoneycomb() || provider == null) {
@@ -143,7 +149,7 @@ public class ImageUtils {
      * @param reqHeight The requested height of the resulting bitmap
      * @return The value to be used for inSampleSize
      */
-    public static int calculateInSampleSize(BitmapFactory.Options options,
+    public static int calculateInSampleSize(@NonNull BitmapFactory.Options options,
             int reqWidth, int reqHeight) {
         // Based on https://github.com/yongce/BitmapFun/blob/master/src/com/example/android/bitmapfun/util/ImageResizer.java
 
@@ -186,11 +192,11 @@ public class ImageUtils {
 
     /**
      * Get the size in bytes of a bitmap.
-     * @param value
+     * @param bitmap The bitmap to calculate.
      * @return size in bytes
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-    public static int getBitmapSize(Bitmap bitmap) {
+    public static int getBitmapSize(@NonNull Bitmap bitmap) {
         if (AndroidVersionUtils.hasHoneycombMR1()) {
             return bitmap.getByteCount();
         }

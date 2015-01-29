@@ -2,6 +2,8 @@ package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.content.Context;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -54,7 +56,8 @@ public class PowerManagerIA {
      * Get "android.os.IPowerManager" object from the service binder.
      * @return null will be returned if failed
      */
-    public static Object asInterface(IBinder binder) {
+    @Nullable
+    public static Object asInterface(@NonNull IBinder binder) {
         if (sMtd_asInterface != null) {
             try {
                 return sMtd_asInterface.invoke(null, binder);
@@ -71,6 +74,7 @@ public class PowerManagerIA {
      * Get "android.os.IPowerManager" object from the service manager.
      * @return null will be returned if failed
      */
+    @Nullable
     public static Object getIPowerManager() {
         IBinder binder = ServiceManagerIA.getService(Context.POWER_SERVICE);
         if (binder != null) {
@@ -106,7 +110,7 @@ public class PowerManagerIA {
      * @param reason
      * @see #asInterface(android.os.IBinder)
      */
-    public static void reboot(Object service, String reason) {
+    public static void reboot(@NonNull Object service, @NonNull String reason) {
         reflect_reboot();
         if (sMtd_reboot != null) {
             try {
@@ -146,7 +150,7 @@ public class PowerManagerIA {
         }
     }
 
-    public static void shutdown(Object service) {
+    public static void shutdown(@NonNull Object service) {
         reflect_shutdown();
         if (sMtd_shutdown != null) {
             try {
@@ -180,7 +184,7 @@ public class PowerManagerIA {
         }
     }
 
-    public static void crash(Object service, String msg) {
+    public static void crash(@NonNull Object service, @NonNull String msg) {
         reflect_crash();
         if (sMtd_crash != null) {
             try {
@@ -238,7 +242,7 @@ public class PowerManagerIA {
      *             of the input event that caused the request to go to sleep.
      * @see android.os.PowerManager#goToSleep(long)
      */
-    public static void goToSleep(Object service, long time) {
+    public static void goToSleep(@NonNull Object service, long time) {
         reflect_goToSleep();
         if (sMtd_goToSleep != null) {
             try {

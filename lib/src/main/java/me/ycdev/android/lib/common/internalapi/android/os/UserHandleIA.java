@@ -43,9 +43,7 @@ public class UserHandleIA {
         if (sMtd_myUserId != null) {
             try {
                 return (Integer) sMtd_myUserId.invoke(null);
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #myUserId()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #myUserId()", e);
             }
         }

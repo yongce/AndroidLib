@@ -1,5 +1,7 @@
 package me.ycdev.android.lib.common.utils;
 
+import android.support.annotation.NonNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +12,7 @@ public class DateTimeUtils {
      * Generate file name from system time in the format "yyyyMMdd-HHmmss-SSS",
      * @param sysTime System time in milliseconds
      */
+    @NonNull
     public static String generateFileName(long sysTime) {
         return new SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).format(new Date(sysTime));
     }
@@ -18,7 +21,7 @@ public class DateTimeUtils {
      * Parse system time from string in the format "yyyyMMdd-HHmmss-SSS",
      * @param timeStr Time string in the format "yyyyMMdd-HHmmss-SSS"
      */
-    public static long parseFileName(String timeStr) throws ParseException {
+    public static long parseFileName(@NonNull String timeStr) throws ParseException {
         return new SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).parse(timeStr).getTime();
     }
 
@@ -26,15 +29,15 @@ public class DateTimeUtils {
      * Generate file name from system time in the format "yyyy-MM-dd HH:mm:ss:SSS",
      * @param timeStamp System time in milliseconds
      */
+    @NonNull
     public static String getReadableTimeStamp(long timeStamp) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.US).format(new Date(timeStamp));
     }
 
     /**
      * Format the time usage to string like "1d17h37m3s728ms"
-     * @param timeUsageMs
-     * @return
      */
+    @NonNull
     public static String getReadableTimeUsage(long timeUsageMs) {
         long millisecondsLeft = timeUsageMs % 1000;
         if (timeUsageMs == millisecondsLeft) {

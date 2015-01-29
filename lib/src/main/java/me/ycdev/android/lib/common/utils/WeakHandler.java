@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 
 public class WeakHandler extends Handler {
     public interface MessageHandler {
@@ -12,7 +13,7 @@ public class WeakHandler extends Handler {
 
     private WeakReference<MessageHandler> mTargetHandler;
 
-    public WeakHandler(MessageHandler msgHandler) {
+    public WeakHandler(@NonNull MessageHandler msgHandler) {
         mTargetHandler = new WeakReference<MessageHandler>(msgHandler);
     }
 

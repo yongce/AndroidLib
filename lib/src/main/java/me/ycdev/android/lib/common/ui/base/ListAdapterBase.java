@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +15,16 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
     protected LayoutInflater mInflater;
     protected List<T> mList;
 
-    public ListAdapterBase(LayoutInflater inflater) {
+    public ListAdapterBase(@NonNull LayoutInflater inflater) {
         mInflater = inflater;
     }
 
-    public void setData(List<T> data) {
+    public void setData(@Nullable List<T> data) {
         mList = data;
         notifyDataSetChanged();
     }
 
-    public void sort(Comparator<T> comparator) {
+    public void sort(@NonNull Comparator<T> comparator) {
         Collections.sort(mList, comparator);
         notifyDataSetChanged();
     }
@@ -30,6 +32,7 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
     /**
      * @return null will be returned if no data set.
      */
+    @Nullable
     public List<T> getData() {
         return mList;
     }
@@ -51,7 +54,7 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolderBase holder = null;
+        ViewHolderBase holder;
         if (convertView == null) {
             convertView = mInflater.inflate(getItemResId(), parent, false);
             holder = createViewHolder(convertView, position);
@@ -64,14 +67,15 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
     }
 
     protected abstract int getItemResId();
-    protected abstract ViewHolderBase createViewHolder(View itemView, int position);
-    protected abstract void bindView(T item, ViewHolderBase holder);
+    protected abstract ViewHolderBase createViewHolder(@NonNull View itemView, int position);
+    protected abstract void bindView(T item, @NonNull ViewHolderBase holder);
 
     protected static abstract class ViewHolderBase {
+        @NonNull
         public View itemView;
         public int position;
 
-        public ViewHolderBase(View itemView, int position) {
+        public ViewHolderBase(@NonNull View itemView, int position) {
             this.itemView = itemView;
             this.position = position;
             findViews();

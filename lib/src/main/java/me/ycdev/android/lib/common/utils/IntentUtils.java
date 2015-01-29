@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.support.annotation.NonNull;
 
 public class IntentUtils {
-    public static boolean canStartActivity(Context cxt, Intent activityIntent) {
+    public static boolean canStartActivity(@NonNull Context cxt, @NonNull Intent activityIntent) {
         // Use PackageManager.MATCH_DEFAULT_ONLY to behavior same as Context#startAcitivty()
         ResolveInfo resolveInfo = cxt.getPackageManager().resolveActivity(activityIntent,
                 PackageManager.MATCH_DEFAULT_ONLY);

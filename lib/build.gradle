@@ -23,3 +23,7 @@ android {
         textOutput 'stdout'
     }
 }
+
+dependencies {
+    compile 'com.android.support:support-annotations:21.0.3'
+}

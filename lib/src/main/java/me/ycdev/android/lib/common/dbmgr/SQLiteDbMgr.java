@@ -2,6 +2,7 @@ package me.ycdev.android.lib.common.dbmgr;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 
@@ -77,11 +78,13 @@ public class SQLiteDbMgr {
         }
     }
 
-    public static SQLiteDatabase acquireDatabase(Context cxt, Class<? extends SQLiteDbCreator> dbInfoClass) {
+    public static SQLiteDatabase acquireDatabase(@NonNull Context cxt,
+            @NonNull Class<? extends SQLiteDbCreator> dbInfoClass) {
         return getInstance(cxt).acquireDatabase(dbInfoClass);
     }
 
-    public static void releaseDatabase(Context cxt, Class<? extends SQLiteDbCreator> dbInfoClass) {
+    public static void releaseDatabase(@NonNull Context cxt,
+            @NonNull Class<? extends SQLiteDbCreator> dbInfoClass) {
         getInstance(cxt).releaseDatabase(dbInfoClass);
     }
 }

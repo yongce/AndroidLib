@@ -8,6 +8,7 @@ import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
 import android.os.Environment;
+import android.support.annotation.Nullable;
 
 public class EnvironmentIA {
     private static final String TAG = "EnvironmentIA";
@@ -67,6 +68,7 @@ public class EnvironmentIA {
      * Same to the hided method Environment#getExternalStorageAndroidDataDir() (API 8)
      * @return null may be returned if the method not supported or failed to invoke it
      */
+    @Nullable
     public static File getExternalStorageAndroidDataDir() {
         if (sMtd_getExternalStorageAndroidDataDir != null) {
             try {
@@ -108,6 +110,7 @@ public class EnvironmentIA {
      * Same to the hided method Environment#getSecureDataDirectory() (API 9)
      * @return null may be returned if the method not supported or failed to invoke it
      */
+    @Nullable
     public static File getSecureDataDirectory() {
         if (sMtd_getSecureDataDirectory != null) {
             try {
@@ -129,6 +132,7 @@ public class EnvironmentIA {
      * Same to the hided method Environment#getSystemSecureDirectory() (API 9)
      * @return null may be returned if the method not supported or failed to invoke it
      */
+    @Nullable
     public static File getSystemSecureDirectory() {
         if (sMtd_getSystemSecureDirectory != null) {
             try {

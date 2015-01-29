@@ -2,6 +2,8 @@ package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.content.Context;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,7 +47,8 @@ public class ActivityManagerIA {
      * Get "android.os.IActivityManager" object from the service binder.
      * @return null will be returned if failed
      */
-    public static Object asInterface(IBinder binder) {
+    @Nullable
+    public static Object asInterface(@NonNull IBinder binder) {
         if (sMtd_asInterface != null) {
             try {
                 return sMtd_asInterface.invoke(null, binder);
@@ -64,6 +67,7 @@ public class ActivityManagerIA {
      * Get "android.os.IActivityManager" object from the service manager.
      * @return null will be returned if failed
      */
+    @Nullable
     public static Object getIActivityManager() {
         IBinder binder = ServiceManagerIA.getService(Context.ACTIVITY_SERVICE);
         if (binder != null) {
@@ -99,7 +103,7 @@ public class ActivityManagerIA {
      * @param pkgName The package name of the app
      * @see #asInterface(android.os.IBinder)
      */
-    public static void forceStopPackage(Object service, String pkgName) {
+    public static void forceStopPackage(@NonNull Object service, @NonNull String pkgName) {
         reflect_forceStopPackage();
         if (sMtd_forceStopPackage != null) {
             try {

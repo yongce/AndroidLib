@@ -18,6 +18,7 @@ import me.ycdev.android.lib.common.utils.LibLogger;
 import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 public class HttpClient {
     private static final String TAG = "HttpClient";
@@ -36,10 +37,10 @@ public class HttpClient {
         mReadTimeout = readTimeout;
     }
 
-    public String get(Context cxt, String url,  HashMap<String, String> requestHeaders)
-            throws IOException {
-        HttpURLConnection httpConn = null;
-        httpConn = getHttpConnection(cxt, url, false, requestHeaders);
+    @NonNull
+    public String get(@NonNull Context cxt, @NonNull String url,
+            @NonNull HashMap<String, String> requestHeaders) throws IOException {
+        HttpURLConnection httpConn = getHttpConnection(cxt, url, false, requestHeaders);
         try {
             httpConn.connect();
         } catch (Exception e) {
@@ -48,17 +49,15 @@ public class HttpClient {
         try {
             return getResponse(httpConn);
         } finally {
-            if (httpConn != null) {
-                httpConn.disconnect();
-            }
+            httpConn.disconnect();
         }
     }
 
-    public String post(Context cxt, String url, String body) throws IOException {
-        HttpURLConnection httpConn = null;
+    @NonNull
+    public String post(@NonNull Context cxt, @NonNull String url, @NonNull String body)
+            throws IOException {
+        HttpURLConnection httpConn = getHttpConnection(cxt, url, true, null);
         DataOutputStream os = null;
-
-        httpConn = getHttpConnection(cxt, url, true, null);
 
         // Send the "POST" request
         try {
@@ -72,18 +71,15 @@ public class HttpClient {
         } finally {
             // Must be called before calling HttpURLConnection.disconnect()
             IoUtils.closeQuietly(os);
-
-            if (httpConn != null) {
-                httpConn.disconnect();
-            }
+            httpConn.disconnect();
         }
     }
 
-    public String post(Context cxt, String url, byte[] body) throws IOException {
-        HttpURLConnection httpConn = null;
+    @NonNull
+    public String post(@NonNull Context cxt, @NonNull String url, @NonNull byte[] body)
+            throws IOException {
+        HttpURLConnection httpConn = getHttpConnection(cxt, url, true, null);
         DataOutputStream os = null;
-
-        httpConn = getHttpConnection(cxt, url, true, null);
 
         // Send the "POST" request
         try {
@@ -97,16 +93,14 @@ public class HttpClient {
         } finally {
             // Must be called before calling HttpURLConnection.disconnect()
             IoUtils.closeQuietly(os);
-
-            if (httpConn != null) {
-                httpConn.disconnect();
-            }
+            httpConn.disconnect();
         }
     }
 
+    @NonNull
     private HttpURLConnection getHttpConnection(Context cxt, String url,
             boolean post, HashMap<String, String> requestHeaders) throws IOException {
-        HttpURLConnection httpConn = openHttpURLConnection(cxt, url);
+        HttpURLConnection httpConn = openHttpURLConnection(url);
         httpConn.setConnectTimeout(mConnectTimeout);
         httpConn.setReadTimeout(mReadTimeout);
         httpConn.setDoInput(true);
@@ -125,7 +119,7 @@ public class HttpClient {
         return httpConn;
     }
 
-    private static HttpURLConnection openHttpURLConnection(Context ctx, String url) throws IOException {
+    private static HttpURLConnection openHttpURLConnection(String url) throws IOException {
         // TODO support proxy
         return (HttpURLConnection) new URL(url).openConnection();
     }
@@ -147,14 +141,20 @@ public class HttpClient {
         InputStream httpInputStream = null;
         try {
             httpInputStream = httpConn.getInputStream();
-        } catch (IllegalStateException e) {
+        } catch (IOException | IllegalStateException e) {
             // ignore
+        }
+        if (httpInputStream == null) {
+            // If httpConn.getInputStream() throws IOException,
+            // we can get the error message from the error stream.
+            // For example, the case when the response code is 4xx.
+            httpInputStream = httpConn.getErrorStream();
         }
         if (httpInputStream == null) {
             throw new IOException("HttpURLConnection.getInputStream() returned null");
         }
 
-        InputStream is = null;
+        InputStream is;
         if (contentEncoding != null && contentEncoding.contains("gzip")) {
             is = new GZIPInputStream(httpInputStream);
         } else if (contentEncoding != null && contentEncoding.contains("deflate")) {

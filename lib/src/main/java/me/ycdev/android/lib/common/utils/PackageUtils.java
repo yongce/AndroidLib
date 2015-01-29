@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
@@ -22,7 +23,7 @@ public class PackageUtils {
      */
     private static final int FLAG_PRIVILEGED = 1<<30;
 
-    public static boolean isPkgEnabled(Context cxt, String pkgName) {
+    public static boolean isPkgEnabled(@NonNull Context cxt, @NonNull String pkgName) {
         try {
             int state = cxt.getPackageManager().getApplicationEnabledSetting(pkgName);
             return (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT ||
@@ -33,11 +34,11 @@ public class PackageUtils {
         return true; // by default
     }
 
-    public static boolean isPkgEnabled(ApplicationInfo appInfo) {
+    public static boolean isPkgEnabled(@NonNull ApplicationInfo appInfo) {
         return appInfo.enabled;
     }
 
-    public static boolean isPkgSystem(ApplicationInfo appInfo) {
+    public static boolean isPkgSystem(@NonNull ApplicationInfo appInfo) {
         return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 
@@ -45,7 +46,7 @@ public class PackageUtils {
      * Check if an app is residing in "/system" (Android 4.3 and old versions)
      * or "/system/priv-app" (Android 4.4 and new versions) and has "signatureOrSystem" permission.
      */
-    public static boolean isPkgPrivileged(ApplicationInfo appInfo) {
+    public static boolean isPkgPrivileged(@NonNull ApplicationInfo appInfo) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return (appInfo.flags & FLAG_PRIVILEGED) != 0;
         } else {
@@ -54,14 +55,15 @@ public class PackageUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-    public static boolean isPkgStopped(ApplicationInfo appInfo) {
+    public static boolean isPkgStopped(@NonNull ApplicationInfo appInfo) {
         return (appInfo.flags & ApplicationInfo.FLAG_STOPPED) != 0;
     }
 
     /**
      * @return An empty list if no launcher apps.
      */
-    public static List<String> getLauncherApps(Context cxt) {
+    @NonNull
+    public static List<String> getLauncherApps(@NonNull Context cxt) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         List<ResolveInfo> apps = cxt.getPackageManager().queryIntentActivities(intent,
@@ -76,7 +78,8 @@ public class PackageUtils {
     /**
      * @return An empty list if no input method apps.
      */
-    public static List<String> getInputMethodApps(Context cxt) {
+    @NonNull
+    public static List<String> getInputMethodApps(@NonNull Context cxt) {
         InputMethodManager imm = (InputMethodManager) cxt.getSystemService(Context.INPUT_METHOD_SERVICE);
         List<InputMethodInfo> apps = imm.getEnabledInputMethodList();
         List<String> pkgNames = new ArrayList<String>(apps.size());

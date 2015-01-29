@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.annotation.NonNull;
 
 public class StorageUtils {
     /**
@@ -16,7 +17,7 @@ public class StorageUtils {
      */
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressWarnings("deprecation")
-    public static long getUsableSpace(File path) {
+    public static long getUsableSpace(@NonNull File path) {
         if (AndroidVersionUtils.hasGingerbread()) {
             return path.getUsableSpace();
         }
@@ -31,7 +32,7 @@ public class StorageUtils {
      */
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressWarnings("deprecation")
-    public static long getFreeSpace(File path) {
+    public static long getFreeSpace(@NonNull File path) {
         if (AndroidVersionUtils.hasGingerbread()) {
             return path.getFreeSpace();
         }
@@ -46,7 +47,7 @@ public class StorageUtils {
      */
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressWarnings("deprecation")
-    public static long getTotalSpace(File path) {
+    public static long getTotalSpace(@NonNull File path) {
         if (AndroidVersionUtils.hasGingerbread()) {
             return path.getTotalSpace();
         }
@@ -88,7 +89,7 @@ public class StorageUtils {
      * @see Context#getExternalCacheDir()
      */
     @TargetApi(Build.VERSION_CODES.FROYO)
-    public static File getExternalCacheDir(Context context) {
+    public static File getExternalCacheDir(@NonNull Context context) {
         if (AndroidVersionUtils.hasFroyo()) {
             return context.getExternalCacheDir();
         }

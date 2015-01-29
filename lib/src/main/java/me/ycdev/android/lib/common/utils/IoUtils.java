@@ -1,5 +1,8 @@
 package me.ycdev.android.lib.common.utils;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -22,7 +25,7 @@ public class IoUtils {
      * Close the closeable target and eat possible exceptions.
      * @param target The target to close. Can be null.
      */
-    public static void closeQuietly(Closeable target) {
+    public static void closeQuietly(@Nullable Closeable target) {
         try {
             if (target != null) {
                 target.close();
@@ -32,9 +35,9 @@ public class IoUtils {
         }
     }
 
-    public static byte[] readAllBytes(InputStream is) throws IOException {
+    public static byte[] readAllBytes(@NonNull InputStream is) throws IOException {
         ByteArrayOutputStream bytesBuf = new ByteArrayOutputStream(1024);
-        int bytesReaded = 0;
+        int bytesReaded;
         byte[] buf = new byte[1024];
         while ((bytesReaded = is.read(buf, 0, buf.length)) != -1) {
             bytesBuf.write(buf, 0, bytesReaded);
@@ -47,10 +50,11 @@ public class IoUtils {
      * Use the "UTF-8" character converter when reading.
      * @return May be empty String, but never null.
      */
-    public static String readAllLines(InputStream is) throws IOException {
+    @NonNull
+    public static String readAllLines(@NonNull InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         StringBuilder sb = new StringBuilder();
-        String line = null;
+        String line;
         boolean first = true;
 
         while ((line = reader.readLine()) != null) {
@@ -69,7 +73,8 @@ public class IoUtils {
      * Read all lines of the text file as a String.
      * @param filePath The file to read
      */
-    public static String readAllLines(String filePath) throws IOException {
+    @NonNull
+    public static String readAllLines(@NonNull String filePath) throws IOException {
         FileInputStream fis = new FileInputStream(filePath);
         try {
             return readAllLines(fis);
@@ -78,18 +83,20 @@ public class IoUtils {
         }
     }
 
-    public static void createParentDirsIfNeeded(File file) {
+    public static void createParentDirsIfNeeded(@NonNull File file) {
         File dirFile = file.getParentFile();
         if (dirFile != null && !dirFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             dirFile.mkdirs();
         }
     }
 
-    public static void createParentDirsIfNeeded(String filePath) {
+    public static void createParentDirsIfNeeded(@NonNull String filePath) {
         createParentDirsIfNeeded(new File(filePath));
     }
 
-    public static void saveAsFile(String content, String filePath) throws IOException {
+    public static void saveAsFile(@NonNull String content, @NonNull String filePath)
+            throws IOException {
         FileWriter fw = new FileWriter(filePath);
         try {
             fw.write(content);
@@ -103,7 +110,8 @@ public class IoUtils {
      * Save the input stream into a file.</br>
      * Note: This method will not close the input stream.
      */
-    public static void saveAsFile(InputStream is, String filePath) throws IOException {
+    public static void saveAsFile(@NonNull InputStream is, @NonNull String filePath)
+            throws IOException {
         FileOutputStream fos = new FileOutputStream(filePath);
         try {
             copyStream(is, fos);
@@ -116,16 +124,18 @@ public class IoUtils {
      * Copy data from the input stream to the output stream.</br>
      * Note: This method will not close the input stream and output stream.
      */
-    public static void copyStream(InputStream is, OutputStream os) throws IOException {
+    public static void copyStream(@NonNull InputStream is, @NonNull OutputStream os)
+            throws IOException {
         byte[] buffer = new byte[IO_BUF_SIZE];
-        int len = 0;
+        int len;
         while ((len = is.read(buffer)) != -1) {
             os.write(buffer, 0, len);
         }
         os.flush();
     }
 
-    public static void copyFile(String srcFilePath, String destFilePath) throws IOException {
+    public static void copyFile(@NonNull String srcFilePath, @NonNull String destFilePath)
+            throws IOException {
         FileInputStream fis = new FileInputStream(srcFilePath);
         try {
             saveAsFile(fis, destFilePath);
