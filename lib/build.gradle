@@ -10,10 +10,12 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "boolean", "DISABLE_LOG", "false"
             buildConfigField "boolean", "DEBUG_LOG", "false"
         }
 
         debug {
+            buildConfigField "boolean", "DISABLE_LOG", "false"
             buildConfigField "boolean", "DEBUG_LOG", "true"
         }
     }

@@ -1,9 +1,11 @@
-package me.ycdev.android.lib.common.internalapi.android.os;
+package me.ycdev.android.lib.common.internalapi.android.app;
 
 import android.content.Context;
 import android.os.IBinder;
 import android.test.AndroidTestCase;
 
+import me.ycdev.android.lib.common.internalapi.android.app.ActivityManagerIA;
+import me.ycdev.android.lib.common.internalapi.android.os.ServiceManagerIA;
 import me.ycdev.android.lib.common.utils.Logger;
 
 public class ActivityManagerIATest extends AndroidTestCase {
