@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import me.ycdev.android.lib.common.annotation.VisibleForTesting;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
@@ -69,6 +70,10 @@ public class ServiceManagerIA {
         return null;
     }
 
+    /**
+     * Just for unit test.
+     */
+    @VisibleForTesting
     static boolean checkReflect_getService() {
         reflect_getService();
         return sMtd_getService != null;
@@ -106,6 +111,10 @@ public class ServiceManagerIA {
         return null;
     }
 
+    /**
+     * Just for unit test.
+     */
+    @VisibleForTesting
     static boolean checkReflect_checkService() {
         reflect_checkService();
         return sMtd_checkService != null;
@@ -145,6 +154,10 @@ public class ServiceManagerIA {
         }
     }
 
+    /**
+     * Just for unit test.
+     */
+    @VisibleForTesting
     static boolean checkReflect_addService() {
         reflect_addService();
         return sMtd_addService != null;
@@ -181,6 +194,10 @@ public class ServiceManagerIA {
         return null;
     }
 
+    /**
+     * Just for unit test.
+     */
+    @VisibleForTesting
     static boolean checkReflect_listServices() {
         reflect_listServices();
         return sMtd_listServices != null;

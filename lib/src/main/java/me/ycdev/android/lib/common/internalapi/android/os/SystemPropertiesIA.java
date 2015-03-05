@@ -35,11 +35,7 @@ public class SystemPropertiesIA {
             try {
                 Object result = sMtd_get.invoke(null, key, def);
                 return (String) result;
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, String)", e);
-            } catch (IllegalAccessException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, String)", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, String)", e);
             }
         } else {
@@ -53,11 +49,7 @@ public class SystemPropertiesIA {
             try {
                 Object result = sMtd_getInt.invoke(null, key, def);
                 return (Integer) result;
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, int)", e);
-            } catch (IllegalAccessException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, int)", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, int)", e);
             }
         } else {
@@ -71,11 +63,7 @@ public class SystemPropertiesIA {
             try {
                 Object result = sMtd_getLong.invoke(null, key, def);
                 return (Long) result;
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, long)", e);
-            } catch (IllegalAccessException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, long)", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, long)", e);
             }
         } else {
@@ -89,11 +77,7 @@ public class SystemPropertiesIA {
             try {
                 Object result = sMtd_getBoolean.invoke(null, key, def);
                 return (Boolean) result;
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, boolean)", e);
-            } catch (IllegalAccessException e) {
-                LibLogger.w(TAG, "Failed to invoke get(String, boolean)", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                 LibLogger.w(TAG, "Failed to invoke get(String, boolean)", e);
             }
         } else {

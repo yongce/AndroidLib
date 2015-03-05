@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import me.ycdev.android.lib.common.annotation.VisibleForTesting;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
@@ -132,6 +133,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
+    @VisibleForTesting
     static boolean checkReflect_reboot() {
         reflect_reboot();
         return sMtd_reboot != null;
@@ -166,6 +168,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
+    @VisibleForTesting
     static boolean checkReflect_shutdown() {
         reflect_shutdown();
         return sMtd_shutdown != null;
@@ -200,6 +203,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
+    @VisibleForTesting
     static boolean checkReflect_crash() {
         reflect_crash();
         return sMtd_crash != null;
@@ -259,6 +263,10 @@ public class PowerManagerIA {
         }
     }
 
+    /**
+     * Just for unit test.
+     */
+    @VisibleForTesting
     static boolean checkReflect_goToSleep() {
         reflect_goToSleep();
         return sMtd_goToSleep != null;

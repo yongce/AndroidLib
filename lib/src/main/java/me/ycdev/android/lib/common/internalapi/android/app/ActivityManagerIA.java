@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import me.ycdev.android.lib.common.annotation.VisibleForTesting;
 import me.ycdev.android.lib.common.internalapi.android.os.ServiceManagerIA;
 import me.ycdev.android.lib.common.internalapi.android.os.UserHandleIA;
 import me.ycdev.android.lib.common.utils.LibConfigs;
@@ -54,9 +55,7 @@ public class ActivityManagerIA {
         if (sMtd_asInterface != null) {
             try {
                 return sMtd_asInterface.invoke(null, binder);
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface()", e);
             }
         } else {
@@ -129,6 +128,7 @@ public class ActivityManagerIA {
     /**
      * Just for unit test.
      */
+    @VisibleForTesting
     static boolean checkReflect_forceStopPackage() {
         reflect_forceStopPackage();
         return sMtd_forceStopPackage != null;
