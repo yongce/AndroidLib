@@ -27,3 +27,6 @@ build/
 .idea/
 *.iml
 
+# Mac OS
+.DS_Store
+
