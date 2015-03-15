@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.test.AndroidTestCase;
 
-import me.ycdev.android.lib.common.utils.Logger;
+import me.ycdev.android.lib.common.utils.TestLogger;
 
 public class PowerManagerIATest extends AndroidTestCase {
     private static final String TAG = "PowerManagerIATest";
@@ -12,13 +12,13 @@ public class PowerManagerIATest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        Logger.i(TAG, "setup");
+        TestLogger.i(TAG, "setup");
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        Logger.i(TAG, "tearDown");
+        TestLogger.i(TAG, "tearDown");
     }
 
     public void test_asInterface() {

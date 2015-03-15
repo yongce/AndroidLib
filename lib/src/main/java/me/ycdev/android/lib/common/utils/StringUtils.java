@@ -3,6 +3,18 @@ package me.ycdev.android.lib.common.utils;
 import android.support.annotation.NonNull;
 
 public class StringUtils {
+    public static String trimPrefixSpaces(String str) {
+        final int N = str.length();
+        int index = 0;
+        while (index < N && (str.charAt(index) <= '\u0020' || str.charAt(index) == '\u00a0')) {
+            index++;
+        }
+        if (index > 0) {
+            return str.substring(index);
+        }
+        return str;
+    }
+
     public static int parseInt(@NonNull String value, int defValue) {
         try {
             return Integer.parseInt(value);

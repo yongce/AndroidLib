@@ -5,7 +5,7 @@ import java.io.StringWriter;
 
 import android.util.Log;
 
-public class Logger {
+public class TestLogger {
     public static final String  TAG = "AndroidLibTest";
 
     public static void v(String subTag, String msg) {
