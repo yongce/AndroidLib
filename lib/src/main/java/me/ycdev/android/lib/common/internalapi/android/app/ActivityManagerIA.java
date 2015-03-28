@@ -115,9 +115,7 @@ public class ActivityManagerIA {
                 } else {
                     if (DEBUG) LibLogger.e(TAG, "reboot, unknown api version: " + sVersion_forceStopPackage);
                 }
-            } catch (IllegalAccessException e) {
-                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #forceStopPackage()", e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #forceStopPackage()", e);
             }
         } else {
