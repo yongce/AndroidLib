@@ -54,12 +54,12 @@ public class SystemPropertiesIATest extends AndroidTestCase {
     }
 
     public void test_getBoolean() {
-        boolean defValue = true;
+        final boolean defValue = true;
         boolean actual = SystemPropertiesIA.getBoolean(TEST_KEY_NONE, defValue);
         assertEquals(defValue, actual);
 
-        actual = SystemPropertiesIA.getBoolean("ro.com.android.dataroaming", true);
-        boolean actual2 = SystemPropertiesIA.getBoolean("ro.com.android.dataroaming", false);
+        actual = SystemPropertiesIA.getBoolean("ro.debuggable", true);
+        boolean actual2 = SystemPropertiesIA.getBoolean("ro.debuggable", false);
         assertEquals(actual, actual2);
     }
 }
