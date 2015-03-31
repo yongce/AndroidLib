@@ -1,6 +1,7 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -140,7 +141,8 @@ public class PowerManagerIA {
     }
 
     private static void reflect_shutdown() {
-        if (sMtd_shutdown != null || sClass_IPowerManager == null) {
+        if (sMtd_shutdown != null || sClass_IPowerManager == null ||
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return;
         }
 
@@ -171,7 +173,7 @@ public class PowerManagerIA {
     @VisibleForTesting
     static boolean checkReflect_shutdown() {
         reflect_shutdown();
-        return sMtd_shutdown != null;
+        return sMtd_shutdown != null || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1;
     }
 
     private static void reflect_crash() {

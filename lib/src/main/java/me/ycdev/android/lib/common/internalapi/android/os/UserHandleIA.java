@@ -1,5 +1,7 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
+import android.os.Build;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -56,7 +58,7 @@ public class UserHandleIA {
      */
     @VisibleForTesting
     static boolean checkReflect_myUserId() {
-        return sMtd_myUserId != null;
+        return sMtd_myUserId != null || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN;
     }
 
 }
