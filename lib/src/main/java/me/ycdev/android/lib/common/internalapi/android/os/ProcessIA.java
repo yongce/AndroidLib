@@ -2,13 +2,19 @@ package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import me.ycdev.android.lib.common.annotation.VisibleForTesting;
+import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
+import me.ycdev.android.lib.common.utils.StringUtils;
 
 public class ProcessIA {
     private static final String TAG = "ProcessIA";
@@ -81,6 +87,45 @@ public class ProcessIA {
         } else {
             if (DEBUG) LibLogger.w(TAG, "#readProcLines() not available");
         }
+    }
+
+    @Nullable
+    public static String getProcessName(int pid) {
+        String cmdlineFile = "/proc/" + pid + "/cmdline";
+        try {
+            return IoUtils.readAllLines(cmdlineFile).trim();
+        } catch (IOException e) {
+            if (DEBUG) LibLogger.w(TAG, "cannot read cmdline file", e);
+        }
+        return null;
+    }
+
+    /**
+     * Return the pid of the specified process name. If there are multiple processes
+     * which have same process name, then just return the first one.
+     * @param procName
+     * @return -1 if the specified process not found
+     */
+    public static int getProcessPid(@NonNull String procName) {
+        File[] procList = new File("/proc").listFiles();
+        if (procList != null && procList.length > 0) {
+            for (File procFile : procList) {
+                if (!procFile.isDirectory()) {
+                    continue;
+                }
+                if (!TextUtils.isDigitsOnly(procFile.getName())) {
+                    continue;
+                }
+                int pid = StringUtils.parseInt(procFile.getName(), -1);
+                if (pid > -1) {
+                    String curProcName = getProcessName(pid);
+                    if (procName.equals(curProcName)) {
+                        return pid;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     /**

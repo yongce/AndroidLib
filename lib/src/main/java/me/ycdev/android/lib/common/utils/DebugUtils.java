@@ -15,10 +15,10 @@ public class DebugUtils {
             StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
                     new StrictMode.ThreadPolicy.Builder()
                             .detectAll()
-                            .penaltyLog()
-                            .penaltyDeathOnNetwork();
+                            .penaltyLog();
             if (AndroidVersionUtils.hasHoneycomb()) {
                 threadPolicyBuilder.penaltyFlashScreen();
+                threadPolicyBuilder.penaltyDeathOnNetwork();
             }
             StrictMode.setThreadPolicy(threadPolicyBuilder.build());
 
