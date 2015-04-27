@@ -3,13 +3,13 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.1'
+        classpath 'com.android.tools.build:gradle:1.2.0'
     }
 }
 
 ext {
-    compileSdkVersion = 21
-    buildToolsVersion = "21.1.1"
+    compileSdkVersion = 22
+    buildToolsVersion = "22.0.1"
 }
 
 allprojects {
