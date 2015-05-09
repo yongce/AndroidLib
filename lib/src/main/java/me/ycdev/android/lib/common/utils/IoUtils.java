@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.zip.ZipFile;
 
 public class IoUtils {
     private static final int IO_BUF_SIZE = 1024 * 16; // 16KB
@@ -31,6 +32,18 @@ public class IoUtils {
                 target.close();
             }
         } catch (Exception e) {
+            // ignore
+        }
+    }
+
+    /**
+     * Before Android 4.4, ZipFile doesn't implement the interface "java.io.Closeable".
+     * @param target The target to close. Can be null.
+     */
+    public static void closeQuietly(@Nullable ZipFile target) {
+        try {
+            if (target != null) target.close();
+        } catch (IOException e) {
             // ignore
         }
     }

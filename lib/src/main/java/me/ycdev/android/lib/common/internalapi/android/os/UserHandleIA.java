@@ -18,12 +18,13 @@ public class UserHandleIA {
 
     static {
         try {
-            // Android 4.2 ~ ?
-            sClass_UserHandle = Class.forName("android.os.UserHandle");
+            // Android 4.1
+            // There are both "UserId" and "UserHandle" in "Xiaomi MI 2SC, MIUI V5-3, Android 4.1.1"
+            sClass_UserHandle = Class.forName("android.os.UserId");
         } catch (ClassNotFoundException e) {
             try {
-                // Android 4.1
-                sClass_UserHandle = Class.forName("android.os.UserId");
+                // Android 4.2 ~ ?
+                sClass_UserHandle = Class.forName("android.os.UserHandle");
             } catch (ClassNotFoundException e1) {
                 if (DEBUG) LibLogger.w(TAG, "class not found", e1);
             }

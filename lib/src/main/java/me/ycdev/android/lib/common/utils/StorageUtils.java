@@ -99,4 +99,11 @@ public class StorageUtils {
         return new File(Environment.getExternalStorageDirectory().getPath() + cacheDir);
     }
 
+    public static boolean isExternalStorageAvailable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    public static String getExternalStoragePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
 }
