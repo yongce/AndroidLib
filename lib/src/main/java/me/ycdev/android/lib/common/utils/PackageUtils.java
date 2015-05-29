@@ -68,7 +68,7 @@ public class PackageUtils {
         intent.addCategory(Intent.CATEGORY_HOME);
         List<ResolveInfo> apps = cxt.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
-        List<String> pkgNames = new ArrayList<String>(apps.size());
+        List<String> pkgNames = new ArrayList<>(apps.size());
         for (ResolveInfo info : apps) {
             pkgNames.add(info.activityInfo.packageName);
         }
@@ -82,7 +82,7 @@ public class PackageUtils {
     public static List<String> getInputMethodApps(@NonNull Context cxt) {
         InputMethodManager imm = (InputMethodManager) cxt.getSystemService(Context.INPUT_METHOD_SERVICE);
         List<InputMethodInfo> apps = imm.getEnabledInputMethodList();
-        List<String> pkgNames = new ArrayList<String>(apps.size());
+        List<String> pkgNames = new ArrayList<>(apps.size());
         for (InputMethodInfo info : apps) {
             pkgNames.add(info.getPackageName());
         }

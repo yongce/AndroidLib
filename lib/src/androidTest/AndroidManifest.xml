@@ -6,6 +6,14 @@
         android:minSdkVersion="9"
         android:targetSdkVersion="9" />
 
+    <permission
+        android:name="${applicationId}.permission.DYNAMIC_BROADCAST"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.permission.DYNAMIC_BROADCAST" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:functionalTest="false"

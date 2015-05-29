@@ -61,8 +61,10 @@ public class ServiceManagerIA {
         if (sMtd_getService != null) {
             try {
                 return (IBinder) sMtd_getService.invoke(null, name);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getService()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getService() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#getService() not available");
@@ -102,8 +104,10 @@ public class ServiceManagerIA {
         if (sMtd_checkService != null) {
             try {
                 return (IBinder) sMtd_checkService.invoke(null, name);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #checkService()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #checkService() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#checkService() not available");
@@ -146,8 +150,10 @@ public class ServiceManagerIA {
         if (sMtd_addService != null) {
             try {
                 sMtd_addService.invoke(null, name, service);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #addService()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #addService() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#addService() not available");
@@ -185,8 +191,10 @@ public class ServiceManagerIA {
         if (sMtd_listServices != null) {
             try {
                 return (String[]) sMtd_listServices.invoke(null);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #listServices()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #listServices() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#listServices() not available");

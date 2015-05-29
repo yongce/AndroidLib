@@ -55,8 +55,10 @@ public class ActivityManagerIA {
         if (sMtd_asInterface != null) {
             try {
                 return sMtd_asInterface.invoke(null, binder);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#asInterface() not available");
@@ -115,8 +117,10 @@ public class ActivityManagerIA {
                 } else {
                     if (DEBUG) LibLogger.e(TAG, "reboot, unknown api version: " + sVersion_forceStopPackage);
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #forceStopPackage()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #forceStopPackage() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#forceStopPackage() not available");

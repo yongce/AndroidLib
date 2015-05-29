@@ -63,8 +63,10 @@ public class PowerManagerIA {
         if (sMtd_asInterface != null) {
             try {
                 return sMtd_asInterface.invoke(null, binder);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #asInterface() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#asInterface() not available");
@@ -123,8 +125,10 @@ public class PowerManagerIA {
                 } else {
                     if (DEBUG) LibLogger.e(TAG, "reboot, unknown api version: " + sVersion_reboot);
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #reboot()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #reboot() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#reboot() not available");
@@ -159,8 +163,10 @@ public class PowerManagerIA {
         if (sMtd_shutdown != null) {
             try {
                 sMtd_shutdown.invoke(service, false, false);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #shutdown()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #shutdown() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#shutdown() not available");
@@ -194,8 +200,10 @@ public class PowerManagerIA {
         if (sMtd_crash != null) {
             try {
                 sMtd_crash.invoke(service, msg);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#crash() not available");
@@ -257,8 +265,10 @@ public class PowerManagerIA {
                 } else if (sVersion_goToSleep == API_VERSION_2) {
                     sMtd_goToSleep.invoke(service, time, GO_TO_SLEEP_REASON_USER, 0);
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #crash() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#crash() not available");

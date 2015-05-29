@@ -43,8 +43,10 @@ public class ProcessIA {
         if (sMtd_setArgV0 != null) {
             try {
                 sMtd_setArgV0.invoke(null, processName);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #setArgV0()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #setArgV0() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#setArgV0() not available");
@@ -81,8 +83,10 @@ public class ProcessIA {
         if (sMtd_readProcLines != null) {
             try {
                 sMtd_readProcLines.invoke(null, path, reqFields, outSizes);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #readProcLines()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #readProcLines() more", e);
             }
         } else {
             if (DEBUG) LibLogger.w(TAG, "#readProcLines() not available");
@@ -156,8 +160,10 @@ public class ProcessIA {
         if (sMtd_getParentPid != null) {
             try {
                 return (int) sMtd_getParentPid.invoke(null, pid);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getParentPid()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getParentPid() more", e);
             }
         } else {
             String[] procStatusLabels = { "PPid:" };
@@ -198,8 +204,10 @@ public class ProcessIA {
         if (sMtd_myPpid != null) {
             try {
                 return (int) sMtd_myPpid.invoke(null);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #myPpid()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #myPpid() more", e);
             }
         } else {
             return getParentPid(android.os.Process.myPid());

@@ -19,8 +19,7 @@ public class SQLiteDbMgr {
     }
 
     private Context mAppContext;
-    private HashMap<Class<? extends SQLiteDbCreator>, DbInfo> mOpenHelpers
-            = new HashMap<Class<? extends SQLiteDbCreator>, DbInfo>();
+    private HashMap<Class<? extends SQLiteDbCreator>, DbInfo> mOpenHelpers = new HashMap<>();
 
     private static volatile SQLiteDbMgr sInstance;
 

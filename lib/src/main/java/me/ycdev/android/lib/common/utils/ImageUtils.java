@@ -13,7 +13,7 @@ import android.support.annotation.Nullable;
 
 public class ImageUtils {
     public interface IReusableBitmapProvider {
-        public Bitmap getReusableBitmap(@NonNull BitmapFactory.Options options);
+        Bitmap getReusableBitmap(@NonNull BitmapFactory.Options options);
     }
 
     /**

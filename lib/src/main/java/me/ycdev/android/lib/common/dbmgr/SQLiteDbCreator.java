@@ -5,5 +5,5 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 public interface SQLiteDbCreator {
-    public abstract SQLiteDatabase createDb(@NonNull Context cxt);
+    SQLiteDatabase createDb(@NonNull Context cxt);
 }

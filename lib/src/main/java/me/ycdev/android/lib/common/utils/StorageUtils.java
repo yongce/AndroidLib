@@ -63,10 +63,7 @@ public class StorageUtils {
      */
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static boolean isExternalStorageRemovable() {
-        if (AndroidVersionUtils.hasGingerbread()) {
-            return Environment.isExternalStorageRemovable();
-        }
-        return true;
+        return !AndroidVersionUtils.hasGingerbread() || Environment.isExternalStorageRemovable();
     }
 
     /**
@@ -76,10 +73,7 @@ public class StorageUtils {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static boolean isExternalStorageEmulated() {
-        if (AndroidVersionUtils.hasHoneycomb()) {
-            return Environment.isExternalStorageEmulated();
-        }
-        return false;
+        return AndroidVersionUtils.hasHoneycomb() && Environment.isExternalStorageEmulated();
     }
 
     /**

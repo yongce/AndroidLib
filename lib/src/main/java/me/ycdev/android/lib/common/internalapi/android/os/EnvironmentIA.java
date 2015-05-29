@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 
 public class EnvironmentIA {
     private static final String TAG = "EnvironmentIA";
+    private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
 
     private static Method sMtd_getExternalStorageAndroidDataDir;
     private static Method sMtd_isEncryptedFilesystemEnabled;
@@ -24,9 +25,7 @@ public class EnvironmentIA {
             sMtd_getExternalStorageAndroidDataDir = Environment.class.getMethod(
                     "getExternalStorageAndroidDataDir");
         } catch (NoSuchMethodException e) {
-            if (LibConfigs.DEBUG_LOG) {
-                LibLogger.w(TAG, "#getExternalStorageAndroidDataDir() not found", e);
-            }
+            if (DEBUG) LibLogger.w(TAG, "#getExternalStorageAndroidDataDir() not found", e);
         }
 
         try {
@@ -34,9 +33,7 @@ public class EnvironmentIA {
             sMtd_isEncryptedFilesystemEnabled = Environment.class.getMethod(
                     "isEncryptedFilesystemEnabled");
         } catch (NoSuchMethodException e) {
-            if (LibConfigs.DEBUG_LOG) {
-                LibLogger.w(TAG, "#isEncryptedFilesystemEnabled() not found", e);
-            }
+            if (DEBUG) LibLogger.w(TAG, "#isEncryptedFilesystemEnabled() not found", e);
         }
 
         try {
@@ -44,9 +41,7 @@ public class EnvironmentIA {
             sMtd_getSecureDataDirectory = Environment.class.getMethod(
                     "getSecureDataDirectory");
         } catch (NoSuchMethodException e) {
-            if (LibConfigs.DEBUG_LOG) {
-                LibLogger.w(TAG, "#getSecureDataDirectory() not found", e);
-            }
+            if (DEBUG) LibLogger.w(TAG, "#getSecureDataDirectory() not found", e);
         }
 
         try {
@@ -54,9 +49,7 @@ public class EnvironmentIA {
             sMtd_getSystemSecureDirectory = Environment.class.getMethod(
                     "getSystemSecureDirectory");
         } catch (NoSuchMethodException e) {
-            if (LibConfigs.DEBUG_LOG) {
-                LibLogger.w(TAG, "#getSystemSecureDirectory() not found", e);
-            }
+            if (DEBUG) LibLogger.w(TAG, "#getSystemSecureDirectory() not found", e);
         }
     }
 
@@ -73,15 +66,13 @@ public class EnvironmentIA {
         if (sMtd_getExternalStorageAndroidDataDir != null) {
             try {
                 return (File) sMtd_getExternalStorageAndroidDataDir.invoke(null);
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke #getExternalStorageAndroidDataDir()", e);
             } catch (IllegalAccessException e) {
-                LibLogger.w(TAG, "Failed to invoke #getExternalStorageAndroidDataDir()", e);
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getExternalStorageAndroidDataDir()", e);
             } catch (InvocationTargetException e) {
-                LibLogger.w(TAG, "Failed to invoke #getExternalStorageAndroidDataDir()", e);
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #getExternalStorageAndroidDataDir() more", e);
             }
         } else {
-            LibLogger.w(TAG, "#getExternalStorageAndroidDataDir() not found");
+            if (DEBUG) LibLogger.w(TAG, "#getExternalStorageAndroidDataDir() not found");
         }
         return null;
     }
@@ -93,15 +84,13 @@ public class EnvironmentIA {
         if (sMtd_isEncryptedFilesystemEnabled != null) {
             try {
                 return (Boolean) sMtd_isEncryptedFilesystemEnabled.invoke(null);
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke #isEncryptedFilesystemEnabled()", e);
             } catch (IllegalAccessException e) {
-                LibLogger.w(TAG, "Failed to invoke #isEncryptedFilesystemEnabled()", e);
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #isEncryptedFilesystemEnabled()", e);
             } catch (InvocationTargetException e) {
-                LibLogger.w(TAG, "Failed to invoke #isEncryptedFilesystemEnabled()", e);
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #isEncryptedFilesystemEnabled() more", e);
             }
         } else {
-            LibLogger.w(TAG, "#isEncryptedFilesystemEnabled() not found");
+            if (DEBUG) LibLogger.w(TAG, "#isEncryptedFilesystemEnabled() not found");
         }
         return false;
     }
@@ -115,12 +104,10 @@ public class EnvironmentIA {
         if (sMtd_getSecureDataDirectory != null) {
             try {
                 return (File) sMtd_getSecureDataDirectory.invoke(null);
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke #getSecureDataDirectory()", e);
             } catch (IllegalAccessException e) {
                 LibLogger.w(TAG, "Failed to invoke #getSecureDataDirectory()", e);
             } catch (InvocationTargetException e) {
-                LibLogger.w(TAG, "Failed to invoke #getSecureDataDirectory()", e);
+                LibLogger.w(TAG, "Failed to invoke #getSecureDataDirectory() more", e);
             }
         } else {
             LibLogger.w(TAG, "#getSecureDataDirectory() not found");
@@ -137,12 +124,10 @@ public class EnvironmentIA {
         if (sMtd_getSystemSecureDirectory != null) {
             try {
                 return (File) sMtd_getSystemSecureDirectory.invoke(null);
-            } catch (IllegalArgumentException e) {
-                LibLogger.w(TAG, "Failed to invoke #getSystemSecureDirectory()", e);
             } catch (IllegalAccessException e) {
                 LibLogger.w(TAG, "Failed to invoke #getSystemSecureDirectory()", e);
             } catch (InvocationTargetException e) {
-                LibLogger.w(TAG, "Failed to invoke #getSystemSecureDirectory()", e);
+                LibLogger.w(TAG, "Failed to invoke #getSystemSecureDirectory() more", e);
             }
         } else {
             LibLogger.w(TAG, "#getSystemSecureDirectory() not found");

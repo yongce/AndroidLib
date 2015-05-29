@@ -14,7 +14,7 @@ public class WeakHandler extends Handler {
     private WeakReference<MessageHandler> mTargetHandler;
 
     public WeakHandler(@NonNull MessageHandler msgHandler) {
-        mTargetHandler = new WeakReference<MessageHandler>(msgHandler);
+        mTargetHandler = new WeakReference<>(msgHandler);
     }
 
     @Override

@@ -17,24 +17,26 @@ public class UserHandleIA {
     private static Method sMtd_myUserId;
 
     static {
-        try {
-            // Android 4.1
-            // There are both "UserId" and "UserHandle" in "Xiaomi MI 2SC, MIUI V5-3, Android 4.1.1"
-            sClass_UserHandle = Class.forName("android.os.UserId");
-        } catch (ClassNotFoundException e) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             try {
-                // Android 4.2 ~ ?
-                sClass_UserHandle = Class.forName("android.os.UserHandle");
-            } catch (ClassNotFoundException e1) {
-                if (DEBUG) LibLogger.w(TAG, "class not found", e1);
+                // Android 4.1
+                // There are both "UserId" and "UserHandle" in "Xiaomi MI 2SC, MIUI V5-3, Android 4.1.1"
+                sClass_UserHandle = Class.forName("android.os.UserId");
+            } catch (ClassNotFoundException e) {
+                try {
+                    // Android 4.2 ~ ?
+                    sClass_UserHandle = Class.forName("android.os.UserHandle");
+                } catch (ClassNotFoundException e1) {
+                    if (DEBUG) LibLogger.w(TAG, "class not found", e1);
+                }
             }
-        }
 
-        if (sClass_UserHandle != null) {
-            try {
-                sMtd_myUserId = sClass_UserHandle.getMethod("myUserId");
-            } catch (NoSuchMethodException e) {
-                if (DEBUG) LibLogger.w(TAG, "method not found", e);
+            if (sClass_UserHandle != null) {
+                try {
+                    sMtd_myUserId = sClass_UserHandle.getMethod("myUserId");
+                } catch (NoSuchMethodException e) {
+                    if (DEBUG) LibLogger.w(TAG, "method not found", e);
+                }
             }
         }
     }
@@ -47,8 +49,10 @@ public class UserHandleIA {
         if (sMtd_myUserId != null) {
             try {
                 return (Integer) sMtd_myUserId.invoke(null);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #myUserId()", e);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) LibLogger.w(TAG, "Failed to invoke #myUserId() more", e);
             }
         }
         return 0;
