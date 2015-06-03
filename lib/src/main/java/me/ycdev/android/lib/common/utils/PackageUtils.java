@@ -3,23 +3,29 @@ package me.ycdev.android.lib.common.utils;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class PackageUtils {
+    private static final String TAG = "PackageUtils";
+    private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
+
     /**
      * Value for {@link android.content.pm.ApplicationInfo#flags}: set to {@code true} if the application
      * is permitted to hold privileged permissions.
-     *
-     * {@hide}
      */
     private static final int FLAG_PRIVILEGED = 1<<30;
 
@@ -87,5 +93,77 @@ public class PackageUtils {
             pkgNames.add(info.getPackageName());
         }
         return pkgNames;
+    }
+
+    public static ActivityInfo[] getAllReceivers(Context cxt, String pkgName, boolean onlyExported) {
+        try {
+            PackageManager pm = cxt.getPackageManager();
+            int flags = PackageManager.GET_RECEIVERS | PackageManager.GET_DISABLED_COMPONENTS;
+            PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
+            if (onlyExported) {
+                ActivityInfo[] tmpArray = new ActivityInfo[pkgInfo.receivers.length];
+                int size = 0;
+                for (ActivityInfo item : pkgInfo.receivers) {
+                    if (!item.exported) continue;
+                    tmpArray[size] = item;
+                    size++;
+                }
+                if (size == 0) return null;
+                return Arrays.copyOf(tmpArray, size);
+            } else {
+                return pkgInfo.receivers;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) LibLogger.w(TAG, "app not found", e);
+        }
+        return null;
+    }
+
+    public static ServiceInfo[] getAllServices(Context cxt, String pkgName, boolean onlyExported) {
+        try {
+            PackageManager pm = cxt.getPackageManager();
+            int flags = PackageManager.GET_SERVICES  | PackageManager.GET_DISABLED_COMPONENTS;
+            PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
+            if (onlyExported) {
+                ServiceInfo[] tmpArray = new ServiceInfo[pkgInfo.services.length];
+                int size = 0;
+                for (ServiceInfo item : pkgInfo.services) {
+                    if (!item.exported) continue;
+                    tmpArray[size] = item;
+                    size++;
+                }
+                if (size == 0) return null;
+                return Arrays.copyOf(tmpArray, size);
+            } else {
+                return pkgInfo.services;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) LibLogger.w(TAG, "app not found", e);
+        }
+        return null;
+    }
+
+    public static ActivityInfo[] getAllActivities(Context cxt, String pkgName, boolean onlyExported) {
+        try {
+            PackageManager pm = cxt.getPackageManager();
+            int flags = PackageManager.GET_ACTIVITIES | PackageManager.GET_DISABLED_COMPONENTS;
+            PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
+            if (onlyExported) {
+                ActivityInfo[] tmpArray = new ActivityInfo[pkgInfo.activities.length];
+                int size = 0;
+                for (ActivityInfo item : pkgInfo.activities) {
+                    if (!item.exported) continue;
+                    tmpArray[size] = item;
+                    size++;
+                }
+                if (size == 0) return null;
+                return Arrays.copyOf(tmpArray, size);
+            } else {
+                return pkgInfo.activities;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) LibLogger.w(TAG, "app not found", e);
+        }
+        return null;
     }
 }
