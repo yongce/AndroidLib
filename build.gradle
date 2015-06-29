@@ -10,6 +10,9 @@ buildscript {
 ext {
     compileSdkVersion = 22
     buildToolsVersion = "22.0.1"
+
+    DEBUG_LOG = "true"
+    DISABLE_LOG = "false"
 }
 
 allprojects {

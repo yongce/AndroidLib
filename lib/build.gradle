@@ -6,18 +6,9 @@ android {
 
     defaultConfig {
         minSdkVersion 9
-    }
 
-    buildTypes {
-        release {
-            buildConfigField "boolean", "DISABLE_LOG", "false"
-            buildConfigField "boolean", "DEBUG_LOG", "false"
-        }
-
-        debug {
-            buildConfigField "boolean", "DISABLE_LOG", "false"
-            buildConfigField "boolean", "DEBUG_LOG", "true"
-        }
+        buildConfigField "boolean", "DEBUG_LOG", rootProject.ext.DEBUG_LOG
+        buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
     }
 
     lintOptions {
