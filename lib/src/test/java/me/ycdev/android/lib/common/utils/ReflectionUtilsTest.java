@@ -1,12 +1,15 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-@SuppressWarnings("unused")
-public class ReflectionUtilsTest extends AndroidTestCase {
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+public class ReflectionUtilsTest {
+    @SuppressWarnings("unused")
     private static class TestA {
         public String a1;
         public int a2;
@@ -43,6 +46,7 @@ public class ReflectionUtilsTest extends AndroidTestCase {
         }
     }
 
+    @SuppressWarnings("unused")
     private static class TestB extends TestA {
         public String b1;
         public int b2;
@@ -81,6 +85,7 @@ public class ReflectionUtilsTest extends AndroidTestCase {
         }
     }
 
+    @Test
     public void test_findMethod() {
         try {
             TestB objB = new TestB();
@@ -132,6 +137,7 @@ public class ReflectionUtilsTest extends AndroidTestCase {
         }
     }
 
+    @Test
     public void test_findField() {
         try {
             TestB objB = new TestB();

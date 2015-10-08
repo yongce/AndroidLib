@@ -1,16 +1,26 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
-import android.test.AndroidTestCase;
+import android.support.test.runner.AndroidJUnit4;
 
-public class ProcessIATest extends AndroidTestCase {
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(AndroidJUnit4.class)
+public class ProcessIATest {
+    @Test
     public void test_setArgV0() {
         assertTrue("failed to reflect #setArgV0", ProcessIA.checkReflect_setArgV0());
     }
 
+    @Test
     public void test_readProcLines() {
         assertTrue("failed to reflect #readProcLines", ProcessIA.checkReflect_readProcLines());
     }
 
+    @Test
     public void test_getParentPid() {
         assertTrue("failed to reflect #getParentPid", ProcessIA.checkReflect_getParentPid());
         // app process --> zygote --> init (pid: 1)
@@ -22,6 +32,7 @@ public class ProcessIATest extends AndroidTestCase {
         assertTrue("pid of init is not 1", initPid == 1);
     }
 
+    @Test
     public void test_myPpid() {
         assertTrue("failed to reflect #myPpid", ProcessIA.checkReflect_myPpid());
         // app process --> zygote --> init (pid: 1)
@@ -33,6 +44,7 @@ public class ProcessIATest extends AndroidTestCase {
         assertTrue("unexpected pid of init: " + initPid, initPid == 1);
     }
 
+    @Test
     public void test_getProcessName() {
         // "/init", pid: 1
         String initProcName = ProcessIA.getProcessName(1);
@@ -43,6 +55,7 @@ public class ProcessIATest extends AndroidTestCase {
         assertEquals("failed to validate the test app", "me.ycdev.android.lib.common.test", myProcName);
     }
 
+    @Test
     public void test_getProcessPid() {
         // "/init", pid: 1
         int initPid = ProcessIA.getProcessPid("/init");

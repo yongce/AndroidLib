@@ -1,24 +1,31 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
-import android.test.AndroidTestCase;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import me.ycdev.android.lib.common.utils.TestLogger;
 
-public class UserHandleIATest extends AndroidTestCase {
+import static org.junit.Assert.assertTrue;
+
+@RunWith(AndroidJUnit4.class)
+public class UserHandleIATest {
     private static final String TAG = "UserHandleIATest";
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         TestLogger.i(TAG, "setup");
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
         TestLogger.i(TAG, "tearDown");
     }
 
+    @Test
     public void test_myUserId() {
         assertTrue(UserHandleIA.checkReflect_myUserId());
     }

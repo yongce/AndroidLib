@@ -1,22 +1,25 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.test.AndroidTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class MiscUtilsTest extends AndroidTestCase {
+import static org.junit.Assert.assertEquals;
+
+public class MiscUtilsTest {
     private static final String TAG = "MiscUtilsTest";
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         TestLogger.i(TAG, "setup");
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
         TestLogger.i(TAG, "tearDown");
     }
 
+    @Test
     public void test_calcProgressPercent() {
         for (int i = 1; i <= 100; i++) {
             assertEquals(i, MiscUtils.calcProgressPercent(1, 100, i, 100));

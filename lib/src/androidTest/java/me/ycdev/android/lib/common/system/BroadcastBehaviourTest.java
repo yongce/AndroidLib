@@ -5,18 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
-import android.test.AndroidTestCase;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import me.ycdev.android.lib.common.utils.TestLogger;
 
-public class BroadcastBehaviourTest extends AndroidTestCase {
+import static org.junit.Assert.fail;
+
+@RunWith(AndroidJUnit4.class)
+public class BroadcastBehaviourTest {
     private static final String TAG = "BroadcastBehaviourTest";
 
+    @Test
     public void testAppBroadcast() {
-        final Context context = getContext();
+        final Context context = InstrumentationRegistry.getContext();
         final String BROADCAST_ACTION = context.getPackageName()
                 + ".action.DYNAMIC_BROADCAST_TEST";
         final String BROADCAST_PERM = context.getPackageName()

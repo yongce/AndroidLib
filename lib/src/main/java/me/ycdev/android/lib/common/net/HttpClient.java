@@ -15,8 +15,6 @@ import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
-import org.apache.http.protocol.HTTP;
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -24,7 +22,7 @@ public class HttpClient {
     private static final String TAG = "HttpClient";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
 
-    private String mCharset = HTTP.UTF_8;
+    private String mCharset = "UTF-8";
     private int mConnectTimeout;  // ms
     private int mReadTimeout;  // ms
 
