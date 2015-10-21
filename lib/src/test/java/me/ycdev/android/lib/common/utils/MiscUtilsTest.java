@@ -1,11 +1,14 @@
 package me.ycdev.android.lib.common.utils;
 
+import android.test.suitebuilder.annotation.SmallTest;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+@SmallTest
 public class MiscUtilsTest {
     private static final String TAG = "MiscUtilsTest";
 

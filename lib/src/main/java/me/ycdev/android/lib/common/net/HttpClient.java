@@ -1,22 +1,21 @@
 package me.ycdev.android.lib.common.net;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
-import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.IoUtils;
+import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
-
-import android.content.Context;
-import android.support.annotation.NonNull;
 
 public class HttpClient {
     private static final String TAG = "HttpClient";
@@ -98,7 +97,7 @@ public class HttpClient {
     @NonNull
     private HttpURLConnection getHttpConnection(Context cxt, String url,
             boolean post, HashMap<String, String> requestHeaders) throws IOException {
-        HttpURLConnection httpConn = openHttpURLConnection(url);
+        HttpURLConnection httpConn = NetworkUtils.openHttpURLConnection(url);
         httpConn.setConnectTimeout(mConnectTimeout);
         httpConn.setReadTimeout(mReadTimeout);
         httpConn.setDoInput(true);
@@ -115,11 +114,6 @@ public class HttpClient {
             httpConn.setRequestMethod("GET");  // by default
         }
         return httpConn;
-    }
-
-    private static HttpURLConnection openHttpURLConnection(String url) throws IOException {
-        // TODO support proxy
-        return (HttpURLConnection) new URL(url).openConnection();
     }
 
     private void addRequestHeaders(HttpURLConnection httpConn, HashMap<String, String> requestHeaders) {

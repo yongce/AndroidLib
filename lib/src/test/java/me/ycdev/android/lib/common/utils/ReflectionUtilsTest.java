@@ -1,5 +1,7 @@
 package me.ycdev.android.lib.common.utils;
 
+import android.test.suitebuilder.annotation.SmallTest;
+
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -8,6 +10,7 @@ import java.lang.reflect.Method;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@SmallTest
 public class ReflectionUtilsTest {
     @SuppressWarnings("unused")
     private static class TestA {

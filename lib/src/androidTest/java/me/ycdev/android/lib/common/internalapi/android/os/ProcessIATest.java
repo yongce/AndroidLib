@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
+import android.support.test.filters.RequiresDevice;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
+@RequiresDevice
 public class ProcessIATest {
     @Test
     public void test_setArgV0() {
