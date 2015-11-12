@@ -2,3 +2,5 @@ include ':baseLib'
 
 include ':jniLib'
 include ':jniLibDemo'
+
+include ':uiLib'

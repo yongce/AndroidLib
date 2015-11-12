@@ -32,3 +32,6 @@ proguard/
 # Mac OS
 .DS_Store
 
+# JNI objects
+obj/
+

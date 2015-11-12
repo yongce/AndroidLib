@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.system;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -120,6 +121,7 @@ public class BroadcastBehaviourTest {
         toggleWifiState(context);
     }
 
+    @SuppressLint("MissingPermission")
     private void toggleWifiState(Context context) {
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         int wifiState = wifiMgr.getWifiState();
