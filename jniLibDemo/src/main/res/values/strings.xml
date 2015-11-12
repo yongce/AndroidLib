@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">AndroidJniLibDemo</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="resource_limit">Resource limit</string>
+
+    <string name="oflimit_status">Current open files limit: %1$d, max limit: %2$d</string>
+    <string name="oflimit_increase">Increase open files limit</string>
+    <string name="oflimit_decrease">Decrease open files limit</string>
+    <string name="title_activity_resource_limit">ResourceLimitActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+</resources>

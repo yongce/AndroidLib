@@ -1,1 +1,4 @@
 include ':baseLib'
+
+include ':jniLib'
+include ':jniLibDemo'
