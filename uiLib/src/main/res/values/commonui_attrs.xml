@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Attrs for CommonUi theme BEGIN -->
+    <attr name="commonuiActivityHorizontalMargin" format="dimension" />
+    <attr name="commonuiActivityVerticalMargin" format="dimension" />
+
+    <attr name="commonuiDividerMargin" format="dimension" />
+    <attr name="commonuiDividerColor" format="color" />
+
+    <attr name="commonuiGridEntriesStyle" format="reference" />
+    <attr name="commonuiGridEntriesItemStyle" format="reference" />
+    <attr name="commonuiGridEntriesSpacing" format="dimension" />
+    <attr name="commonuiGridEntriesItemWidth" format="dimension"/>
+    <attr name="commonuiGridEntriesItemHeight" format="dimension" />
+    <attr name="commonuiGridEntriesItemBkg" format="reference" />
+    <attr name="commonuiGridEntriesItemTextAppearance" format="reference" />
+
+    <attr name="commonuiListItemVerticalMargin" format="dimension" />
+    <!-- Attrs for CommonUi theme END -->
+</resources>

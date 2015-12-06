@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="commonui_activity_horizontal_margin">16dp</dimen>
+    <dimen name="commonui_activity_vertical_margin">16dp</dimen>
+
+    <dimen name="commonui_divider_margin">6dp</dimen>
+
+    <dimen name="commonui_grid_entries_spacing">4dp</dimen>
+    <dimen name="commonui_grid_entries_item_width">100dp</dimen>
+    <dimen name="commonui_grid_entries_item_height">50dp</dimen>
+
+    <dimen name="commonui_list_view_item_vertical_margin">6dp</dimen>
+</resources>

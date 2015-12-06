@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public abstract class ListAdapterBase<T> extends BaseAdapter {
+public abstract class ListAdapterBase<ItemType> extends BaseAdapter {
     protected Context mContext;
     protected LayoutInflater mInflater;
-    protected List<T> mList;
+    protected List<ItemType> mList;
 
     public ListAdapterBase(@NonNull Context cxt) {
         mContext = cxt;
@@ -27,12 +28,12 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
         }
     }
 
-    public void setData(@Nullable List<T> data) {
+    public void setData(@Nullable List<ItemType> data) {
         mList = data;
         notifyDataSetChanged();
     }
 
-    public void sort(@NonNull Comparator<T> comparator) {
+    public void sort(@NonNull Comparator<ItemType> comparator) {
         Collections.sort(mList, comparator);
         notifyDataSetChanged();
     }
@@ -41,7 +42,7 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
      * @return null will be returned if no data set.
      */
     @Nullable
-    public List<T> getData() {
+    public List<ItemType> getData() {
         return mList;
     }
 
@@ -51,7 +52,7 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
     }
 
     @Override
-    public T getItem(int position) {
+    public ItemType getItem(int position) {
         return mList.get(position);
     }
 
@@ -64,7 +65,7 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolderBase holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(getItemResId(), parent, false);
+            convertView = mInflater.inflate(getItemLayoutResId(), parent, false);
             holder = createViewHolder(convertView, position);
             convertView.setTag(holder);
         } else {
@@ -74,13 +75,12 @@ public abstract class ListAdapterBase<T> extends BaseAdapter {
         return convertView;
     }
 
-    protected abstract int getItemResId();
-    protected abstract ViewHolderBase createViewHolder(@NonNull View itemView, int position);
-    protected abstract void bindView(T item, @NonNull ViewHolderBase holder);
+    protected abstract @LayoutRes int getItemLayoutResId();
+    protected abstract @NonNull ViewHolderBase createViewHolder(@NonNull View itemView, int position);
+    protected abstract void bindView(@NonNull ItemType item, @NonNull ViewHolderBase holder);
 
-    protected static abstract class ViewHolderBase {
-        @NonNull
-        public View itemView;
+    public static abstract class ViewHolderBase {
+        public @NonNull View itemView;
         public int position;
 
         public ViewHolderBase(@NonNull View itemView, int position) {
