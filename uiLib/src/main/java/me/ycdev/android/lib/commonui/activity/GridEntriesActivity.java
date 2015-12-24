@@ -20,6 +20,7 @@ import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.lib.common.utils.IntentUtils;
 import me.ycdev.android.lib.commonui.R;
 import me.ycdev.android.lib.commonui.base.ListAdapterBase;
+import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
 import static me.ycdev.android.arch.ArchConstants.IntentType;
 
@@ -110,7 +111,7 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
         }
     }
 
-    protected static class SystemEntriesAdapter extends ListAdapterBase<IntentEntry>  {
+    protected static class SystemEntriesAdapter extends ListAdapterBase<IntentEntry, SystemEntriesAdapter.ViewHolder>  {
         public SystemEntriesAdapter(Context cxt) {
             super(cxt);
         }
@@ -122,25 +123,20 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
 
         @NonNull
         @Override
-        protected ViewHolderBase createViewHolder(@NonNull View itemView, int position) {
+        protected ViewHolder createViewHolder(@NonNull View itemView, int position) {
             return new ViewHolder(itemView, position);
         }
 
         @Override
-        protected void bindView(@NonNull IntentEntry item, @NonNull ViewHolderBase holder) {
-            ViewHolder vh = (ViewHolder) holder;
+        protected void bindView(@NonNull IntentEntry item, @NonNull ViewHolder vh) {
             vh.titleView.setText(item.title);
         }
 
-        protected static class ViewHolder extends ListAdapterBase.ViewHolderBase {
+        protected static class ViewHolder extends ViewHolderBase {
             public TextView titleView;
 
             public ViewHolder(@NonNull View itemView, int position) {
                 super(itemView, position);
-            }
-
-            @Override
-            protected void findViews() {
                 titleView = (TextView) itemView.findViewById(R.id.title);
             }
         }

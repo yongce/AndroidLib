@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public abstract class ListAdapterBase<ItemType> extends BaseAdapter {
+public abstract class ListAdapterBase<ItemType, VH extends ViewHolderBase> extends BaseAdapter {
     protected Context mContext;
     protected LayoutInflater mInflater;
     protected List<ItemType> mList;
@@ -63,32 +63,21 @@ public abstract class ListAdapterBase<ItemType> extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolderBase holder;
+        VH holder;
         if (convertView == null) {
             convertView = mInflater.inflate(getItemLayoutResId(), parent, false);
             holder = createViewHolder(convertView, position);
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolderBase) convertView.getTag();
+            @SuppressWarnings("unchecked")
+            VH tmp = (VH) convertView.getTag();
+            holder = tmp;
         }
         bindView(getItem(position), holder);
         return convertView;
     }
 
     protected abstract @LayoutRes int getItemLayoutResId();
-    protected abstract @NonNull ViewHolderBase createViewHolder(@NonNull View itemView, int position);
-    protected abstract void bindView(@NonNull ItemType item, @NonNull ViewHolderBase holder);
-
-    public static abstract class ViewHolderBase {
-        public @NonNull View itemView;
-        public int position;
-
-        public ViewHolderBase(@NonNull View itemView, int position) {
-            this.itemView = itemView;
-            this.position = position;
-            findViews();
-        }
-
-        protected abstract void findViews();
-    }
+    protected abstract @NonNull VH createViewHolder(@NonNull View itemView, int position);
+    protected abstract void bindView(@NonNull ItemType item, @NonNull VH holder);
 }
