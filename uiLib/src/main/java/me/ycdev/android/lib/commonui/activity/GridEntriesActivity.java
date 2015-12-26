@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -46,18 +47,19 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
     }
 
     protected SystemEntriesAdapter mAdapter;
+    protected GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.commonui_grid_entries);
+        setContentView(getContentViewLayout());
 
         mAdapter = new SystemEntriesAdapter(this);
 
-        GridView gridView = (GridView) findViewById(R.id.grid);
-        gridView.setAdapter(mAdapter);
-        gridView.setOnItemClickListener(this);
-        gridView.setOnItemLongClickListener(this);
+        mGridView = (GridView) findViewById(R.id.grid);
+        mGridView.setAdapter(mAdapter);
+        mGridView.setOnItemClickListener(this);
+        mGridView.setOnItemLongClickListener(this);
 
         loadItems();
     }
@@ -91,6 +93,10 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
         IntentEntry item = mAdapter.getItem(position);
         ToastHelper.show(this, item.desc, Toast.LENGTH_LONG);
         return true;
+    }
+
+    protected @LayoutRes int getContentViewLayout() {
+        return R.layout.commonui_grid_entries;
     }
 
     /**
