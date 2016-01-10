@@ -4,3 +4,8 @@ include ':jniLib'
 include ':jniLibDemo'
 
 include ':uiLib'
+
+include ':archLib'
+include ':archLintRules'
+include ':archLintRulesAAR'
+include ':archLintRulesTestDemo'

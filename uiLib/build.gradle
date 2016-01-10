@@ -11,6 +11,11 @@ android {
         buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     lintOptions {
         textReport true
         textOutput 'stdout'

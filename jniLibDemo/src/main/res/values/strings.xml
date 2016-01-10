@@ -10,5 +10,4 @@
     <string name="oflimit_decrease">Decrease open files limit</string>
     <string name="title_activity_resource_limit">ResourceLimitActivity</string>
 
-    <string name="hello_world">Hello world!</string>
 </resources>

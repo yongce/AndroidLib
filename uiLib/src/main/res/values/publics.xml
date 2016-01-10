@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    For "public & private resources",
+    please refer http://developer.android.com/tools/studio/studio-features.html#private-res
+    !-->
+    <public type="string" name="commonui_tips_loading" />
+    <public type="string" name="commonui_tips_loading_percent" />
+</resources>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">demo</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_lint_violation">LintViolationActivity</string>
+    <string name="title_activity_lint_violation2">LintViolation2Activity</string>
+    <string name="title_activity_lint_good">LintGoodActivity</string>
+    <string name="title_activity_lint_good2">LintGood2Activity</string>
+</resources>

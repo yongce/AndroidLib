@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.ycdev.android.arch">
+
+    <permission
+        android:name="${applicationId}.permission.INTERNAL_COMMON"
+        android:description="@string/arch_perm_guard_common_desc"
+        android:label="@string/arch_perm_guard_common_label"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.permission.INTERNAL_COMMON"/>
+</manifest>

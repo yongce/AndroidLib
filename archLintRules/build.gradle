@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+dependencies {
+    compile 'com.android.tools.lint:lint-api:24.3.1'
+    compile 'com.android.tools.lint:lint-checks:24.3.1'
+
+    testCompile 'com.android.tools.lint:lint-tests:24.3.1'
+}
+
+jar {
+    manifest {
+        attributes("Lint-Registry": "me.ycdev.android.arch.lint.MyIssueRegistry")
+    }
+}
+
+defaultTasks 'assemble'
+
+/*
+ * rules for providing "MyLintRules.jar"
+ */
+configurations {
+    lintJarOutput
+}
+
+dependencies {
+    lintJarOutput files(jar)
+}

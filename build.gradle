@@ -9,9 +9,9 @@ buildscript {
 
 ext {
     compileSdkVersion = 23
-    buildToolsVersion = "23.0.1"
+    buildToolsVersion = "23.0.2"
 
-    supportLibVersion = "23.1.0"
+    supportLibVersion = "23.1.1"
 
     junitVersion = "4.12"
     mockitoVersion = "1.10.19"
@@ -21,6 +21,7 @@ ext {
 
     DEBUG_LOG = "true"
     DISABLE_LOG = "false"
+    LOG_TAG = "\"AndroidLib\""
 }
 
 allprojects {
@@ -28,3 +29,8 @@ allprojects {
         jcenter()
     }
 }
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+

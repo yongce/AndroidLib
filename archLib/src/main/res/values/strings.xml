@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arch_perm_guard_common_label">Guard permission</string>
+    <string name="arch_perm_guard_common_desc">To guard myself to prevent attacks</string>
+</resources>
