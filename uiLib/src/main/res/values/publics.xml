@@ -6,4 +6,8 @@
     !-->
     <public type="string" name="commonui_tips_loading" />
     <public type="string" name="commonui_tips_loading_percent" />
+
+    <public type="attr" name="commonuiActivityHorizontalMargin" />
+    <public type="attr" name="commonuiActivityVerticalMargin" />
+    <public type="attr" name="commonuiGridEntriesStyle" />
 </resources>
