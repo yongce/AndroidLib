@@ -1,5 +1,7 @@
 package me.ycdev.android.arch.activity;
 
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 /**
@@ -7,5 +9,18 @@ import android.support.v7.app.AppCompatActivity;
  * {@link android.support.v7.app.AppCompatActivity}.
  */
 public abstract class AppCompatBaseActivity extends AppCompatActivity {
-    // nothing to do right now
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (shouldSetDisplayHomeAsUpEnabled()) {
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+    }
+
+    protected boolean shouldSetDisplayHomeAsUpEnabled() {
+        return true;
+    }
 }
