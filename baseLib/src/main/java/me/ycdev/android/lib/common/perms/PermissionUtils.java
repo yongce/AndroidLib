@@ -91,11 +91,15 @@ public class PermissionUtils {
         checkCallerSupported(caller);
 
         boolean shouldShowRationale = false;
-        for (String perm : params.permissions) {
-            if (shouldShowRequestPermissionRationale(caller, perm)) {
-                shouldShowRationale = true;
-                break;
+        if (params.rationalePolicy == PermissionRequestParams.RATIONALE_POLICY_ON_DEMOND) {
+            for (String perm : params.permissions) {
+                if (shouldShowRequestPermissionRationale(caller, perm)) {
+                    shouldShowRationale = true;
+                    break;
+                }
             }
+        } else if (params.rationalePolicy == PermissionRequestParams.RATIONALE_POLICY_ALWAYS) {
+            shouldShowRationale = true;
         }
 
         if (shouldShowRationale) {
