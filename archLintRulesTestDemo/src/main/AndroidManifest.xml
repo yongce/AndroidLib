@@ -21,6 +21,10 @@
             android:label="@string/title_activity_lint_good2" >
         </activity>
         <activity
+            android:name=".activity.LintGood3Activity"
+            android:label="@string/title_activity_lint_good3" >
+        </activity>
+        <activity
             android:name=".activity.LintViolationActivity"
             android:label="@string/title_activity_lint_violation" >
         </activity>

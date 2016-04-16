@@ -1,4 +1,4 @@
-package me.ycdev.android.lib.common.test;
+package me.ycdev.android.lib.test;
 
 import android.support.test.runner.AndroidJUnit4;
 
