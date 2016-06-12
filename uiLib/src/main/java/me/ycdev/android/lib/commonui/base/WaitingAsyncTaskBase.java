@@ -21,13 +21,21 @@ public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
     protected ProgressDialog mDialog;
 
     public WaitingAsyncTaskBase(Activity activity) {
-        this(activity, true, true);
+        this(activity, false, false);
     }
 
     public WaitingAsyncTaskBase(Activity activity, boolean cancelable,
             boolean autoFinishWhenCanceled) {
         mActivity = activity;
         mCancelable = cancelable;
+        mAutoFinishWhenCanceled = autoFinishWhenCanceled;
+    }
+
+    public void setCancelable(boolean cancelable) {
+        mCancelable = cancelable;
+    }
+
+    public void setAutoFinishWhenCanceled(boolean autoFinishWhenCanceled) {
         mAutoFinishWhenCanceled = autoFinishWhenCanceled;
     }
 
