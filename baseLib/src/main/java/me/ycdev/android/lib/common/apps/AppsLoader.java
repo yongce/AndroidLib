@@ -1,9 +1,12 @@
 package me.ycdev.android.lib.common.apps;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ public class AppsLoader {
     private PackageManager mPm;
     private String mMyselfPkgName;
 
+    @SuppressLint("StaticFieldLeak")
     private static volatile AppsLoader sInstance;
 
     private AppsLoader(Context cxt) {
@@ -38,6 +42,7 @@ public class AppsLoader {
         return sInstance;
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     public List<AppInfo> loadInstalledApps(AppsLoadFilter filter, AppsLoadConfig config,
             AppsLoadListener listener) {
         HashMap<String, AppInfo> allApps = new HashMap<>();
@@ -63,7 +68,7 @@ public class AppsLoader {
         // The flag 'PackageManager.GET_UNINSTALLED_PACKAGES' may cause less information
         // about currently installed applications to be returned!
         // Such as, install time & update time, APK path, and so on.
-        installedApps = mPm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        installedApps = mPm.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
         i = 0;
         n = installedApps.size();
         for (PackageInfo pkgInfo : installedApps) {

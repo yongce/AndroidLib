@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -95,10 +96,12 @@ public class PackageUtils {
         return pkgNames;
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     public static ActivityInfo[] getAllReceivers(Context cxt, String pkgName, boolean onlyExported) {
         try {
             PackageManager pm = cxt.getPackageManager();
-            int flags = PackageManager.GET_RECEIVERS | PackageManager.GET_DISABLED_COMPONENTS;
+            @SuppressLint("WrongConstant")
+            int flags = PackageManager.GET_RECEIVERS | PackageManager.MATCH_DISABLED_COMPONENTS;
             PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
             if (onlyExported) {
                 ActivityInfo[] tmpArray = new ActivityInfo[pkgInfo.receivers.length];
@@ -119,10 +122,12 @@ public class PackageUtils {
         return null;
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     public static ServiceInfo[] getAllServices(Context cxt, String pkgName, boolean onlyExported) {
         try {
             PackageManager pm = cxt.getPackageManager();
-            int flags = PackageManager.GET_SERVICES  | PackageManager.GET_DISABLED_COMPONENTS;
+            @SuppressLint("WrongConstant")
+            int flags = PackageManager.GET_SERVICES  | PackageManager.MATCH_DISABLED_COMPONENTS;
             PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
             if (onlyExported) {
                 ServiceInfo[] tmpArray = new ServiceInfo[pkgInfo.services.length];
@@ -143,10 +148,11 @@ public class PackageUtils {
         return null;
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     public static ActivityInfo[] getAllActivities(Context cxt, String pkgName, boolean onlyExported) {
         try {
             PackageManager pm = cxt.getPackageManager();
-            int flags = PackageManager.GET_ACTIVITIES | PackageManager.GET_DISABLED_COMPONENTS;
+            int flags = PackageManager.GET_ACTIVITIES | PackageManager.MATCH_DISABLED_COMPONENTS;
             PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
             if (onlyExported) {
                 ActivityInfo[] tmpArray = new ActivityInfo[pkgInfo.activities.length];

@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.dbmgr;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ public class SQLiteDbMgr {
     private Context mAppContext;
     private HashMap<Class<? extends SQLiteDbCreator>, DbInfo> mOpenHelpers = new HashMap<>();
 
+    @SuppressLint("StaticFieldLeak")
     private static volatile SQLiteDbMgr sInstance;
 
     private SQLiteDbMgr(Context cxt) {

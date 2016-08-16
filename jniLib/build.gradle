@@ -53,6 +53,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Testing Support Library's runner and rules
-    androidTestCompile 'com.android.support.test:runner:' + rootProject.ext.runnerVersion
-    androidTestCompile 'com.android.support.test:rules:' + rootProject.ext.rulesVersion
+    androidTestCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    androidTestCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
 }
