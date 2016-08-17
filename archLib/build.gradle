@@ -12,6 +12,11 @@ android {
         buildConfigField "String", "LOG_TAG", rootProject.ext.LOG_TAG
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     lintOptions {
         textReport true
         textOutput 'stdout'
