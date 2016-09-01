@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+project.archivesBaseName = 'common-arch-lint-rules'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -45,3 +46,11 @@ project.afterEvaluate {
     def compileLintTask = project.tasks.find { it.name == 'compileLint' }
     compileLintTask.dependsOn(copyLintJar)
 }
+
+project.ext {
+    moduleName = 'me.ycdev.android.common-arch-lint-rules'
+    moduleDesc = 'Lint rules for common arch module in AndroidLib project'
+}
+
+apply from: rootProject.file('bintray-install.gradle')
+apply from: rootProject.file('bintray-upload.gradle')

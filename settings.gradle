@@ -1,3 +1,5 @@
+rootProject.name = 'AndroidLib'
+
 include ':baseLib'
 
 include ':jniLib'

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+project.archivesBaseName = 'common-test'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -26,3 +27,11 @@ dependencies {
     compile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
     compile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
 }
+
+project.ext {
+    moduleName = 'me.ycdev.android.common-test'
+    moduleDesc = 'Common test module in AndroidLib project'
+}
+
+apply from: rootProject.file('bintray-install.gradle')
+apply from: rootProject.file('bintray-upload.gradle')

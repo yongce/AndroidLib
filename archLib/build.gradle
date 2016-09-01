@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+project.archivesBaseName = 'common-arch'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -28,3 +29,11 @@ dependencies {
     compile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
     compile project(':archLintRulesAAR')
 }
+
+project.ext {
+    moduleName = 'me.ycdev.android.common-arch'
+    moduleDesc = 'Common arch module in AndroidLib project'
+}
+
+apply from: rootProject.file('bintray-install.gradle')
+apply from: rootProject.file('bintray-upload.gradle')

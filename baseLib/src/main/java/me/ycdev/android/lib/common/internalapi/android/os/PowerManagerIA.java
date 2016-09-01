@@ -247,14 +247,13 @@ public class PowerManagerIA {
     }
 
     /**
-     * Forces the device to go to sleep.
+     * Forces the device to go to sleep. Please refer android.os.PowerManager#goToSleep(long).
      * @param service
      * @param time The time when the request to go to sleep was issued,
      *             in the {@link android.os.SystemClock#uptimeMillis()} time base.
      *             This timestamp is used to correctly order the go to sleep request with
      *             other power management functions. It should be set to the timestamp
      *             of the input event that caused the request to go to sleep.
-     * @see android.os.PowerManager#goToSleep(long)
      */
     public static void goToSleep(@NonNull Object service, long time) {
         reflect_goToSleep();

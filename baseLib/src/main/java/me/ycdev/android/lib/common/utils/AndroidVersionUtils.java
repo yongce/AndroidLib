@@ -26,7 +26,6 @@ public class AndroidVersionUtils {
 
     /**
      * Honeycomb (3.0) and higher version (API 11+)
-     * @return
      */
     public static boolean hasHoneycomb() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;

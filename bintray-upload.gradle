@@ -1,0 +1,58 @@
+apply plugin: 'com.jfrog.bintray'
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+task generateJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+afterEvaluate {
+    generateJavadocs.classpath += files(android.libraryVariants.collect { variant ->
+        variant.javaCompile.classpath
+    })
+    generateJavadocs.classpath += files(android.libraryVariants.collect { variant ->
+        variant.javaCompile.outputs
+    })
+}
+
+task generateJavadocsJar(type: Jar, dependsOn: generateJavadocs) {
+    from generateJavadocs.destinationDir
+    classifier 'javadoc'
+}
+
+artifacts {
+    archives generateSourcesJar
+    archives generateJavadocsJar
+}
+
+// For the plugin 'com.jfrog.bintray'
+Properties properties = new Properties()
+properties.load(rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apikey')
+
+    configurations = ['archives']
+
+    pkg {
+        repo = rootProject.ext.projectRepo
+        name = project.ext.moduleName
+        desc = project.ext.moduleDesc
+        websiteUrl = rootProject.ext.projectUrl
+        vcsUrl = rootProject.ext.projectScmConnection
+        licenses = ['Apache-2.0']
+        publicDownloadNumbers = true
+        publish = true
+
+        version {
+            name = rootProject.ext.version
+            desc = project.ext.moduleDesc
+            released  = new Date()
+            vcsTag = rootProject.ext.version
+        }
+    }
+}

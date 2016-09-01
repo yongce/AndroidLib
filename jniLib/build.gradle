@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+project.archivesBaseName = 'common-jni'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -42,3 +43,11 @@ dependencies {
     androidTestCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
     androidTestCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
 }
+
+project.ext {
+    moduleName = 'me.ycdev.android.common-jni'
+    moduleDesc = 'Common jni module in AndroidLib project'
+}
+
+apply from: rootProject.file('bintray-install.gradle')
+apply from: rootProject.file('bintray-upload.gradle')

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+project.archivesBaseName = 'common-ui'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -28,3 +29,11 @@ dependencies {
     compile project(':archLib')
     compile project(':baseLib')
 }
+
+project.ext {
+    moduleName = 'me.ycdev.android.common-ui'
+    moduleDesc = 'Common UI module in AndroidLib project'
+}
+
+apply from: rootProject.file('bintray-install.gradle')
+apply from: rootProject.file('bintray-upload.gradle')
