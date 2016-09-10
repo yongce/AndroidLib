@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-beta3'
+        classpath 'com.android.tools.build:gradle:2.2.0-rc1'
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
@@ -38,7 +38,7 @@ ext {
     LOG_TAG = "\"AndroidLib\""
 
     // For bintray upload
-    projectRepo = 'maven'
+    projectRepo = 'android'
     projectUrl = 'https://github.com/yongce/AndroidLib'
     projectScmConnection = 'https://github.com/yongce/AndroidLib.git'
     projectScmDevConnection = 'ssh://git@github.com/yongce/AndroidLib.git'

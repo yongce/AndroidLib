@@ -6,8 +6,6 @@ version = rootProject.ext.version
 install {
     repositories.mavenInstaller {
         pom.project {
-            name project.ext.moduleName
-            description project.ext.moduleDesc
             url rootProject.ext.projectUrl
             inceptionYear rootProject.ext.projectInceptionYear
 

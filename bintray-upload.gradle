@@ -38,6 +38,8 @@ bintray {
 
     configurations = ['archives']
 
+    publish = true
+
     pkg {
         repo = rootProject.ext.projectRepo
         name = project.ext.moduleName
@@ -46,13 +48,10 @@ bintray {
         vcsUrl = rootProject.ext.projectScmConnection
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
-        publish = true
 
         version {
             name = rootProject.ext.version
-            desc = project.ext.moduleDesc
             released  = new Date()
-            vcsTag = rootProject.ext.version
         }
     }
 }
