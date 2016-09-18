@@ -1,6 +1,5 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -100,7 +99,6 @@ public class PackageUtils {
     public static ActivityInfo[] getAllReceivers(Context cxt, String pkgName, boolean onlyExported) {
         try {
             PackageManager pm = cxt.getPackageManager();
-            @SuppressLint("WrongConstant")
             int flags = PackageManager.GET_RECEIVERS | PackageManager.MATCH_DISABLED_COMPONENTS;
             PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
             if (onlyExported) {
@@ -126,7 +124,6 @@ public class PackageUtils {
     public static ServiceInfo[] getAllServices(Context cxt, String pkgName, boolean onlyExported) {
         try {
             PackageManager pm = cxt.getPackageManager();
-            @SuppressLint("WrongConstant")
             int flags = PackageManager.GET_SERVICES  | PackageManager.MATCH_DISABLED_COMPONENTS;
             PackageInfo pkgInfo = pm.getPackageInfo(pkgName, flags);
             if (onlyExported) {
