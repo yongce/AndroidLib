@@ -2,7 +2,7 @@
 <resources>
     <!--
     For "public & private resources",
-    please refer http://developer.android.com/tools/studio/studio-features.html#private-res
+    please refer https://developer.android.com/studio/projects/android-library.html#PrivateResources
     !-->
     <public type="string" name="commonui_tips_loading" />
     <public type="string" name="commonui_tips_loading_percent" />
