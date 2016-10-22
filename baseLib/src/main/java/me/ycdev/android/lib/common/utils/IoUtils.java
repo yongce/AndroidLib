@@ -96,6 +96,37 @@ public class IoUtils {
         }
     }
 
+    /**
+     * @param lineNumber Start from 1
+     */
+    @Nullable
+    public static String readOneLine(@NonNull InputStream is, int lineNumber) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        String line = null;
+
+        for (int i = 0; i < lineNumber; i++) {
+            line = reader.readLine();
+            if (line == null) {
+                break;
+            }
+        }
+
+        return line;
+    }
+
+    /**
+     * @param lineNumber Start from 1
+     */
+    @Nullable
+    public static String readOneLine(@NonNull String filePath, int lineNumber) throws IOException {
+        FileInputStream fis = new FileInputStream(filePath);
+        try {
+            return readOneLine(fis, lineNumber);
+        } finally {
+            closeQuietly(fis);
+        }
+    }
+
     public static void createParentDirsIfNeeded(@NonNull File file) {
         File dirFile = file.getParentFile();
         if (dirFile != null && !dirFile.exists()) {

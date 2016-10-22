@@ -28,6 +28,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
     compile project(':archLintRulesAAR')
+    compile project(':baseLib')
 }
 
 project.ext {
