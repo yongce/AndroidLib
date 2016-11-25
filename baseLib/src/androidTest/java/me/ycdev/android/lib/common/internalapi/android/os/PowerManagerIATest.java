@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import me.ycdev.android.lib.common.utils.TestLogger;
+import me.ycdev.android.lib.common.utils.LibLogger;
 
 import static org.junit.Assert.assertTrue;
 
@@ -19,12 +19,12 @@ public class PowerManagerIATest {
 
     @Before
     public void setUp() throws Exception {
-        TestLogger.i(TAG, "setup");
+        LibLogger.i(TAG, "setup");
     }
 
     @After
     public void tearDown() throws Exception {
-        TestLogger.i(TAG, "tearDown");
+        LibLogger.i(TAG, "tearDown");
     }
 
     @Test

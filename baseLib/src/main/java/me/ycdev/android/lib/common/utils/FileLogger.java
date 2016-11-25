@@ -1,4 +1,4 @@
-package me.ycdev.android.arch.utils;
+package me.ycdev.android.lib.common.utils;
 
 import android.os.Process;
 import android.support.annotation.NonNull;
@@ -15,9 +15,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import me.ycdev.android.lib.common.annotation.GuardedBy;
-import me.ycdev.android.lib.common.utils.IoUtils;
 
-public class FileLogger {
+public class FileLogger extends LibLogger {
     private static final String TAG = "FileLogger";
 
     private Writer mFileWriter = null;

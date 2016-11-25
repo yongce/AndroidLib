@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import me.ycdev.android.lib.commonjni.demo.utils.AppLogger;
+import me.ycdev.android.arch.utils.AppLogger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";

@@ -5,14 +5,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 
+import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.commonui.R;
-import me.ycdev.android.lib.commonui.utils.LibConfigs;
-import me.ycdev.android.lib.commonui.utils.LibLogger;
 
 public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
         AsyncTask<Params, Progress, Result> {
     private static final String TAG = "WaitingAsyncTaskBase";
-    private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
 
     protected Activity mActivity;
     protected boolean mCancelable;
@@ -51,9 +49,7 @@ public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
         mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (DEBUG) {
-                    LibLogger.d(TAG, "to cancel, finish activity? " + mAutoFinishWhenCanceled);
-                }
+                LibLogger.d(TAG, "to cancel, finish activity? " + mAutoFinishWhenCanceled);
                 cancel(true);
                 if (mAutoFinishWhenCanceled) {
                     mActivity.finish();
@@ -65,7 +61,7 @@ public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
 
     @Override
     protected void onCancelled() {
-        if (DEBUG) LibLogger.d(TAG, "cancelled");
+        LibLogger.d(TAG, "cancelled");
         if (mDialog.isShowing()) {
             mDialog.dismiss();
         }

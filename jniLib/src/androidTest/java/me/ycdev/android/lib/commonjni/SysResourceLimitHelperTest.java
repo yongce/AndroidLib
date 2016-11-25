@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import me.ycdev.android.lib.commonjni.utils.TestLogger;
+import me.ycdev.android.lib.common.utils.LibLogger;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +17,7 @@ public class SysResourceLimitHelperTest {
     public void test_getOpenFilesNumberLimit() {
         SysResourceLimitHelper.LimitInfo ofLimit = SysResourceLimitHelper.getOpenFilesLimit();
         assertTrue("failed to get open files limit", ofLimit != null);
-        TestLogger.d(TAG, "cur limit: " + ofLimit.curLimit + ", max limit: " + ofLimit.maxLimit);
+        LibLogger.d(TAG, "cur limit: " + ofLimit.curLimit + ", max limit: " + ofLimit.maxLimit);
     }
 
     @Test

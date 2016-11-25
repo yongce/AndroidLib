@@ -4,13 +4,12 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 
-import me.ycdev.android.lib.commonjni.utils.TestLogger;
+import me.ycdev.android.lib.common.utils.LibLogger;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,7 +24,7 @@ public class FileStatusHelperTest {
         File testFile = targetContext.getFilesDir();
         FileStatusHelper.FileStatus fileStatus = FileStatusHelper.getFileStatus(
                 testFile.getAbsolutePath());
-        TestLogger.i(TAG, "uid: " + fileStatus.uid + ", gid: " + fileStatus.gid
+        LibLogger.i(TAG, "uid: " + fileStatus.uid + ", gid: " + fileStatus.gid
                 + ", mode: " + Integer.toOctalString(fileStatus.mode));
         assertEquals("check uid", targetUid, fileStatus.uid);
         assertEquals("check gid", targetUid, fileStatus.gid);
