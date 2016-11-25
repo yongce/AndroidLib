@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.RestrictTo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -130,7 +130,7 @@ public class ActivityManagerIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_forceStopPackage() {
         reflect_forceStopPackage();
         return sMtd_forceStopPackage != null;

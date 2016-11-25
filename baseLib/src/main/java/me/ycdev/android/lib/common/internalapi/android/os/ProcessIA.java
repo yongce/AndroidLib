@@ -3,7 +3,7 @@ package me.ycdev.android.lib.common.internalapi.android.os;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.RestrictTo;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -56,7 +56,7 @@ public class ProcessIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_setArgV0() {
         reflect_setArgV0();
         return sMtd_setArgV0 != null;
@@ -135,7 +135,7 @@ public class ProcessIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_readProcLines() {
         reflect_readProcLines();
         return sMtd_readProcLines != null;
@@ -178,7 +178,7 @@ public class ProcessIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_getParentPid() {
         reflect_getParentPid();
         return sMtd_getParentPid != null ||
@@ -218,7 +218,7 @@ public class ProcessIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_myPpid() {
         reflect_myPpid();
         return sMtd_myPpid != null || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT;

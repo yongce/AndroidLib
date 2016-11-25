@@ -1,7 +1,7 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.os.Build;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.RestrictTo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -61,7 +61,7 @@ public class UserHandleIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_myUserId() {
         return sMtd_myUserId != null || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN;
     }

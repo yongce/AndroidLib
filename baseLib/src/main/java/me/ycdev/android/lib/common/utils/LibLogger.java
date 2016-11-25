@@ -3,8 +3,10 @@ package me.ycdev.android.lib.common.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import android.support.annotation.RestrictTo;
 import android.util.Log;
 
+@RestrictTo(RestrictTo.Scope.GROUP_ID)
 public class LibLogger {
     public static final String  TAG = "AndroidLib";
 

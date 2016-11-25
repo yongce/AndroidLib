@@ -1,10 +1,12 @@
 package me.ycdev.android.lib.commonui.utils;
 
+import android.support.annotation.RestrictTo;
 import android.util.Log;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+@RestrictTo(RestrictTo.Scope.GROUP_ID)
 public class LibLogger {
     public static final String  TAG = "AndroidUiLib";
 

@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.RestrictTo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -138,7 +138,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_reboot() {
         reflect_reboot();
         return sMtd_reboot != null;
@@ -176,7 +176,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_shutdown() {
         reflect_shutdown();
         return sMtd_shutdown != null || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1;
@@ -213,7 +213,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_crash() {
         reflect_crash();
         return sMtd_crash != null;
@@ -277,7 +277,7 @@ public class PowerManagerIA {
     /**
      * Just for unit test.
      */
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_goToSleep() {
         reflect_goToSleep();
         return sMtd_goToSleep != null;
