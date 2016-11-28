@@ -1,12 +1,11 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import android.support.test.filters.SmallTest;
 
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -96,7 +95,7 @@ public class ReflectionUtilsTest {
             // TestA part
             Method a11 = ReflectionUtils.findMethod(TestB.class, "a11", String.class, long.class);
             assertTrue(a11.getDeclaringClass() == TestA.class && a11.getName().equals("a11"));
-            assertTrue(a11.invoke(objB, "a", 11l).equals("a11"));
+            assertTrue(a11.invoke(objB, "a", 11L).equals("a11"));
 
             Method a13 = ReflectionUtils.findMethod(TestB.class, "a13");
             assertTrue(a13.getDeclaringClass() == TestA.class && a13.getName().equals("a13"));
@@ -104,7 +103,7 @@ public class ReflectionUtilsTest {
 
             Method a14 = ReflectionUtils.findMethod(TestB.class, "a14", long.class);
             assertTrue(a14.getDeclaringClass() == TestA.class && a14.getName().equals("a14"));
-            assertTrue((long) a14.invoke(null, 14l) == 14l);
+            assertTrue((long) a14.invoke(null, 14L) == 14L);
 
             Method a15 = ReflectionUtils.findMethod(TestB.class, "a15", int.class, String.class);
             assertTrue(a15.getDeclaringClass() == TestA.class && a15.getName().equals("a15"));
@@ -121,7 +120,7 @@ public class ReflectionUtilsTest {
 
             Method b11 = ReflectionUtils.findMethod(TestB.class, "b11", String.class, long.class);
             assertTrue(b11.getDeclaringClass() == TestB.class && b11.getName().equals("b11"));
-            assertTrue(b11.invoke(objB, "b", 11l).equals("b11"));
+            assertTrue(b11.invoke(objB, "b", 11L).equals("b11"));
 
             Method b13 = ReflectionUtils.findMethod(TestB.class, "b13");
             assertTrue(b13.getDeclaringClass() == TestB.class && b13.getName().equals("b13"));
@@ -129,7 +128,7 @@ public class ReflectionUtilsTest {
 
             Method b14 = ReflectionUtils.findMethod(TestB.class, "b14", long.class);
             assertTrue(b14.getDeclaringClass() == TestB.class && b14.getName().equals("b14"));
-            assertTrue((long) b14.invoke(null, 14l) == 14l);
+            assertTrue((long) b14.invoke(null, 14L) == 14L);
 
             Method b15 = ReflectionUtils.findMethod(TestB.class, "b15", int.class, String.class);
             assertTrue(b15.getDeclaringClass() == TestB.class && b15.getName().equals("b15"));
@@ -163,8 +162,8 @@ public class ReflectionUtilsTest {
 
             Field a4 = ReflectionUtils.findField(TestB.class, "a4");
             assertTrue(a4.getDeclaringClass() == TestA.class && a4.getName().equals("a4"));
-            a4.set(objB, 4l);
-            assertTrue((long) a4.get(objB) == 4l);
+            a4.set(objB, 4L);
+            assertTrue((long) a4.get(objB) == 4L);
 
             Field a5 = ReflectionUtils.findField(TestB.class, "a5");
             assertTrue(a5.getDeclaringClass() == TestA.class && a5.getName().equals("a5"));
@@ -183,8 +182,8 @@ public class ReflectionUtilsTest {
 
             Field a8 = ReflectionUtils.findField(TestB.class, "a8");
             assertTrue(a8.getDeclaringClass() == TestA.class && a8.getName().equals("a8"));
-            a8.set(null, 8l);
-            assertTrue((long) a8.get(null) == 8l);
+            a8.set(null, 8L);
+            assertTrue((long) a8.get(null) == 8L);
 
             // TestB part
             Field b1 = ReflectionUtils.findField(TestB.class, "b1");
@@ -204,8 +203,8 @@ public class ReflectionUtilsTest {
 
             Field b4 = ReflectionUtils.findField(TestB.class, "b4");
             assertTrue(b4.getDeclaringClass() == TestB.class && b4.getName().equals("b4"));
-            b4.set(objB, 4l);
-            assertTrue((long) b4.get(objB) == 4l);
+            b4.set(objB, 4L);
+            assertTrue((long) b4.get(objB) == 4L);
 
             Field b5 = ReflectionUtils.findField(TestB.class, "b5");
             assertTrue(b5.getDeclaringClass() == TestB.class && b5.getName().equals("b5"));
@@ -224,8 +223,8 @@ public class ReflectionUtilsTest {
 
             Field b8 = ReflectionUtils.findField(TestB.class, "b8");
             assertTrue(b8.getDeclaringClass() == TestB.class && b8.getName().equals("b8"));
-            b8.set(null, 8l);
-            assertTrue((long) b8.get(null) == 8l);
+            b8.set(null, 8L);
+            assertTrue((long) b8.get(null) == 8L);
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed to reflect: " + e.toString());

@@ -3,10 +3,9 @@ package me.ycdev.android.lib.common.net;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -14,18 +13,17 @@ import org.junit.runner.RunWith;
 
 import me.ycdev.android.lib.common.utils.SystemSwitchUtils;
 
-import static me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_2G;
-import static me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_3G;
-import static me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_4G;
-import static me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_MOBILE;
-import static me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_NONE;
-import static me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_WIFI;
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_2G;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_3G;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_4G;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_MOBILE;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_NONE;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_WIFI;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

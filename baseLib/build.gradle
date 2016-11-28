@@ -32,6 +32,8 @@ dependencies {
     // Dependencies for local unit tests
     testCompile project(':testLib')
     testCompile "junit:junit:${rootProject.ext.junitVersion}"
+    testCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    testCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
     testCompile "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
     testCompile "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
 

@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import android.support.test.filters.SmallTest;
 
 import org.junit.After;
 import org.junit.Before;

@@ -18,23 +18,30 @@ import java.net.URL;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_2G;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_3G;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_4G;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_MOBILE;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_NONE;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_WIFI;
+
 public class NetworkUtils {
     private static final String TAG = "NetworkUtils";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
-
-    public static final int NETWORK_TYPE_NONE = -1;
-    public static final int NETWORK_TYPE_WIFI = 1;
-    public static final int NETWORK_TYPE_MOBILE = 2;
-    public static final int NETWORK_TYPE_2G = 10;
-    public static final int NETWORK_TYPE_3G = 11;
-    public static final int NETWORK_TYPE_4G = 12;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
             NETWORK_TYPE_NONE, NETWORK_TYPE_WIFI, NETWORK_TYPE_MOBILE,
             NETWORK_TYPE_2G, NETWORK_TYPE_3G, NETWORK_TYPE_4G
     })
-    public @interface NetworkType {}
+    public @interface NetworkType {
+        int NETWORK_TYPE_NONE = -1;
+        int NETWORK_TYPE_WIFI = 1;
+        int NETWORK_TYPE_MOBILE = 2;
+        int NETWORK_TYPE_2G = 10;
+        int NETWORK_TYPE_3G = 11;
+        int NETWORK_TYPE_4G = 12;
+    }
 
     public static NetworkInfo getActiveNetworkInfo(Context cxt) {
         ConnectivityManager cm = (ConnectivityManager) cxt.getSystemService(
@@ -54,8 +61,8 @@ public class NetworkUtils {
     }
 
     /**
-     * @return One of the values {@link #NETWORK_TYPE_NONE},
-     *         {@link #NETWORK_TYPE_WIFI} or {@link #NETWORK_TYPE_MOBILE}
+     * @return One of the values {@link NetworkType#NETWORK_TYPE_NONE},
+     *         {@link NetworkType#NETWORK_TYPE_WIFI} or {@link NetworkType#NETWORK_TYPE_MOBILE}
      */
     @SuppressWarnings("deprecation")
     @NetworkType
@@ -79,8 +86,8 @@ public class NetworkUtils {
     }
 
     /**
-     * @return One of values {@link #NETWORK_TYPE_2G}, {@link #NETWORK_TYPE_3G},
-     *                       {@link #NETWORK_TYPE_4G} or {@link #NETWORK_TYPE_NONE}
+     * @return One of values {@link NetworkType#NETWORK_TYPE_2G}, {@link NetworkType#NETWORK_TYPE_3G},
+     *         {@link NetworkType#NETWORK_TYPE_4G} or {@link NetworkType#NETWORK_TYPE_NONE}
      */
     @NetworkType
     public static int getMobileNetworkType(Context cxt) {
@@ -133,8 +140,9 @@ public class NetworkUtils {
     }
 
     /**
-     * @return One of values {@link #NETWORK_TYPE_WIFI}, {@link #NETWORK_TYPE_2G},
-     *         {@link #NETWORK_TYPE_3G}, {@link #NETWORK_TYPE_4G} or {@link #NETWORK_TYPE_NONE}
+     * @return One of values {@link NetworkType#NETWORK_TYPE_WIFI}, {@link NetworkType#NETWORK_TYPE_2G},
+     *         {@link NetworkType#NETWORK_TYPE_3G}, {@link NetworkType#NETWORK_TYPE_4G}
+     *         or {@link NetworkType#NETWORK_TYPE_NONE}
      */
     @NetworkType
     public static int getMixedNetworkType(Context cxt) {
