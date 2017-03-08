@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import me.ycdev.android.lib.common.annotation.GuardedBy;
 
-public class FileLogger extends LibLogger {
+public class FileLogger {
     private static final String TAG = "FileLogger";
 
     private Writer mFileWriter = null;

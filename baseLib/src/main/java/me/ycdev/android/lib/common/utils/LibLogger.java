@@ -7,7 +7,7 @@ import android.util.Log;
 
 import java.util.Locale;
 
-@RestrictTo(RestrictTo.Scope.GROUP_ID)
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public class LibLogger {
     private static final String TAG = "AndroidLib";
     private static boolean sJvmLogger = false;
