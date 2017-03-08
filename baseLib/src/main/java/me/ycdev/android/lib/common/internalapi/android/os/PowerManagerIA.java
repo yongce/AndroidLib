@@ -31,6 +31,7 @@ public class PowerManagerIA {
     private static Method sMtd_reboot;
     private static int sVersion_reboot;
     private static Method sMtd_shutdown;
+    private static int sVersion_shutdown;
     private static Method sMtd_crash;
     private static Method sMtd_goToSleep;
     private static int sVersion_goToSleep;
@@ -151,18 +152,33 @@ public class PowerManagerIA {
         }
 
         try {
-            // Android 4.2: void shutdown(boolean confirm, boolean wait);
-            sMtd_shutdown = sClass_IPowerManager.getMethod("shutdown", boolean.class, boolean.class);
+            try {
+                // Android 4.2: void shutdown(boolean confirm, boolean wait);
+                sMtd_shutdown = sClass_IPowerManager.getMethod("shutdown",
+                        boolean.class, boolean.class);
+                sVersion_shutdown = API_VERSION_1;
+            } catch (NoSuchMethodException e) {
+                // Android 7.0: void shutdown(boolean confirm, String reason, boolean wait);
+                sMtd_shutdown = sClass_IPowerManager.getMethod("shutdown",
+                        boolean.class, String.class, boolean.class);
+                sVersion_shutdown = API_VERSION_2;
+            }
         } catch (NoSuchMethodException e) {
             if (DEBUG) LibLogger.w(TAG, "method not found", e);
         }
     }
 
-    public static void shutdown(@NonNull Object service) {
+    public static void shutdown(@NonNull Object service, String reason) {
         reflect_shutdown();
         if (sMtd_shutdown != null) {
             try {
-                sMtd_shutdown.invoke(service, false, false);
+                if (sVersion_shutdown == API_VERSION_1) {
+                    sMtd_shutdown.invoke(service, false, false);
+                } else if (sVersion_shutdown == API_VERSION_2) {
+                    sMtd_shutdown.invoke(service, false, reason, false);
+                } else {
+                    if (DEBUG) LibLogger.e(TAG, "shutdown, unknown api version: " + sVersion_shutdown);
+                }
             } catch (IllegalAccessException e) {
                 if (DEBUG) LibLogger.w(TAG, "Failed to invoke #shutdown()", e);
             } catch (InvocationTargetException e) {

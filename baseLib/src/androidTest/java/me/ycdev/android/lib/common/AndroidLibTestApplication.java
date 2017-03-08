@@ -6,7 +6,7 @@ import me.ycdev.android.lib.common.utils.DebugUtils;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
 public class AndroidLibTestApplication extends Application {
-    private static final String TAG = "AndroidLibTestApplication";
+    private static final String TAG = "BaseLibTestApp";
 
     @Override
     public void onCreate() {
