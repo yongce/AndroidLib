@@ -4,13 +4,6 @@ import android.os.Build;
 
 public class AndroidVersionUtils {
     /**
-     * Froyo (2.2) and higher version (API 8+)
-     */
-    public static boolean hasFroyo() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
-    }
-
-    /**
      * Gingerbread (2.3) and higher version (API 9+)
      */
     public static boolean hasGingerbread() {

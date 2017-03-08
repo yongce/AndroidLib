@@ -84,13 +84,7 @@ public class StorageUtils {
      */
     @TargetApi(Build.VERSION_CODES.FROYO)
     public static File getExternalCacheDir(@NonNull Context context) {
-        if (AndroidVersionUtils.hasFroyo()) {
-            return context.getExternalCacheDir();
-        }
-
-        // Before Froyo we need to construct the external cache dir ourselves
-        final String cacheDir = "/Android/data/" + context.getPackageName() + "/cache/";
-        return new File(Environment.getExternalStorageDirectory().getPath() + cacheDir);
+        return context.getExternalCacheDir();
     }
 
     public static boolean isExternalStorageAvailable() {
