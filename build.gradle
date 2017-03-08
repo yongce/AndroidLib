@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.3.0'
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
@@ -23,9 +23,9 @@ task clean(type: Delete) {
 
 ext {
     compileSdkVersion = 25
-    buildToolsVersion = "25.0.1"
+    buildToolsVersion = "25.0.2"
 
-    supportLibVersion = "25.0.1"
+    supportLibVersion = "25.2.0"
 
     junitVersion = "4.12"
     mockitoVersion = "1.10.19"
@@ -35,7 +35,6 @@ ext {
 
     DEBUG_LOG = "true"
     DISABLE_LOG = "false"
-    LOG_TAG = "\"AndroidLib\""
 
     // For bintray upload
     projectRepo = 'android'

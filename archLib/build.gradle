@@ -10,7 +10,6 @@ android {
 
         buildConfigField "boolean", "DEBUG_LOG", rootProject.ext.DEBUG_LOG
         buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
-        buildConfigField "String", "LOG_TAG", rootProject.ext.LOG_TAG
     }
 
     compileOptions {
