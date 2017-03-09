@@ -6,17 +6,18 @@ import android.widget.Toast;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class ArchConstants {
-    /*
-     * Intent types
-     */
-    public static final int INTENT_TYPE_ACTIVITY = 1;
-    public static final int INTENT_TYPE_BROADCAST = 2;
-    public static final int INTENT_TYPE_SERVICE = 3;
+import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_ACTIVITY;
+import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_BROADCAST;
+import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_SERVICE;
 
+public class ArchConstants {
     @IntDef({INTENT_TYPE_ACTIVITY, INTENT_TYPE_BROADCAST, INTENT_TYPE_SERVICE})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface IntentType {}
+    public @interface IntentType {
+        int INTENT_TYPE_ACTIVITY = 1;
+        int INTENT_TYPE_BROADCAST = 2;
+        int INTENT_TYPE_SERVICE = 3;
+    }
 
     /*
      * Durations for toast

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import me.ycdev.android.arch.ArchConstants;
 import me.ycdev.android.arch.activity.AppCompatBaseActivity;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 import me.ycdev.android.lib.common.utils.IntentUtils;
@@ -24,6 +23,7 @@ import me.ycdev.android.lib.commonui.base.ListAdapterBase;
 import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 
 import static me.ycdev.android.arch.ArchConstants.IntentType;
+import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_ACTIVITY;
 
 public abstract class GridEntriesActivity extends AppCompatBaseActivity
         implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -31,7 +31,7 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
         public @NonNull Intent intent;
         public @NonNull String title;
         public @NonNull String desc;
-        public @IntentType int type = ArchConstants.INTENT_TYPE_ACTIVITY;
+        public @IntentType int type = INTENT_TYPE_ACTIVITY;
         public @Nullable String perm;
 
         public IntentEntry(@NonNull Intent intent, @NonNull String title, @NonNull String desc) {

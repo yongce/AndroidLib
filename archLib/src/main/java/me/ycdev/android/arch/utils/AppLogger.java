@@ -24,12 +24,15 @@ public class AppLogger {
         LibLogger.setFileLogger(fileLogger);
     }
 
-    public static void setDebug(boolean debug) {
-        LibLogger.setDebug(debug);
+    /**
+     * Log enabled by default
+     */
+    public static void setLogEnabled(boolean enabled) {
+        LibLogger.setLogEnabled(enabled);
     }
 
-    public static boolean isDebug() {
-        return LibLogger.isDebug();
+    public static boolean isLogEnabled() {
+        return LibLogger.isLogEnabled();
     }
 
     public static void v(@NonNull String tag, @NonNull String msg, Object... args) {

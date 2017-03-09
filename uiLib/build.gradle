@@ -7,9 +7,6 @@ android {
 
     defaultConfig {
         minSdkVersion 9
-
-        buildConfigField "boolean", "DEBUG_LOG", rootProject.ext.DEBUG_LOG
-        buildConfigField "boolean", "DISABLE_LOG", rootProject.ext.DISABLE_LOG
     }
 
     compileOptions {

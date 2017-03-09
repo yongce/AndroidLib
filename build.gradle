@@ -33,9 +33,6 @@ ext {
     runnerVersion = "0.5"
     rulesVersion = "0.5"
 
-    DEBUG_LOG = "true"
-    DISABLE_LOG = "false"
-
     // For bintray upload
     projectRepo = 'android'
     projectUrl = 'https://github.com/yongce/AndroidLib'
