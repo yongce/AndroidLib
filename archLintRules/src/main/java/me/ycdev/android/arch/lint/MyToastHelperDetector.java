@@ -7,7 +7,6 @@ import com.android.tools.lint.detector.api.JavaContext;
 import com.android.tools.lint.detector.api.Scope;
 import com.android.tools.lint.detector.api.Severity;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

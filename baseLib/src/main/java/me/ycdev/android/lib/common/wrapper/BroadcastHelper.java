@@ -1,4 +1,4 @@
-package me.ycdev.android.arch.wrapper;
+package me.ycdev.android.lib.common.wrapper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,14 +11,14 @@ import android.support.annotation.NonNull;
  */
 @SuppressWarnings("unused")
 public class BroadcastHelper {
-    private static final String PERM_COMMON_BROADCAST_SUFFIX = ".permission.INTERNAL_COMMON";
+    private static final String PERM_INTERNAL_BROADCAST_SUFFIX = ".permission.INTERNAL";
 
     private BroadcastHelper() {
         // nothing to do
     }
 
-    public static String getInternalBroadcastPerm(Context cxt) {
-        return cxt.getPackageName() + PERM_COMMON_BROADCAST_SUFFIX;
+    private static String getInternalBroadcastPerm(Context cxt) {
+        return cxt.getPackageName() + PERM_INTERNAL_BROADCAST_SUFFIX;
     }
 
     /**
@@ -26,7 +26,7 @@ public class BroadcastHelper {
      */
     public static Intent registerForInternal(@NonNull Context cxt,
             @NonNull BroadcastReceiver receiver, @NonNull IntentFilter filter) {
-        String perm = cxt.getPackageName() + PERM_COMMON_BROADCAST_SUFFIX;
+        String perm = cxt.getPackageName() + PERM_INTERNAL_BROADCAST_SUFFIX;
         return cxt.registerReceiver(receiver, filter, perm, null);
     }
 
@@ -42,7 +42,7 @@ public class BroadcastHelper {
      * Send a broadcast to internal receivers.
      */
     public static void sendToInternal(@NonNull Context cxt, @NonNull Intent intent) {
-        String perm = cxt.getPackageName() + PERM_COMMON_BROADCAST_SUFFIX;
+        String perm = cxt.getPackageName() + PERM_INTERNAL_BROADCAST_SUFFIX;
         intent.setPackage(cxt.getPackageName()); // only works on Android 4.0 and higher versions
         cxt.sendBroadcast(intent, perm);
     }

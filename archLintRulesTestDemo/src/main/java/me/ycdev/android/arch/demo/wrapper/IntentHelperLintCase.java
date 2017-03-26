@@ -3,7 +3,7 @@ package me.ycdev.android.arch.demo.wrapper;
 import android.content.Intent;
 import android.os.Bundle;
 
-import me.ycdev.android.arch.wrapper.IntentHelper;
+import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
 public class IntentHelperLintCase {
     public static boolean hasExtraGood(Intent intent, String key) {

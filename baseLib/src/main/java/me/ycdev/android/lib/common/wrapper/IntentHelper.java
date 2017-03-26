@@ -1,4 +1,4 @@
-package me.ycdev.android.arch.wrapper;
+package me.ycdev.android.lib.common.wrapper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import me.ycdev.android.arch.utils.AppLogger;
+import me.ycdev.android.lib.common.utils.LibLogger;
 
 /**
  * A wrapper class to avoid security issues when parsing Intent extras.
@@ -26,7 +26,7 @@ public class IntentHelper {
     private static void onIntentAttacked(@NonNull Intent intent, Throwable e) {
         // prevent OOM for Android 5.0~?
         intent.replaceExtras((Bundle) null);
-        AppLogger.w(TAG, "attacked?", e);
+        LibLogger.w(TAG, "attacked?", e);
     }
 
     public static boolean hasExtra(@Nullable Intent intent, @NonNull String key) {

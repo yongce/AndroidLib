@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import me.ycdev.android.arch.wrapper.BroadcastHelper;
+import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 
 public class BroadcastHelperLintCase {
     public static Intent registerGood(Context cxt, BroadcastReceiver receiver, IntentFilter filter) {
