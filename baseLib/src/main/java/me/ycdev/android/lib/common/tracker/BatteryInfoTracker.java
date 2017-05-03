@@ -73,7 +73,7 @@ public class BatteryInfoTracker extends WeakTracker<BatteryInfoTracker.BatteryIn
     }
 
     @Override
-    protected void onListenerRegistered(@NonNull BatteryInfoListener listener) {
+    protected void onListenerAdded(@NonNull BatteryInfoListener listener) {
         if (mBatteryInfo != null) {
             listener.onBatteryInfoUpdated(mBatteryInfo);
         }

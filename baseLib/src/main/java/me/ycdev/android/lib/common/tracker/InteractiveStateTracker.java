@@ -99,7 +99,7 @@ public class InteractiveStateTracker extends WeakTracker<InteractiveStateTracker
     }
 
     @Override
-    protected void onListenerRegistered(@NonNull InteractiveStateListener listener) {
+    protected void onListenerAdded(@NonNull InteractiveStateListener listener) {
         listener.onInteractiveChanged(mInteractive);
     }
 
