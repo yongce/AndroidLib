@@ -6,4 +6,10 @@ public class Preconditions {
             throw new RuntimeException("Not in main thread");
         }
     }
+
+    public static void checkArgument(boolean expression) {
+        if (!expression) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

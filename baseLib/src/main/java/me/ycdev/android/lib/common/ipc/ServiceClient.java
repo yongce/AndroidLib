@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
@@ -22,13 +24,21 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
     protected Context mAppContext;
     protected IServiceInterface mService;
-    protected Handler mTaskHandler;
+    protected Handler mConnectHandler;
 
     private final AtomicBoolean mConnecting = new AtomicBoolean(false);
 
     protected ServiceClient(Context cxt) {
         mAppContext = cxt.getApplicationContext();
-        mTaskHandler = new Handler(getTaskLooer());
+        mConnectHandler = new Handler(getConnectLooer());
+    }
+
+    /**
+     * Get the looper used to connect/reconnect target Service.
+     * By default, it's the main looper.
+     */
+    protected Looper getConnectLooer() {
+        return Looper.getMainLooper();
     }
 
     /**
@@ -37,16 +47,27 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     protected abstract Intent getServiceIntent();
 
     /**
+     * Sub class can rewrite the candidate services select logic.
+     */
+    protected ComponentName selectTargetService(List<ResolveInfo> servicesList) {
+        LibLogger.i(TAG, "Candidate services: %d", servicesList.size());
+        Preconditions.checkArgument(servicesList.size() >= 1);
+        ServiceInfo serviceInfo = servicesList.get(0).serviceInfo;
+        for (ResolveInfo info : servicesList) {
+            if ((info.serviceInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) ==
+                    ApplicationInfo.FLAG_SYSTEM) {
+                serviceInfo = info.serviceInfo; // search the system candidate
+                LibLogger.i(TAG, "Service from system found and select it");
+                break;
+            }
+        }
+        return new ComponentName(serviceInfo.packageName, serviceInfo.name);
+    }
+
+    /**
      * Convert the IBinder object to interface.
      */
     protected abstract IServiceInterface asInterface(IBinder service);
-
-    /**
-     * Get the looper used to do some IPC calls.
-     */
-    protected Looper getTaskLooer() {
-        return IpcHandler.getInstance().getLooper();
-    }
 
     public void connect() {
         connectServiceIfNeeded();
@@ -67,6 +88,8 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
             mConnecting.set(false);
             return;
         }
+        // must set explicit component before bind/start service
+        intent.setComponent(selectTargetService(servicesList));
 
         final ServiceConnection conn = new ServiceConnection() {
             private boolean mConnectLost = false;
@@ -104,7 +127,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     }
 
     private void reconnectWithDelay(long delayMillis) {
-        mTaskHandler.postDelayed(new Runnable() {
+        mConnectHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 LibLogger.d(TAG, "delayed reconnect fires...");
@@ -160,5 +183,9 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                 sleepTime = sleepTime * 2;
             }
         }
+    }
+
+    public IServiceInterface getService() {
+        return mService;
     }
 }
