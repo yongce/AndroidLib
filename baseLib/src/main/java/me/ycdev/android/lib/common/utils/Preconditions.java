@@ -7,6 +7,12 @@ public class Preconditions {
         }
     }
 
+    public static void checkNonMainThread() {
+        if (ThreadUtils.isMainThread()) {
+            throw new RuntimeException("In main thread");
+        }
+    }
+
     public static void checkArgument(boolean expression) {
         if (!expression) {
             throw new IllegalArgumentException();

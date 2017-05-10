@@ -98,9 +98,9 @@ public class BatteryInfoTracker extends WeakTracker<BatteryInfoTracker.BatteryIn
 
         LibLogger.d(TAG, "battery info updated, " + dump(data));
         mBatteryInfo = data;
-        notifyListeners(new NotifyAction() {
+        notifyListeners(new NotifyAction<BatteryInfoListener>() {
             @Override
-            protected void notify(BatteryInfoListener listener) {
+            public void notify(BatteryInfoListener listener) {
                 listener.onBatteryInfoUpdated(data);
             }
         });

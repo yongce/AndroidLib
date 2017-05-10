@@ -11,33 +11,51 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.common.utils.Preconditions;
+import me.ycdev.android.lib.common.utils.WeakListenerManager;
+import me.ycdev.android.lib.common.utils.WeakListenerManager.NotifyAction;
 
 public abstract class ServiceClient<IServiceInterface extends IInterface> {
     private static final String TAG = "ServiceClient";
 
+    public static final int STATE_DISCONNECTED = 1;
+    public static final int STATE_CONNECTING = 2;
+    public static final int STATE_CONNECTED = 3;
+
+    private static final int MSG_RECONNECT = 1;
+    private static final int MSG_NOTIFY_LISTENERS = 2;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({STATE_DISCONNECTED, STATE_CONNECTING, STATE_CONNECTED})
+    public @interface ConnectState {}
+
     protected Context mAppContext;
     protected IServiceInterface mService;
-    protected Handler mConnectHandler;
 
-    private final AtomicBoolean mConnecting = new AtomicBoolean(false);
+    protected WeakListenerManager<ConnectStateListener> mStateListeners = new WeakListenerManager<>();
+    private final Object mConnectWaitLock = new Object();
+    private AtomicInteger mState = new AtomicInteger(STATE_DISCONNECTED);
 
     protected ServiceClient(Context cxt) {
         mAppContext = cxt.getApplicationContext();
-        mConnectHandler = new Handler(getConnectLooer());
     }
 
     /**
      * Get the looper used to connect/reconnect target Service.
      * By default, it's the main looper.
      */
-    protected Looper getConnectLooer() {
+    protected Looper getConnectLooper() {
         return Looper.getMainLooper();
     }
 
@@ -69,23 +87,38 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
      */
     protected abstract IServiceInterface asInterface(IBinder service);
 
+    /**
+     * Add a connect state listener, using {@link WeakListenerManager} to manager listeners.
+     * Callbacks will be invoked in {@link #getConnectLooper()} thread.
+     */
+    public void addListener(@NonNull ConnectStateListener listener) {
+        mStateListeners.addListener(listener);
+    }
+
+    public void removeListener(@NonNull ConnectStateListener listener) {
+        mStateListeners.removeListener(listener);
+    }
+
     public void connect() {
         connectServiceIfNeeded();
     }
 
     private void connectServiceIfNeeded() {
-        if (mService != null || mConnecting.get()) {
-            LibLogger.d(TAG, "service is running or connecting");
+        if (mService != null) {
+            LibLogger.d(TAG, "service is connected");
             return;
         }
-
-        mConnecting.set(true);
+        if (!mState.compareAndSet(STATE_DISCONNECTED, STATE_CONNECTING)) {
+            LibLogger.d(TAG, "Service is under connecting");
+            return;
+        }
+        updateConnectState(STATE_CONNECTING);
 
         Intent intent = getServiceIntent();
         List<ResolveInfo> servicesList = mAppContext.getPackageManager().queryIntentServices(intent, 0);
         if (servicesList == null || servicesList.size() == 0) {
             LibLogger.w(TAG, "no service component available, cannot connect");
-            mConnecting.set(false);
+            updateConnectState(STATE_DISCONNECTED);
             return;
         }
         // must set explicit component before bind/start service
@@ -99,6 +132,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                 LibLogger.i(TAG, "service connected, cn: %s, mConnectLost: %s", cn, mConnectLost);
                 if (!mConnectLost) {
                     mService = asInterface(service);
+                    updateConnectState(STATE_CONNECTED);
                 } // else: waiting for reconnecting using new ServiceConnection object
             }
 
@@ -113,27 +147,24 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                 mConnectLost = true;
                 mService = null;
                 mAppContext.unbindService(this);
-                mConnecting.set(false);
+                updateConnectState(STATE_DISCONNECTED);
 
-                reconnectWithDelay(1000);
+                mConnectHandler.sendEmptyMessageDelayed(MSG_RECONNECT, 1000);
             }
         };
 
         LibLogger.i(TAG, "connecting service...");
         if (!mAppContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
             LibLogger.w(TAG, "cannot connect");
-            mConnecting.set(false);
+            updateConnectState(STATE_DISCONNECTED);
         }
     }
 
-    private void reconnectWithDelay(long delayMillis) {
-        mConnectHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LibLogger.d(TAG, "delayed reconnect fires...");
-                connect();
-            }
-        }, delayMillis);
+    private void updateConnectState(@ConnectState int newState) {
+        if (newState != STATE_CONNECTING) {
+            mState.set(newState);
+        }
+        mConnectHandler.obtainMessage(MSG_NOTIFY_LISTENERS, newState, 0).sendToTarget();
     }
 
     /**
@@ -152,19 +183,20 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
      */
     @WorkerThread
     public void waitForConnected(long timeoutMillis) {
-        Preconditions.checkMainThread();
+        Preconditions.checkNonMainThread();
         if (mService != null) {
+            LibLogger.d(TAG, "already connected");
             return;
         }
 
-        synchronized (mConnecting) {
+        synchronized (mConnectWaitLock) {
             connect();
             long sleepTime = 50;
             long timeElapsed = 0;
             while (true) {
-                LibLogger.d(TAG, "checking, service: %s, connecting: %s, time: %d/%d",
-                        mService, mConnecting.get(), timeElapsed, timeoutMillis);
-                if (mService != null || !mConnecting.get()) {
+                LibLogger.d(TAG, "checking, service: %s, state: %d, time: %d/%d",
+                        mService, mState.get(), timeElapsed, timeoutMillis);
+                if (mService != null || mState.get() == STATE_DISCONNECTED) {
                     break;
                 }
                 if (timeoutMillis >= 0 && timeElapsed >= timeoutMillis) {
@@ -181,6 +213,9 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
                 timeElapsed = timeElapsed + sleepTime;
                 sleepTime = sleepTime * 2;
+                if (sleepTime > 200) {
+                    sleepTime = 200;
+                }
             }
         }
     }
@@ -188,4 +223,35 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     public IServiceInterface getService() {
         return mService;
     }
+
+    @ConnectState
+    public int getConnectState() {
+        //noinspection WrongConstant
+        return mState.get();
+    }
+
+    private Handler mConnectHandler = new Handler(getConnectLooper()) {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_RECONNECT: {
+                    LibLogger.d(TAG, "delayed reconnect fires...");
+                    connect();
+                    break;
+                }
+
+                case MSG_NOTIFY_LISTENERS: {
+                    final @ConnectState int newState = msg.arg1;
+                    mStateListeners.notifyListeners(new NotifyAction<ConnectStateListener>() {
+                        @Override
+                        public void notify(ConnectStateListener listener) {
+                            listener.onStateChanged(newState);
+                        }
+                    });
+                    break;
+                }
+            }
+        }
+    };
 }

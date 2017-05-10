@@ -104,18 +104,18 @@ public class InteractiveStateTracker extends WeakTracker<InteractiveStateTracker
     }
 
     private void notifyInteractiveChanged(final boolean interactive) {
-        notifyListeners(new NotifyAction() {
+        notifyListeners(new NotifyAction<InteractiveStateListener>() {
             @Override
-            protected void notify(InteractiveStateListener listener) {
+            public void notify(InteractiveStateListener listener) {
                 listener.onInteractiveChanged(interactive);
             }
         });
     }
 
     private void notifyUserPresent() {
-        notifyListeners(new NotifyAction() {
+        notifyListeners(new NotifyAction<InteractiveStateListener>() {
             @Override
-            protected void notify(InteractiveStateListener listener) {
+            public void notify(InteractiveStateListener listener) {
                 listener.onUserPresent();
             }
         });

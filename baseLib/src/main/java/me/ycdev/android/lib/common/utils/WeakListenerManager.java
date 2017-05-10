@@ -9,8 +9,8 @@ import java.util.List;
 public class WeakListenerManager<IListener> {
     private static final String TAG = "WeakListenerManager";
 
-    protected abstract class NotifyAction {
-        protected abstract void notify(IListener listener);
+    public interface NotifyAction<IListener> {
+        void notify(IListener listener);
     }
 
     private class ListenerInfo {
@@ -80,7 +80,7 @@ public class WeakListenerManager<IListener> {
         }
     }
 
-    protected void notifyListeners(@NonNull NotifyAction action) {
+    public void notifyListeners(@NonNull NotifyAction<IListener> action) {
         synchronized (mListeners) {
             for (int i = 0; i < mListeners.size();) {
                 ListenerInfo listenerInfo = mListeners.get(i);
@@ -97,5 +97,4 @@ public class WeakListenerManager<IListener> {
             LibLogger.d(TAG, "notify done, cur size: " + mListeners.size());
         }
     }
-
 }
