@@ -17,6 +17,11 @@
 
     <application android:allowBackup="true"
         android:name="me.ycdev.android.lib.common.AndroidLibTestApplication">
+
+        <provider
+            android:authorities="me.ycdev.android.lib.common.provider.InfoProvider"
+            android:name="me.ycdev.android.lib.common.provider.InfoProviderImpl"
+            android:exported="true" />
     </application>
 
 </manifest>
