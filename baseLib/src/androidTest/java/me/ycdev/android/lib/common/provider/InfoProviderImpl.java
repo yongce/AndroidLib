@@ -22,6 +22,7 @@ public class InfoProviderImpl extends InfoProvider {
         return true;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private SharedPreferences getStoragePrefs(String table) {
         return getContext().getSharedPreferences("info_provider_" + table, Context.MODE_PRIVATE);
     }

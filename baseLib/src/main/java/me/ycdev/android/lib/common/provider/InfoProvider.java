@@ -93,6 +93,7 @@ public abstract class InfoProvider extends ContentProvider {
         Bundle result = new Bundle();
         switch (method) {
             case METHOD_REMOVE: {
+                result.putString(KEY_VALUE, get(table, name)); // old value
                 result.putBoolean(KEY_STATUS, remove(table, name));
                 break;
             }
@@ -105,6 +106,7 @@ public abstract class InfoProvider extends ContentProvider {
                     LibLogger.w(TAG, "no value for the request");
                     return null;
                 }
+                result.putString(KEY_VALUE, get(table, name)); // old value
                 result.putBoolean(KEY_STATUS, put(table, name, value));
                 break;
             }

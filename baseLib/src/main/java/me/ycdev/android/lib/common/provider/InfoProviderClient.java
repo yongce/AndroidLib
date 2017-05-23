@@ -2,6 +2,7 @@ package me.ycdev.android.lib.common.provider;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,16 +22,28 @@ public class InfoProviderClient {
         mAuthority = authority;
     }
 
-    private Uri getUriForCall() {
-        Uri.Builder builder = new Uri.Builder();
-        builder = builder.scheme("content");
-        builder.authority(mAuthority);
-        return builder.build();
+    private Uri getUriFor(@Nullable String table, @NonNull String name) {
+        if (TextUtils.isEmpty(table)) {
+            table = InfoProvider.TABLE_DEFAULT;
+        }
+        return new Uri.Builder().scheme("content").authority(mAuthority)
+                .appendPath(table).appendPath(name)
+                .build();
+    }
+
+    public void registerObserver(@Nullable String table, @NonNull String name,
+            @NonNull ContentObserver observer) {
+        Uri uri = getUriFor(table, name);
+        mResolver.registerContentObserver(uri, true, observer);
+    }
+
+    public void unregisterObserver(@NonNull ContentObserver observer) {
+        mResolver.unregisterContentObserver(observer);
     }
 
     public boolean remove(@Nullable String table, @NonNull String name) {
         try {
-            Uri uri = getUriForCall();
+            Uri uri = getUriFor(table, name);
             Bundle args = new Bundle();
             args.putString(InfoProvider.KEY_TABLE, table);
             args.putString(InfoProvider.KEY_NAME, name);
@@ -39,7 +52,14 @@ public class InfoProviderClient {
                 LibLogger.e(TAG, "Cannot call method [%s]", InfoProvider.METHOD_REMOVE);
                 return false;
             }
-            return result.getBoolean(InfoProvider.KEY_STATUS);
+
+            boolean success = result.getBoolean(InfoProvider.KEY_STATUS);
+            String oldValue = result.getString(InfoProvider.KEY_VALUE);
+            if (success && !TextUtils.isEmpty(oldValue)) {
+                mResolver.notifyChange(uri, null);
+            }
+
+            return success;
         } catch (Exception e) {
             LibLogger.w(TAG, "Failed to remove [%s] in table [%s]", name, table);
             return false;
@@ -48,7 +68,7 @@ public class InfoProviderClient {
 
     public String getString(@Nullable String table, @NonNull String name, @Nullable String defValue) {
         try {
-            Uri uri = getUriForCall();
+            Uri uri = getUriFor(table, name);
             Bundle args = new Bundle();
             args.putString(InfoProvider.KEY_TABLE, table);
             args.putString(InfoProvider.KEY_NAME, name);
@@ -71,7 +91,7 @@ public class InfoProviderClient {
 
     public boolean putString(@Nullable String table, @NonNull String name, @NonNull String value) {
         try {
-            Uri uri = getUriForCall();
+            Uri uri = getUriFor(table, name);
             Bundle args = new Bundle();
             args.putString(InfoProvider.KEY_TABLE, table);
             args.putString(InfoProvider.KEY_NAME, name);
@@ -81,7 +101,14 @@ public class InfoProviderClient {
                 LibLogger.e(TAG, "Cannot call method [%s]", InfoProvider.METHOD_PUT);
                 return false;
             }
-            return result.getBoolean(InfoProvider.KEY_STATUS);
+
+            boolean success = result.getBoolean(InfoProvider.KEY_STATUS);
+            String oldValue = result.getString(InfoProvider.KEY_VALUE);
+            if (success && !TextUtils.equals(oldValue, value)) {
+                mResolver.notifyChange(uri, null);
+            }
+
+            return success;
         } catch (Exception e) {
             LibLogger.w(TAG, "Failed to put value for [%s] in table [%s]", name, table);
         }
