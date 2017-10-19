@@ -36,19 +36,23 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     private static final int MSG_RECONNECT = 1;
     private static final int MSG_NOTIFY_LISTENERS = 2;
 
+    private static final long FORCE_REBIND_TIME = 60 * 1000; // 1 minute
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({STATE_DISCONNECTED, STATE_CONNECTING, STATE_CONNECTED})
     public @interface ConnectState {}
 
     protected Context mAppContext;
+    protected String mServiceName;
     protected IServiceInterface mService;
 
     protected WeakListenerManager<ConnectStateListener> mStateListeners = new WeakListenerManager<>();
     private final Object mConnectWaitLock = new Object();
     private AtomicInteger mState = new AtomicInteger(STATE_DISCONNECTED);
 
-    protected ServiceClient(Context cxt) {
+    protected ServiceClient(Context cxt, String serviceName) {
         mAppContext = cxt.getApplicationContext();
+        mServiceName = serviceName;
     }
 
     /**
@@ -68,14 +72,14 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
      * Sub class can rewrite the candidate services select logic.
      */
     protected ComponentName selectTargetService(List<ResolveInfo> servicesList) {
-        LibLogger.i(TAG, "Candidate services: %d", servicesList.size());
+        LibLogger.i(TAG, "[%s] Candidate services: %d", mServiceName, servicesList.size());
         Preconditions.checkArgument(servicesList.size() >= 1);
         ServiceInfo serviceInfo = servicesList.get(0).serviceInfo;
         for (ResolveInfo info : servicesList) {
             if ((info.serviceInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) ==
                     ApplicationInfo.FLAG_SYSTEM) {
                 serviceInfo = info.serviceInfo; // search the system candidate
-                LibLogger.i(TAG, "Service from system found and select it");
+                LibLogger.i(TAG, "[%s] Service from system found and select it", mServiceName);
                 break;
             }
         }
@@ -105,11 +109,11 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
     private void connectServiceIfNeeded() {
         if (mService != null) {
-            LibLogger.d(TAG, "service is connected");
+            LibLogger.d(TAG, "[%s] service is connected", mServiceName);
             return;
         }
         if (!mState.compareAndSet(STATE_DISCONNECTED, STATE_CONNECTING)) {
-            LibLogger.d(TAG, "Service is under connecting");
+            LibLogger.d(TAG, "[%s] Service is under connecting", mServiceName);
             return;
         }
         updateConnectState(STATE_CONNECTING);
@@ -117,7 +121,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
         Intent intent = getServiceIntent();
         List<ResolveInfo> servicesList = mAppContext.getPackageManager().queryIntentServices(intent, 0);
         if (servicesList == null || servicesList.size() == 0) {
-            LibLogger.w(TAG, "no service component available, cannot connect");
+            LibLogger.w(TAG, "[%s] no service component available, cannot connect", mServiceName);
             updateConnectState(STATE_DISCONNECTED);
             return;
         }
@@ -129,7 +133,8 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
             @Override
             public void onServiceConnected(ComponentName cn, IBinder service) {
-                LibLogger.i(TAG, "service connected, cn: %s, mConnectLost: %s", cn, mConnectLost);
+                LibLogger.i(TAG, "[%s] service connected, cn: %s, mConnectLost: %s",
+                        mServiceName,  cn, mConnectLost);
                 if (!mConnectLost) {
                     mService = asInterface(service);
                     updateConnectState(STATE_CONNECTED);
@@ -138,7 +143,8 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
             @Override
             public void onServiceDisconnected(ComponentName cn) {
-                LibLogger.i(TAG, "service disconnected, cn: %s, mConnectLost: %s", cn, mConnectLost);
+                LibLogger.i(TAG, "[%s] service disconnected, cn: %s, mConnectLost: %s",
+                        mServiceName, cn, mConnectLost);
                 if (mConnectLost) {
                     return;
                 }
@@ -153,9 +159,9 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
             }
         };
 
-        LibLogger.i(TAG, "connecting service...");
+        LibLogger.i(TAG, "[%s] connecting service...", mServiceName);
         if (!mAppContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
-            LibLogger.w(TAG, "cannot connect");
+            LibLogger.w(TAG, "[%s] cannot connect", mServiceName);
             updateConnectState(STATE_DISCONNECTED);
         }
     }
@@ -185,7 +191,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     public void waitForConnected(long timeoutMillis) {
         Preconditions.checkNonMainThread();
         if (mService != null) {
-            LibLogger.d(TAG, "already connected");
+            LibLogger.d(TAG, "[%s] already connected", mServiceName);
             return;
         }
 
@@ -194,13 +200,18 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
             long sleepTime = 50;
             long timeElapsed = 0;
             while (true) {
-                LibLogger.d(TAG, "checking, service: %s, state: %d, time: %d/%d",
-                        mService, mState.get(), timeElapsed, timeoutMillis);
+                LibLogger.d(TAG, "[%s] checking, service: %s, state: %d, time: %d/%d",
+                        mServiceName, mService, mState.get(), timeElapsed, timeoutMillis);
                 if (mService != null || mState.get() == STATE_DISCONNECTED) {
                     break;
                 }
                 if (timeoutMillis >= 0 && timeElapsed >= timeoutMillis) {
                     break;
+                }
+                if (timeElapsed >= FORCE_REBIND_TIME) {
+                    // if the state is in "connecting" always, try to rebind
+                    LibLogger.d(TAG, "[%s] force to rebind", mServiceName);
+                    mState.set(STATE_DISCONNECTED);
                 }
 
                 connect();
@@ -213,8 +224,8 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
                 timeElapsed = timeElapsed + sleepTime;
                 sleepTime = sleepTime * 2;
-                if (sleepTime > 200) {
-                    sleepTime = 200;
+                if (sleepTime > 1000) {
+                    sleepTime = 1000;
                 }
             }
         }
@@ -236,7 +247,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_RECONNECT: {
-                    LibLogger.d(TAG, "delayed reconnect fires...");
+                    LibLogger.d(TAG, "[%s] delayed reconnect fires...", mServiceName);
                     connect();
                     break;
                 }
