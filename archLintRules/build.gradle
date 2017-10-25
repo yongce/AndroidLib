@@ -1,27 +1,20 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    compile 'com.android.tools.lint:lint-api:24.3.1'
-    compile 'com.android.tools.lint:lint-checks:24.3.1'
+    compileOnly "com.android.tools.lint:lint-api:$lintVersion"
+    compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
 
-    testCompile 'com.android.tools.lint:lint-tests:24.3.1'
+    testImplementation "junit:junit:${rootProject.ext.junitVersion}"
+    testImplementation "com.android.tools.lint:lint:$lintVersion"
+    testImplementation "com.android.tools.lint:lint-tests:$lintVersion"
+    testImplementation "com.android.tools:testutils:$lintVersion"
 }
 
 jar {
     manifest {
-        attributes("Lint-Registry": "me.ycdev.android.arch.lint.MyIssueRegistry")
+        attributes("Lint-Registry-v2": "me.ycdev.android.arch.lint.MyIssueRegistry")
     }
-}
-
-defaultTasks 'assemble'
-
-/*
- * rules for providing "MyLintRules.jar"
- */
-configurations {
-    lintJarOutput
-}
-
-dependencies {
-    lintJarOutput files(jar)
 }

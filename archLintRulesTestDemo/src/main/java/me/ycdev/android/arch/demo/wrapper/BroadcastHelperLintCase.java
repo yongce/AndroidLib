@@ -8,6 +8,22 @@ import android.content.IntentFilter;
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 
 public class BroadcastHelperLintCase {
+    private static class Foo {
+        public void registerReceiver() { // lint good
+        }
+
+        public void sendBroadcast() { // lint good
+        }
+    }
+
+    public static void registerReceiver() { // lint good
+        new Foo().registerReceiver();
+    }
+
+    public static void sendBroadcast() { // lint good
+        new Foo().sendBroadcast();
+    }
+
     public static Intent registerGood(Context cxt, BroadcastReceiver receiver, IntentFilter filter) {
         return BroadcastHelper.registerForInternal(cxt, receiver, filter); // lint good
     }
@@ -39,5 +55,4 @@ public class BroadcastHelperLintCase {
     public static void sendViolation2(Context cxt, Intent intent) {
         cxt.sendBroadcast(intent); // lint violation
     }
-
 }

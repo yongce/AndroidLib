@@ -37,12 +37,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Testing Support Library's runner and rules
-    androidTestCompile project(':baseLib')
-    androidTestCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    androidTestCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    androidTestImplementation project(':baseLib')
+    androidTestImplementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    androidTestImplementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
 }
 
 project.ext {

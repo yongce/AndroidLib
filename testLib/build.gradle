@@ -19,13 +19,13 @@ android {
 
 dependencies {
     // Dependencies for local unit tests
-    compile "junit:junit:${rootProject.ext.junitVersion}"
-    compile "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
-    compile "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
+    implementation "junit:junit:${rootProject.ext.junitVersion}"
+    implementation "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
+    implementation "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
 
     // Android Testing Support Library's runner and rules
-    compile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    compile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    implementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    implementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
 }
 
 project.ext {

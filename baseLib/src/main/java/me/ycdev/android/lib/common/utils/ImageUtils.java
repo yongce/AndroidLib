@@ -1,15 +1,13 @@
 package me.ycdev.android.lib.common.utils;
 
-import java.io.FileDescriptor;
-
-import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import java.io.FileDescriptor;
 
 public class ImageUtils {
     public interface IReusableBitmapProvider {
@@ -115,12 +113,11 @@ public class ImageUtils {
         return BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void addInBitmapOptionsIfPossible(@NonNull BitmapFactory.Options options,
             @Nullable IReusableBitmapProvider provider) {
         // Based on https://github.com/yongce/BitmapFun/blob/master/src/com/example/android/bitmapfun/util/ImageResizer.java
 
-        if (!AndroidVersionUtils.hasHoneycomb() || provider == null) {
+        if (provider == null) {
             return;
         }
 
@@ -195,12 +192,8 @@ public class ImageUtils {
      * @param bitmap The bitmap to calculate.
      * @return size in bytes
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     public static int getBitmapSize(@NonNull Bitmap bitmap) {
-        if (AndroidVersionUtils.hasHoneycombMR1()) {
-            return bitmap.getByteCount();
-        }
-        return bitmap.getRowBytes() * bitmap.getHeight();
+        return bitmap.getByteCount();
     }
 
 }

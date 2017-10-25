@@ -7,25 +7,21 @@ import com.android.tools.lint.detector.api.JavaContext;
 import com.android.tools.lint.detector.api.Scope;
 import com.android.tools.lint.detector.api.Severity;
 
+import org.jetbrains.uast.UElement;
+
 import java.util.Arrays;
 import java.util.List;
 
-import lombok.ast.MethodInvocation;
 import me.ycdev.android.arch.lint.base.WrapperDetectorBase;
 
 public class MyBroadcastHelperDetector extends WrapperDetectorBase {
-    public static final Issue ISSUE = Issue.create(
+    static final Issue ISSUE = Issue.create(
             "MyBroadcastHelper",
             "BroadcastHelper should be used.",
             "Please use the wrapper class 'BroadcastHelper' to register broadcast receivers"
                     + " and send broadcasts to avoid security issues.",
             Category.CORRECTNESS, 5, Severity.ERROR,
             new Implementation(MyBroadcastHelperDetector.class, Scope.JAVA_FILE_SCOPE));
-
-    /** Constructs a new {@link MyBroadcastHelperDetector} check */
-    public MyBroadcastHelperDetector() {
-        super();
-    }
 
     @Override
     protected String getWrapperClassName() {
@@ -47,8 +43,8 @@ public class MyBroadcastHelperDetector extends WrapperDetectorBase {
     }
 
     @Override
-    protected void reportViolation(JavaContext context, MethodInvocation node) {
-        context.report(ISSUE, node, context.getLocation(node),
+    protected void reportViolation(JavaContext context, UElement element) {
+        context.report(ISSUE, element, context.getLocation(element),
                 "Please use the wrapper class 'BroadcastHelper'.");
     }
 }

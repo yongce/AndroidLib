@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.commonui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -64,6 +65,7 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
         loadItems();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void loadItems() {
         if (needLoadIntentsAsync()) {
             new AsyncTask<Void, Void, List<IntentEntry>>() {

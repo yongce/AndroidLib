@@ -19,24 +19,26 @@ android {
     lintOptions {
         textReport true
         textOutput 'stdout'
+
+        disable 'PrivateApi'
     }
 }
 
 dependencies {
-    compile "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
-    compile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
 
     // Dependencies for local unit tests
-    testCompile project(':testLib')
-    testCompile "junit:junit:${rootProject.ext.junitVersion}"
-    testCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    testCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
-    testCompile "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
-    testCompile "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
+    testImplementation project(':testLib')
+    testImplementation "junit:junit:${rootProject.ext.junitVersion}"
+    testImplementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    testImplementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
+    testImplementation "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
 
     // Android Testing Support Library's runner and rules
-    androidTestCompile "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    androidTestCompile "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    androidTestImplementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
+    androidTestImplementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
 }
 
 project.ext {

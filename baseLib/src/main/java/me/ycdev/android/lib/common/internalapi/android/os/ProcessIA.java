@@ -142,8 +142,7 @@ public class ProcessIA {
     }
 
     private static void reflect_getParentPid() {
-        if (sMtd_getParentPid != null ||
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if (sMtd_getParentPid != null) {
             return;
         }
 
@@ -181,8 +180,7 @@ public class ProcessIA {
     @RestrictTo(RestrictTo.Scope.TESTS)
     static boolean checkReflect_getParentPid() {
         reflect_getParentPid();
-        return sMtd_getParentPid != null ||
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+        return sMtd_getParentPid != null;
     }
 
 

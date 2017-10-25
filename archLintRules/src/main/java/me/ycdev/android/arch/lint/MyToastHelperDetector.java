@@ -7,25 +7,21 @@ import com.android.tools.lint.detector.api.JavaContext;
 import com.android.tools.lint.detector.api.Scope;
 import com.android.tools.lint.detector.api.Severity;
 
+import org.jetbrains.uast.UElement;
+
 import java.util.Collections;
 import java.util.List;
 
-import lombok.ast.MethodInvocation;
 import me.ycdev.android.arch.lint.base.WrapperDetectorBase;
 
 public class MyToastHelperDetector extends WrapperDetectorBase {
-    public static final Issue ISSUE = Issue.create(
+    static final Issue ISSUE = Issue.create(
             "MyToastHelper",
             "ToastHelper should be used.",
             "Please use the wrapper class 'ToastHelper' to show toast."
                     + " So that we can customize and unify the UI in future.",
             Category.CORRECTNESS, 5, Severity.ERROR,
             new Implementation(MyToastHelperDetector.class, Scope.JAVA_FILE_SCOPE));
-
-    /** Constructs a new {@link MyToastHelperDetector} check */
-    public MyToastHelperDetector() {
-        super();
-    }
 
     @Override
     protected String getWrapperClassName() {
@@ -45,8 +41,8 @@ public class MyToastHelperDetector extends WrapperDetectorBase {
     }
 
     @Override
-    protected void reportViolation(JavaContext context, MethodInvocation node) {
-        context.report(ISSUE, node, context.getLocation(node),
+    protected void reportViolation(JavaContext context, UElement element) {
+        context.report(ISSUE, element, context.getLocation(element),
                 "Please use the wrapper class 'ToastHelper'.");
     }
 }

@@ -7,14 +7,15 @@ import com.android.tools.lint.detector.api.JavaContext;
 import com.android.tools.lint.detector.api.Scope;
 import com.android.tools.lint.detector.api.Severity;
 
+import org.jetbrains.uast.UElement;
+
 import java.util.Arrays;
 import java.util.List;
 
-import lombok.ast.MethodInvocation;
 import me.ycdev.android.arch.lint.base.WrapperDetectorBase;
 
 public class MyIntentHelperDetector extends WrapperDetectorBase {
-    public static final Issue ISSUE = Issue.create(
+    static final Issue ISSUE = Issue.create(
             "MyIntentHelper",
             "IntentHelper should be used.",
             "Please use the wrapper class 'IntentHelper' to get Intent extras"
@@ -75,8 +76,8 @@ public class MyIntentHelperDetector extends WrapperDetectorBase {
     }
 
     @Override
-    protected void reportViolation(JavaContext context, MethodInvocation node) {
-        context.report(ISSUE, node, context.getLocation(node),
+    protected void reportViolation(JavaContext context, UElement element) {
+        context.report(ISSUE, element, context.getLocation(element),
                 "Please use the wrapper class 'IntentHelper'.");
     }
 

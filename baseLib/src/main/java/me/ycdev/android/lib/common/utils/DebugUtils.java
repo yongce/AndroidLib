@@ -10,25 +10,21 @@ public class DebugUtils {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void enableStrictMode() {
-        if (AndroidVersionUtils.hasGingerbread()) {
-            // thread policy
-            StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
-                    new StrictMode.ThreadPolicy.Builder()
-                            .detectAll()
-                            .penaltyLog();
-            if (AndroidVersionUtils.hasHoneycomb()) {
-                threadPolicyBuilder.penaltyFlashScreen();
-                threadPolicyBuilder.penaltyDeathOnNetwork();
-            }
-            StrictMode.setThreadPolicy(threadPolicyBuilder.build());
+        // thread policy
+        StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
+                new StrictMode.ThreadPolicy.Builder()
+                        .detectAll()
+                        .penaltyLog();
+        threadPolicyBuilder.penaltyFlashScreen();
+        threadPolicyBuilder.penaltyDeathOnNetwork();
+        StrictMode.setThreadPolicy(threadPolicyBuilder.build());
 
-            // VM policy
-            StrictMode.VmPolicy.Builder vmPolicyBuilder =
-                    new StrictMode.VmPolicy.Builder()
-                            .detectAll()
-                            .penaltyLog()
-                            .penaltyDeath();
-            StrictMode.setVmPolicy(vmPolicyBuilder.build());
-        }
+        // VM policy
+        StrictMode.VmPolicy.Builder vmPolicyBuilder =
+                new StrictMode.VmPolicy.Builder()
+                        .detectAll()
+                        .penaltyLog()
+                        .penaltyDeath();
+        StrictMode.setVmPolicy(vmPolicyBuilder.build());
     }
 }

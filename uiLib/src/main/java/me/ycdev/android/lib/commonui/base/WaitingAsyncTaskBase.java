@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.commonui.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
         AsyncTask<Params, Progress, Result> {
     private static final String TAG = "WaitingAsyncTaskBase";
 
+    @SuppressLint("StaticFieldLeak")
     protected Activity mActivity;
     protected boolean mCancelable;
     protected boolean mAutoFinishWhenCanceled;

@@ -17,14 +17,16 @@ android {
     lintOptions {
         textReport true
         textOutput 'stdout'
+
+        disable 'UnusedResources'
     }
 }
 
 dependencies {
-    compile "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
-    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-    compile project(':archLib')
-    compile project(':baseLib')
+    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    api project(':archLib')
+    api project(':baseLib')
 }
 
 project.ext {

@@ -7,15 +7,16 @@ import com.android.tools.lint.detector.api.JavaContext;
 import com.android.tools.lint.detector.api.Scope;
 import com.android.tools.lint.detector.api.Severity;
 
+import org.jetbrains.uast.UElement;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import lombok.ast.Node;
 import me.ycdev.android.arch.lint.base.InheritDetectorBase;
 
 public class MyBaseActivityDetector extends InheritDetectorBase {
-    public static final Issue ISSUE = Issue.create(
+    static final Issue ISSUE = Issue.create(
             "MyBaseActivity",
             "Base classes for Activity should be used.",
             "Please use the base classes for Activity."
@@ -38,8 +39,8 @@ public class MyBaseActivityDetector extends InheritDetectorBase {
     }
 
     @Override
-    protected void reportViolation(JavaContext context, Node node) {
-        context.report(ISSUE, node, context.getLocation(node),
+    protected void reportViolation(JavaContext context, UElement element) {
+        context.report(ISSUE, element, context.getNameLocation(element),
                 "Please use the base classes for Activity.");
     }
 }

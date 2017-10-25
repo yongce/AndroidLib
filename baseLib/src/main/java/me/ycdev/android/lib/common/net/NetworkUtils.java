@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.IntDef;
+import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -43,6 +44,7 @@ public class NetworkUtils {
         int NETWORK_TYPE_4G = 12;
     }
 
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     public static NetworkInfo getActiveNetworkInfo(Context cxt) {
         ConnectivityManager cm = (ConnectivityManager) cxt.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
@@ -65,6 +67,7 @@ public class NetworkUtils {
      *         {@link NetworkType#NETWORK_TYPE_WIFI} or {@link NetworkType#NETWORK_TYPE_MOBILE}
      */
     @SuppressWarnings("deprecation")
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     @NetworkType
     public static int getNetworkType(Context cxt) {
         NetworkInfo netInfo = getActiveNetworkInfo(cxt);
@@ -144,6 +147,7 @@ public class NetworkUtils {
      *         {@link NetworkType#NETWORK_TYPE_3G}, {@link NetworkType#NETWORK_TYPE_4G}
      *         or {@link NetworkType#NETWORK_TYPE_NONE}
      */
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     @NetworkType
     public static int getMixedNetworkType(Context cxt) {
         int type = getNetworkType(cxt);
@@ -156,6 +160,7 @@ public class NetworkUtils {
     /**
      * Check if there is an active network connection
      */
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isNetworkAvailable(Context cxt) {
         NetworkInfo network = getActiveNetworkInfo(cxt);
         return network != null && network.isConnected();
@@ -165,6 +170,7 @@ public class NetworkUtils {
      * Check if the current active network may cause monetary cost
      * @see ConnectivityManager#isActiveNetworkMetered()
      */
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isActiveNetworkMetered(Context cxt) {
         ConnectivityManager cm = (ConnectivityManager) cxt.getSystemService(
                 Context.CONNECTIVITY_SERVICE);

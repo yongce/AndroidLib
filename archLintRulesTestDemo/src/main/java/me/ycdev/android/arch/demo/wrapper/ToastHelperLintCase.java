@@ -6,6 +6,22 @@ import android.widget.Toast;
 import me.ycdev.android.arch.wrapper.ToastHelper;
 
 public class ToastHelperLintCase {
+    private static class Foo {
+        public void show() { // lint good
+        }
+
+        public void makeText() { // lint good
+        }
+    }
+
+    public static void show() { // lint good
+        new Foo().show();
+    }
+
+    public static void makeText() { // lint good
+        new Foo().makeText();
+    }
+
     public static void showGood(Context cxt, int msgResId, int duration) {
         ToastHelper.show(cxt, msgResId, duration); // lint good
     }

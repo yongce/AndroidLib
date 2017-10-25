@@ -1,13 +1,10 @@
 package me.ycdev.android.lib.common.utils;
 
-import java.io.File;
-
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.os.Environment;
-import android.os.StatFs;
 import android.support.annotation.NonNull;
+
+import java.io.File;
 
 public class StorageUtils {
     /**
@@ -15,14 +12,9 @@ public class StorageUtils {
      * Returns 0 if this path does not exist.
      * @see File#getUsableSpace()
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressWarnings("deprecation")
     public static long getUsableSpace(@NonNull File path) {
-        if (AndroidVersionUtils.hasGingerbread()) {
-            return path.getUsableSpace();
-        }
-        StatFs stats = new StatFs(path.getPath());
-        return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
+        return path.getUsableSpace();
     }
 
     /**
@@ -30,14 +22,9 @@ public class StorageUtils {
      * Returns 0 if this path does not exist.
      * @see File#getFreeSpace()
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressWarnings("deprecation")
     public static long getFreeSpace(@NonNull File path) {
-        if (AndroidVersionUtils.hasGingerbread()) {
-            return path.getFreeSpace();
-        }
-        StatFs stats = new StatFs(path.getPath());
-        return (long) stats.getBlockSize() * (long) stats.getFreeBlocks();
+        return path.getFreeSpace();
     }
 
     /**
@@ -45,14 +32,9 @@ public class StorageUtils {
      * Returns 0 if this path does not exist.
      * @see File#getTotalSpace()
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @SuppressWarnings("deprecation")
     public static long getTotalSpace(@NonNull File path) {
-        if (AndroidVersionUtils.hasGingerbread()) {
-            return path.getTotalSpace();
-        }
-        StatFs stats = new StatFs(path.getPath());
-        return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
+        return path.getTotalSpace();
     }
 
     /**
@@ -61,9 +43,8 @@ public class StorageUtils {
      *         otherwise.
      * @see Environment#isExternalStorageRemovable()
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static boolean isExternalStorageRemovable() {
-        return !AndroidVersionUtils.hasGingerbread() || Environment.isExternalStorageRemovable();
+        return Environment.isExternalStorageRemovable();
     }
 
     /**
@@ -71,9 +52,8 @@ public class StorageUtils {
      * @return true if the external storage is emulated, false otherwise.
      * @see Environment#isExternalStorageEmulated()
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static boolean isExternalStorageEmulated() {
-        return AndroidVersionUtils.hasHoneycomb() && Environment.isExternalStorageEmulated();
+        return Environment.isExternalStorageEmulated();
     }
 
     /**
@@ -82,7 +62,6 @@ public class StorageUtils {
      * @return The external cache dir
      * @see Context#getExternalCacheDir()
      */
-    @TargetApi(Build.VERSION_CODES.FROYO)
     public static File getExternalCacheDir(@NonNull Context context) {
         return context.getExternalCacheDir();
     }
