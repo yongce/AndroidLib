@@ -41,16 +41,16 @@ bintray {
     publish = true
 
     pkg {
-        repo = rootProject.ext.projectRepo
+        repo = bintrayMaven.projectRepo
         name = project.ext.moduleName
         desc = project.ext.moduleDesc
-        websiteUrl = rootProject.ext.projectUrl
-        vcsUrl = rootProject.ext.projectScmConnection
+        websiteUrl = bintrayMaven.projectUrl
+        vcsUrl = bintrayMaven.projectScmConnection
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
 
         version {
-            name = rootProject.ext.version
+            name = bintrayMaven.version
             released  = new Date()
         }
     }

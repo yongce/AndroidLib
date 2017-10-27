@@ -1,18 +1,18 @@
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = rootProject.ext.groupId
-version = rootProject.ext.version
+group = bintrayMaven.groupId
+version = bintrayMaven.version
 
 install {
     repositories.mavenInstaller {
         pom.project {
-            url rootProject.ext.projectUrl
-            inceptionYear rootProject.ext.projectInceptionYear
+            url bintrayMaven.projectUrl
+            inceptionYear bintrayMaven.projectInceptionYear
 
             packaging 'aar'
-            groupId rootProject.ext.groupId
+            groupId bintrayMaven.groupId
             artifactId project.archivesBaseName
-            version rootProject.ext.version
+            version bintrayMaven.version
 
             licenses {
                 license {
@@ -23,16 +23,16 @@ install {
             }
 
             scm {
-                url rootProject.ext.projectUrl
-                connection rootProject.ext.projectScmConnection
-                developerConnection rootProject.ext.projectScmDevConnection
+                url bintrayMaven.projectUrl
+                connection bintrayMaven.projectScmConnection
+                developerConnection bintrayMaven.projectScmDevConnection
             }
 
             developers {
                 developer {
-                    id rootProject.ext.developerId
-                    name rootProject.ext.developerName
-                    email rootProject.ext.developerEmail
+                    id bintrayMaven.developerId
+                    name bintrayMaven.developerName
+                    email bintrayMaven.developerEmail
                 }
             }
         }

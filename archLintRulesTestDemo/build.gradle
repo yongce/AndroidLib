@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
         applicationId "me.ycdev.android.arch.demo"
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion versions.minSdk
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -34,8 +34,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:' + rootProject.ext.supportLibVersion
     implementation project(':archLib')
+
+    implementation deps.support.appcompat
 }
 

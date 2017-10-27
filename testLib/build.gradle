@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 project.archivesBaseName = 'common-test'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion versions.minSdk
     }
 
     lintOptions {
@@ -19,13 +19,13 @@ android {
 
 dependencies {
     // Dependencies for local unit tests
-    implementation "junit:junit:${rootProject.ext.junitVersion}"
-    implementation "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
-    implementation "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
+    testImplementation deps.test.junit
+    testImplementation deps.test.mockitoCore
+    testImplementation deps.test.hamcrestCore
 
     // Android Testing Support Library's runner and rules
-    implementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    implementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    androidTestImplementation deps.test.supportRunner
+    androidTestImplementation deps.test.supportRules
 }
 
 project.ext {

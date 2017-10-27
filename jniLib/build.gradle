@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 project.archivesBaseName = 'common-jni'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion versions.minSdk
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -37,12 +37,10 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     // Android Testing Support Library's runner and rules
     androidTestImplementation project(':baseLib')
-    androidTestImplementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    androidTestImplementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    androidTestImplementation deps.test.supportRunner
+    androidTestImplementation deps.test.supportRules
 }
 
 project.ext {

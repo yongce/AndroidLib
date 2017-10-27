@@ -4,13 +4,13 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    compileOnly "com.android.tools.lint:lint-api:$lintVersion"
-    compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
+    compileOnly "com.android.tools.lint:lint-api:${versions.lintLib}"
+    compileOnly "com.android.tools.lint:lint-checks:${versions.lintLib}"
 
-    testImplementation "junit:junit:${rootProject.ext.junitVersion}"
-    testImplementation "com.android.tools.lint:lint:$lintVersion"
-    testImplementation "com.android.tools.lint:lint-tests:$lintVersion"
-    testImplementation "com.android.tools:testutils:$lintVersion"
+    testImplementation "junit:junit:${versions.junit}"
+    testImplementation "com.android.tools.lint:lint:${versions.lintLib}"
+    testImplementation "com.android.tools.lint:lint-tests:${versions.lintLib}"
+    testImplementation "com.android.tools:testutils:${versions.lintLib}"
 }
 
 jar {

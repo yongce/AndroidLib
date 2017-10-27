@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 project.archivesBaseName = 'common-ui'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion versions.minSdk
     }
 
     compileOptions {
@@ -23,10 +23,10 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     api project(':archLib')
     api project(':baseLib')
+
+    implementation deps.support.appcompat
 }
 
 project.ext {

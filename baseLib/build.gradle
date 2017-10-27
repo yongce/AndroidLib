@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 project.archivesBaseName = 'common-base'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion versions.minSdk
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -25,20 +25,21 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
+    api deps.support.annotations
+    implementation deps.support.compat
+    implementation deps.support.fragment
 
     // Dependencies for local unit tests
     testImplementation project(':testLib')
-    testImplementation "junit:junit:${rootProject.ext.junitVersion}"
-    testImplementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    testImplementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
-    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockitoVersion}"
-    testImplementation "org.hamcrest:hamcrest-core:${rootProject.ext.hamcrestVersion}"
+    testImplementation deps.test.junit
+    testImplementation deps.test.supportRunner
+    testImplementation deps.test.supportRules
+    testImplementation deps.test.mockitoCore
+    testImplementation deps.test.hamcrestCore
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation "com.android.support.test:runner:${rootProject.ext.runnerVersion}"
-    androidTestImplementation "com.android.support.test:rules:${rootProject.ext.rulesVersion}"
+    androidTestImplementation deps.test.supportRunner
+    androidTestImplementation deps.test.supportRules
 }
 
 project.ext {
