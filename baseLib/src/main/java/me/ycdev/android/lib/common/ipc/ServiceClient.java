@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
@@ -35,8 +36,10 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
     private static final int MSG_RECONNECT = 1;
     private static final int MSG_NOTIFY_LISTENERS = 2;
+    private static final int MSG_CONNECT_TIMEOUT_CHECK = 3;
 
-    private static final long FORCE_REBIND_TIME = 60 * 1000; // 1 minute
+    private static final long CONNECT_TIMEOUT_CHECK_INTERVAL = 5000; // 5s
+    private static final long FORCE_REBIND_TIME = 30 * 1000; // 30 seconds
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({STATE_DISCONNECTED, STATE_CONNECTING, STATE_CONNECTED})
@@ -49,6 +52,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     protected WeakListenerManager<ConnectStateListener> mStateListeners = new WeakListenerManager<>();
     private final Object mConnectWaitLock = new Object();
     private AtomicInteger mState = new AtomicInteger(STATE_DISCONNECTED);
+    private long mConnectStartTime;
 
     protected ServiceClient(Context cxt, String serviceName) {
         mAppContext = cxt.getApplicationContext();
@@ -104,19 +108,22 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     }
 
     public void connect() {
-        connectServiceIfNeeded();
+        connectServiceIfNeeded(false);
     }
 
-    private void connectServiceIfNeeded() {
+    private void connectServiceIfNeeded(boolean rebind) {
         if (mService != null) {
             LibLogger.d(TAG, "[%s] service is connected", mServiceName);
             return;
         }
-        if (!mState.compareAndSet(STATE_DISCONNECTED, STATE_CONNECTING)) {
-            LibLogger.d(TAG, "[%s] Service is under connecting", mServiceName);
-            return;
+        if (!rebind) {
+            if (!mState.compareAndSet(STATE_DISCONNECTED, STATE_CONNECTING)) {
+                LibLogger.d(TAG, "[%s] Service is under connecting", mServiceName);
+                return;
+            }
+            updateConnectState(STATE_CONNECTING);
         }
-        updateConnectState(STATE_CONNECTING);
+        mConnectStartTime = SystemClock.elapsedRealtime();
 
         Intent intent = getServiceIntent();
         List<ResolveInfo> servicesList = mAppContext.getPackageManager().queryIntentServices(intent, 0);
@@ -137,6 +144,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                         mServiceName,  cn, mConnectLost);
                 if (!mConnectLost) {
                     mService = asInterface(service);
+                    mConnectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK);
                     updateConnectState(STATE_CONNECTED);
                 } // else: waiting for reconnecting using new ServiceConnection object
             }
@@ -163,6 +171,10 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
         if (!mAppContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
             LibLogger.w(TAG, "[%s] cannot connect", mServiceName);
             updateConnectState(STATE_DISCONNECTED);
+        } else {
+            mConnectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK);
+            mConnectHandler.sendEmptyMessageDelayed(MSG_CONNECT_TIMEOUT_CHECK,
+                    CONNECT_TIMEOUT_CHECK_INTERVAL);
         }
     }
 
@@ -207,11 +219,6 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                 }
                 if (timeoutMillis >= 0 && timeElapsed >= timeoutMillis) {
                     break;
-                }
-                if (timeElapsed >= FORCE_REBIND_TIME) {
-                    // if the state is in "connecting" always, try to rebind
-                    LibLogger.d(TAG, "[%s] force to rebind", mServiceName);
-                    mState.set(STATE_DISCONNECTED);
                 }
 
                 connect();
@@ -260,6 +267,25 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                             listener.onStateChanged(newState);
                         }
                     });
+                    break;
+                }
+
+                case MSG_CONNECT_TIMEOUT_CHECK: {
+                    LibLogger.d(TAG, "checking connect timeout");
+                    int curState = mState.get();
+                    if (SystemClock.elapsedRealtime() - mConnectStartTime >= FORCE_REBIND_TIME) {
+                        LibLogger.d(TAG, "[%s] connect timeout, state: %s",
+                                mServiceName, curState);
+                        if (curState == STATE_CONNECTING) {
+                            // force to rebind the service
+                            connectServiceIfNeeded(true);
+                        }
+                    } else {
+                        if (curState == STATE_CONNECTING) {
+                            mConnectHandler.sendEmptyMessageDelayed(MSG_CONNECT_TIMEOUT_CHECK,
+                                    CONNECT_TIMEOUT_CHECK_INTERVAL);
+                        }
+                    }
                     break;
                 }
             }
