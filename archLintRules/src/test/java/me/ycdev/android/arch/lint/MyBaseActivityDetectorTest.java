@@ -48,7 +48,7 @@ public class MyBaseActivityDetectorTest {
         lint().files(TestFileStubs.getAppCompatBaseActivity(), testFile)
                 .issues(MyBaseActivityDetector.ISSUE)
                 .run()
-                .expect("No warnings.");
+                .expectClean();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class MyBaseActivityDetectorTest {
         lint().files(TestFileStubs.getBaseActivity(), testFile)
                 .issues(MyBaseActivityDetector.ISSUE)
                 .run()
-                .expect("No warnings.");
+                .expectClean();
     }
 
     @Test
@@ -96,7 +96,7 @@ public class MyBaseActivityDetectorTest {
         lint().files(TestFileStubs.getBaseActivity(), good2File, good3File)
                 .issues(MyBaseActivityDetector.ISSUE)
                 .run()
-                .expect("No warnings.");
+                .expectClean();
     }
 
     @Test
