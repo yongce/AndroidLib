@@ -15,6 +15,7 @@ import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 /**
  * A tracker to track the interactive state of the device.
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class InteractiveStateTracker extends WeakTracker<InteractiveStateTracker.InteractiveStateListener> {
     private static final String TAG = "InteractiveStateTracker";
 
@@ -39,10 +40,10 @@ public class InteractiveStateTracker extends WeakTracker<InteractiveStateTracker
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             LibLogger.i(TAG, "Received: " + action);
-            if (action.equals(Intent.ACTION_USER_PRESENT)) {
+            if (Intent.ACTION_USER_PRESENT.equals(action)) {
                 notifyUserPresent();
             } else {
-                mInteractive = action.equals(Intent.ACTION_SCREEN_ON);
+                mInteractive = Intent.ACTION_SCREEN_ON.equals(action);
                 notifyInteractiveChanged(mInteractive);
             }
         }
@@ -104,20 +105,10 @@ public class InteractiveStateTracker extends WeakTracker<InteractiveStateTracker
     }
 
     private void notifyInteractiveChanged(final boolean interactive) {
-        notifyListeners(new NotifyAction<InteractiveStateListener>() {
-            @Override
-            public void notify(InteractiveStateListener listener) {
-                listener.onInteractiveChanged(interactive);
-            }
-        });
+        notifyListeners(listener -> listener.onInteractiveChanged(interactive));
     }
 
     private void notifyUserPresent() {
-        notifyListeners(new NotifyAction<InteractiveStateListener>() {
-            @Override
-            public void notify(InteractiveStateListener listener) {
-                listener.onUserPresent();
-            }
-        });
+        notifyListeners(InteractiveStateListener::onUserPresent);
     }
 }

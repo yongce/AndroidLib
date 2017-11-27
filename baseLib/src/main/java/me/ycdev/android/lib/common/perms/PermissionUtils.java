@@ -3,7 +3,6 @@ package me.ycdev.android.lib.common.perms;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class PermissionUtils {
     /**
      * Check if the caller has been granted a set of permissions.
@@ -106,18 +106,11 @@ public class PermissionUtils {
             AlertDialog dialog = new AlertDialog.Builder(getActivity(caller))
                     .setTitle(params.rationaleTitle)
                     .setMessage(params.rationaleContent)
-                    .setPositiveButton(params.positiveBtnResId, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            doRequestPermissions(caller, params.permissions, params.requestCode);
-                        }
-                    })
-                    .setNegativeButton(params.negativeBtnResId, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // act as if all permissions were denied
-                            params.callback.onRationaleDenied(params.requestCode);
-                        }
+                    .setPositiveButton(params.positiveBtnResId, (dialog1, which) ->
+                            doRequestPermissions(caller, params.permissions, params.requestCode))
+                    .setNegativeButton(params.negativeBtnResId, (dialog12, which) -> {
+                        // act as if all permissions were denied
+                        params.callback.onRationaleDenied(params.requestCode);
                     }).create();
             dialog.show();
         } else {

@@ -11,6 +11,7 @@ import android.text.TextUtils;
 
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class InfoProviderClient {
     private static final String TAG = "InfoProviderClient";
 

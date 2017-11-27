@@ -17,6 +17,7 @@ import me.ycdev.android.lib.common.utils.IoUtils;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class HttpClient {
     private static final String TAG = "HttpClient";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;

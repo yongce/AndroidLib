@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.os.Handler;
 import android.os.Process;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,12 +11,12 @@ import android.text.TextUtils;
 import java.io.IOException;
 import java.util.List;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ApplicationUtils {
     private static final String TAG = "ApplicationUtils";
 
     @SuppressLint("StaticFieldLeak")
     private static Application sApp;
-    private static Handler sHandler;
     private static String sProcessName;
 
     /**
@@ -25,15 +24,17 @@ public class ApplicationUtils {
      */
     public static void initApplication(Application app) {
         sApp = app;
-        sHandler = new Handler();
         getCurrentProcessName(); // init process name in UI thread
     }
 
     public static Context getApplicationContext() {
+        Preconditions.checkNotNull(sApp);
         return sApp;
     }
 
     public static String getCurrentProcessName() {
+        Preconditions.checkNotNull(sApp);
+
         if (!TextUtils.isEmpty(sProcessName)) {
             return sProcessName;
         }
@@ -76,13 +77,5 @@ public class ApplicationUtils {
             processName = processName.trim();
         }
         return processName;
-    }
-
-    public static void post(Runnable r) {
-        sHandler.post(r);
-    }
-
-    public static void postDelayed(Runnable r, long delayMs) {
-        sHandler.postDelayed(r, delayMs);
     }
 }

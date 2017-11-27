@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class SystemServiceHelper {
     private static final String TAG = "SystemServiceHelper";
 

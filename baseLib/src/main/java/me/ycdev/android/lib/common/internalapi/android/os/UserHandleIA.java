@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.support.annotation.RestrictTo;
 
@@ -9,6 +10,8 @@ import java.lang.reflect.Method;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressLint("PrivateApi")
 public class UserHandleIA {
     private static final String TAG = "UserHandleIA";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;

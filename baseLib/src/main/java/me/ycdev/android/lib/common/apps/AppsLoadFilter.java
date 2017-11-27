@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.apps;
 
+@SuppressWarnings("WeakerAccess")
 public class AppsLoadFilter {
     /**
      * Get mounted apps only (true by default).

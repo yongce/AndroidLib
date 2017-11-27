@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ReflectionUtils {
     public static Method findMethod(@NonNull Class<?> classObj, @NonNull String methodName,
             Class<?>... parameterTypes) throws NoSuchMethodException {

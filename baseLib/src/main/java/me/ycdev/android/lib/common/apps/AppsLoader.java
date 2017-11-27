@@ -17,6 +17,7 @@ import me.ycdev.android.lib.common.utils.MiscUtils;
 import me.ycdev.android.lib.common.utils.PackageUtils;
 import me.ycdev.android.lib.common.utils.StringUtils;
 
+@SuppressWarnings("unused")
 public class AppsLoader {
     private Context mAppContext;
     private PackageManager mPm;

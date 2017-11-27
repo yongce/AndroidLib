@@ -6,6 +6,7 @@ import android.support.annotation.StringRes;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class PermissionRequestParams {
     public static final int RATIONALE_POLICY_ON_DEMOND = 1;
     public static final int RATIONALE_POLICY_NEVER = 2;

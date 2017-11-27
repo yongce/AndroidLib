@@ -26,6 +26,7 @@ import me.ycdev.android.lib.commonui.base.ViewHolderBase;
 import static me.ycdev.android.arch.ArchConstants.IntentType;
 import static me.ycdev.android.arch.ArchConstants.IntentType.INTENT_TYPE_ACTIVITY;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class GridEntriesActivity extends AppCompatBaseActivity
         implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     public static class IntentEntry {
@@ -57,7 +58,7 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
 
         mAdapter = new SystemEntriesAdapter(this);
 
-        mGridView = (GridView) findViewById(R.id.grid);
+        mGridView = findViewById(R.id.grid);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
         mGridView.setOnItemLongClickListener(this);
@@ -145,7 +146,7 @@ public abstract class GridEntriesActivity extends AppCompatBaseActivity
 
             public ViewHolder(@NonNull View itemView, int position) {
                 super(itemView, position);
-                titleView = (TextView) itemView.findViewById(R.id.title);
+                titleView = itemView.findViewById(R.id.title);
             }
         }
 

@@ -2,6 +2,7 @@ package me.ycdev.android.lib.common.utils;
 
 import android.support.annotation.NonNull;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {
     public static String trimPrefixSpaces(String str) {
         final int N = str.length();

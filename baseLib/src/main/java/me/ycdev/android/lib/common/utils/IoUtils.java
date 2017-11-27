@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.zip.ZipFile;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class IoUtils {
     private static final int IO_BUF_SIZE = 1024 * 16; // 16KB
 

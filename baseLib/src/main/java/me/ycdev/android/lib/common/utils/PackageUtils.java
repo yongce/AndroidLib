@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -87,6 +88,9 @@ public class PackageUtils {
     @NonNull
     public static List<String> getInputMethodApps(@NonNull Context cxt) {
         InputMethodManager imm = (InputMethodManager) cxt.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm == null) {
+            return Collections.emptyList();
+        }
         List<InputMethodInfo> apps = imm.getEnabledInputMethodList();
         List<String> pkgNames = new ArrayList<>(apps.size());
         for (InputMethodInfo info : apps) {

@@ -3,6 +3,7 @@ package me.ycdev.android.lib.commonui.base;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ViewHolderBase {
     public @NonNull View itemView;
     public int position;

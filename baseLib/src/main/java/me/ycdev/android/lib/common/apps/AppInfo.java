@@ -8,6 +8,7 @@ import java.util.Comparator;
 
 import me.ycdev.android.lib.common.utils.DateTimeUtils;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AppInfo {
     public String pkgName;
     public int appUid;

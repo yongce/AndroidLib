@@ -26,6 +26,7 @@ import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_T
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_NONE;
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_WIFI;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class NetworkUtils {
     private static final String TAG = "NetworkUtils";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
@@ -186,7 +187,6 @@ public class NetworkUtils {
 
     /**
      * Open a HTTP connection to the specified URL. Use proxy automatically if needed.
-     * @throws IOException
      */
     public static HttpURLConnection openHttpURLConnection(String url) throws IOException {
         // check if url can be parsed successfully to prevent host == null crash

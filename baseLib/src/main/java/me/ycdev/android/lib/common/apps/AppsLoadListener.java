@@ -1,11 +1,12 @@
 package me.ycdev.android.lib.common.apps;
 
-public abstract class AppsLoadListener {
+@SuppressWarnings("WeakerAccess")
+public interface AppsLoadListener {
     /**
      * This method can be used to cancel the apps loading.
      * @return false will be returned by default.
      */
-    public boolean isCancelled() {
+    default boolean isCancelled() {
         return false;
     }
 
@@ -15,7 +16,5 @@ public abstract class AppsLoadListener {
      * @param percent Value range [1, 2, ..., 100]
      * @param appInfo May be null
      */
-    public void onProgressUpdated(int percent, AppInfo appInfo) {
-        // nothing to do
-    }
+    void onProgressUpdated(int percent, AppInfo appInfo);
 }

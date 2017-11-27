@@ -12,6 +12,7 @@ import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper;
 import me.ycdev.android.lib.common.wrapper.IntentHelper;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class BatteryInfoTracker extends WeakTracker<BatteryInfoTracker.BatteryInfoListener> {
     private static final String TAG = "BatteryInfoTracker";
 
@@ -98,12 +99,7 @@ public class BatteryInfoTracker extends WeakTracker<BatteryInfoTracker.BatteryIn
 
         LibLogger.d(TAG, "battery info updated, " + dump(data));
         mBatteryInfo = data;
-        notifyListeners(new NotifyAction<BatteryInfoListener>() {
-            @Override
-            public void notify(BatteryInfoListener listener) {
-                listener.onBatteryInfoUpdated(data);
-            }
-        });
+        notifyListeners(listener -> listener.onBatteryInfoUpdated(data));
     }
 
     private void fixData(BatteryInfo data) {

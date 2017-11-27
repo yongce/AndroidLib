@@ -6,20 +6,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class WeakHandler extends Handler {
-    public interface MessageHandler {
-        void handleMessage(Message msg);
-    }
+    private WeakReference<Handler.Callback> mTargetHandler;
 
-    private WeakReference<MessageHandler> mTargetHandler;
-
-    public WeakHandler(@NonNull MessageHandler msgHandler) {
+    public WeakHandler(@NonNull Handler.Callback msgHandler) {
         mTargetHandler = new WeakReference<>(msgHandler);
     }
 
     @Override
     public void handleMessage(Message msg) {
-        MessageHandler realHandler = mTargetHandler.get();
+        Handler.Callback realHandler = mTargetHandler.get();
         if (realHandler != null) {
             realHandler.handleMessage(msg);
         }

@@ -3,12 +3,12 @@ package me.ycdev.android.lib.commonui.base;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.commonui.R;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
         AsyncTask<Params, Progress, Result> {
     private static final String TAG = "WaitingAsyncTaskBase";
@@ -48,14 +48,11 @@ public abstract class WaitingAsyncTaskBase<Params, Progress, Result> extends
         mDialog = new ProgressDialog(mActivity);
         mDialog.setMessage(getInitMessage());
         mDialog.setCancelable(mCancelable);
-        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                LibLogger.d(TAG, "to cancel, finish activity? " + mAutoFinishWhenCanceled);
-                cancel(true);
-                if (mAutoFinishWhenCanceled) {
-                    mActivity.finish();
-                }
+        mDialog.setOnCancelListener(dialog -> {
+            LibLogger.d(TAG, "to cancel, finish activity? " + mAutoFinishWhenCanceled);
+            cancel(true);
+            if (mAutoFinishWhenCanceled) {
+                mActivity.finish();
             }
         });
         mDialog.show();

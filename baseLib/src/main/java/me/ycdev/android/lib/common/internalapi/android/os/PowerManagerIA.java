@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.IBinder;
@@ -13,6 +14,8 @@ import java.lang.reflect.Method;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressLint("PrivateApi")
 public class PowerManagerIA {
     private static final String TAG = "PowerManagerIA";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
@@ -112,7 +115,7 @@ public class PowerManagerIA {
     /**
      * Reboot the device.
      * @param service The "android.os.IPowerManager" object.
-     * @param reason
+     * @param reason Just for logging
      * @see #asInterface(android.os.IBinder)
      */
     public static void reboot(@NonNull Object service, @NonNull String reason) {
@@ -264,7 +267,7 @@ public class PowerManagerIA {
 
     /**
      * Forces the device to go to sleep. Please refer android.os.PowerManager#goToSleep(long).
-     * @param service
+     * @param service The IPowerManager object
      * @param time The time when the request to go to sleep was issued,
      *             in the {@link android.os.SystemClock#uptimeMillis()} time base.
      *             This timestamp is used to correctly order the go to sleep request with

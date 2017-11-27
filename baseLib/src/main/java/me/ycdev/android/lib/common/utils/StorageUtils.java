@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import java.io.File;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class StorageUtils {
     /**
      * Returns the number of usable free bytes on the partition containing this path.

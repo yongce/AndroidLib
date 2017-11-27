@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,8 @@ import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.common.utils.StringUtils;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressLint("PrivateApi")
 public class ProcessIA {
     private static final String TAG = "ProcessIA";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
@@ -107,7 +110,7 @@ public class ProcessIA {
     /**
      * Return the pid of the specified process name. If there are multiple processes
      * which have same process name, then just return the first one.
-     * @param procName
+     * @param procName The process name
      * @return -1 if the specified process not found
      */
     public static int getProcessPid(@NonNull String procName) {

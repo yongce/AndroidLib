@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
+@SuppressWarnings("unused")
 public class IpcHandler extends Handler {
     private static volatile IpcHandler sInstance;
 

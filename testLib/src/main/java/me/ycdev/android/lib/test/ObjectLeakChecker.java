@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CountDownLatch;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ObjectLeakChecker<T> {
     public interface ObjectOperator<T> {
         T createObject();

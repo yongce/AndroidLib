@@ -10,6 +10,7 @@ import java.util.HashMap;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+@SuppressWarnings("unused")
 public class SQLiteDbMgr {
     private static final String TAG = "SQLiteDbMgr";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;

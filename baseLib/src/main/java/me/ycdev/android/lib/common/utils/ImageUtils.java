@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 
 import java.io.FileDescriptor;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ImageUtils {
     public interface IReusableBitmapProvider {
         Bitmap getReusableBitmap(@NonNull BitmapFactory.Options options);

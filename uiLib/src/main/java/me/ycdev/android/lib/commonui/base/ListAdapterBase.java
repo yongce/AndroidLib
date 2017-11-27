@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class ListAdapterBase<ItemType, VH extends ViewHolderBase> extends BaseAdapter {
     protected Context mContext;
     protected LayoutInflater mInflater;

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class IntentUtils {
     public static boolean canStartActivity(@NonNull Context cxt, @NonNull Intent activityIntent) {
         // Use PackageManager.MATCH_DEFAULT_ONLY to behavior same as Context#startAcitivty()

@@ -68,7 +68,7 @@ ext {
             // infrastructure
             'butterknife'      : "8.8.1",
             'timber'           : "4.6.0",
-            'guava'            : "23.3-android",
+            'guava'            : "23.5-android",
 
             // debug
             'leakcanary'       : "1.5",

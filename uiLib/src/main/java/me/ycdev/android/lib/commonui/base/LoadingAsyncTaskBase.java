@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import me.ycdev.android.lib.commonui.R;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class LoadingAsyncTaskBase<Params, Result> extends
         WaitingAsyncTaskBase<Params, Integer, Result> {
     public LoadingAsyncTaskBase(Activity activity) {

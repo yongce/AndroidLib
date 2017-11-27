@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.commonjni;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class FileStatusHelper {
     static {
         CommonJniLoader.load();

@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import me.ycdev.android.lib.common.annotation.GuardedBy;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class FileLogger {
     private static final String TAG = "FileLogger";
 

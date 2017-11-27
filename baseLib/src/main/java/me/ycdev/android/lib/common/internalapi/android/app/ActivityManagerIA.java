@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.internalapi.android.app;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import me.ycdev.android.lib.common.internalapi.android.os.UserHandleIA;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressLint("PrivateApi")
 public class ActivityManagerIA {
     private static final String TAG = "ActivityManagerIA";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;

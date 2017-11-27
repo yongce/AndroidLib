@@ -2,6 +2,7 @@ package me.ycdev.android.lib.common.utils;
 
 import android.os.Build;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class AndroidVersionUtils {
     /**
      * Ice Cream Sandwich MR1 (4.0.3) and higher version (API 15+)

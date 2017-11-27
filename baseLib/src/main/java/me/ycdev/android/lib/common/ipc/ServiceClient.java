@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.common.utils.Preconditions;
 import me.ycdev.android.lib.common.utils.WeakListenerManager;
-import me.ycdev.android.lib.common.utils.WeakListenerManager.NotifyAction;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class ServiceClient<IServiceInterface extends IInterface> {
     private static final String TAG = "ServiceClient";
 
@@ -261,12 +261,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
                 case MSG_NOTIFY_LISTENERS: {
                     final @ConnectState int newState = msg.arg1;
-                    mStateListeners.notifyListeners(new NotifyAction<ConnectStateListener>() {
-                        @Override
-                        public void notify(ConnectStateListener listener) {
-                            listener.onStateChanged(newState);
-                        }
-                    });
+                    mStateListeners.notifyListeners(listener -> listener.onStateChanged(newState));
                     break;
                 }
 

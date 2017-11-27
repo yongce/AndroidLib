@@ -5,6 +5,7 @@ import android.os.SystemClock;
 
 import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class WaitingAsyncTask extends WaitingAsyncTaskBase<Void, Void, Void> {
     private static final long WAITING_TIME_MIN = 500; // ms
 

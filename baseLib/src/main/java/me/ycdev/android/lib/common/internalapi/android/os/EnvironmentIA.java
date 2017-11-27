@@ -7,9 +7,12 @@ import java.lang.reflect.Method;
 import me.ycdev.android.lib.common.utils.LibConfigs;
 import me.ycdev.android.lib.common.utils.LibLogger;
 
+import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressLint("PrivateApi")
 public class EnvironmentIA {
     private static final String TAG = "EnvironmentIA";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;

@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Preconditions {
     public static void checkMainThread() {
         if (!ThreadUtils.isMainThread()) {
@@ -17,5 +18,12 @@ public class Preconditions {
         if (!expression) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static <T> T checkNotNull(T object) {
+        if (object == null) {
+            throw new NullPointerException();
+        }
+        return object;
     }
 }
