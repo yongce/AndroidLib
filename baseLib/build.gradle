@@ -26,6 +26,8 @@ dependencies {
     testImplementation deps.test.supportRules
     testImplementation deps.test.mockitoCore
     testImplementation deps.test.hamcrestCore
+    testImplementation deps.test.powermockMockito
+    testImplementation deps.test.powermockJunit
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.test.supportRunner

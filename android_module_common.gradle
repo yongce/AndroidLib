@@ -1,7 +1,6 @@
 /**
  * File: 'android_module_common.gradle'
  * Version: 2017.12.10
- * Ref: https://gist.github.com/yongce/cef32768dbdfdf32a54d2488afcf1ed3
  * All android projects can copy and include this file.
  */
 

@@ -1,7 +1,6 @@
 /**
  * File: 'android_project_common.gradle'
  * Version: 2017.12.10
- * Ref: https://gist.github.com/yongce/8ac047420e0b5cb5427687e701a26fb2
  * All android projects can copy and include this file.
  */
 
@@ -70,10 +69,12 @@ ext {
             'buildTools'       : "26.0.3",
 
             // Android official support
-            'supportLib'       : "27.0.0",
+            'supportLib'       : "27.0.2",
             'multidexLib'      : "1.0.2",
             'constraintLayout' : "1.0.2",
             'lintLib'          : "26.0.0",
+            'lifecycle'        : "1.0.0",
+            'room'             : "1.0.0",
 
             // test
             'junit'            : "4.12",
@@ -118,7 +119,6 @@ ext {
             // others
             'zxing'            : "3.3.1",
     ]
-
     deps = [
             // Android official support
             'support': [
@@ -126,14 +126,42 @@ ext {
                     'compat'           : "com.android.support:support-compat:${versions.supportLib}",
                     'coreUtils'        : "com.android.support:support-core-utils:${versions.supportLib}",
                     'coreUi'           : "com.android.support:support-core-ui:${versions.supportLib}",
+                    'mediaCompat'      : "com.android.support:support-media-compat:${versions.supportLib}",
                     'fragment'         : "com.android.support:support-fragment:${versions.supportLib}",
                     'supportV13'       : "com.android.support:support-v13:${versions.supportLib}",
                     'appcompat'        : "com.android.support:appcompat-v7:${versions.supportLib}",
+                    'cardview'         : "com.android.support:cardview-v7:${versions.supportLib}",
+                    'gridlayout'       : "com.android.support:gridlayout-v7:${versions.supportLib}",
+                    'mediarouter'      : "com.android.support:mediarouter-v7:${versions.supportLib}",
+                    'palette'          : "com.android.support:palette-v7:${versions.supportLib}",
                     'design'           : "com.android.support:design:${versions.supportLib}",
                     'recyclerview'     : "com.android.support:recyclerview-v7:${versions.supportLib}",
                     'percent'          : "com.android.support:percent:${versions.supportLib}",
+                    'vectorDrawable'   : "com.android.support:support-vector-drawable:${versions.supportLib}",
+                    'animatedVectorDrawable' : "com.android.support:animated-vector-drawable:${versions.supportLib}",
+                    'customtabs'       : "com.android.support:customtabs:${versions.supportLib}",
+                    'exifinterface'    : "com.android.support:exifinterface:${versions.supportLib}",
+                    'wear'             : "com.android.support:wear:${versions.supportLib}",
+
                     'constraintLayout' : "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
                     'multidex'         : "com.android.support:multidex:${versions.multidexLib}",
+            ],
+            'archCore': [
+                    'coreTesting'      : "android.arch.core:core-testing:${versions.lifecycle}",
+            ],
+            'lifecycle': [
+                    'runtime'          : "android.arch.lifecycle:runtime:${versions.lifecycle}",
+                    'compiler'         : "android.arch.lifecycle:compiler:${versions.lifecycle}",
+                    'commonJava8'      : "android.arch.lifecycle:common-java8:${versions.lifecycle}",
+                    'extensions'       : "android.arch.lifecycle:extensions:${versions.lifecycle}",
+                    'reactiveStreams'  : "android.arch.lifecycle:reactivestreams:${versions.lifecycle}",
+
+            ],
+            'room': [
+                    'runtime'          : "android.arch.persistence.room:runtime:${versions.room}",
+                    'compiler'         : "android.arch.persistence.room:compiler:${versions.room}",
+                    'rxjava'           : "android.arch.persistence.room:rxjava2:${versions.room}",
+                    'testing'          : "android.arch.persistence.room:testing:${versions.room}",
             ],
 
             // test
@@ -201,4 +229,5 @@ ext {
             // others
             'zxingCore'                : "com.google.zxing:core:${versions.zxing}",
     ]
+
 }
