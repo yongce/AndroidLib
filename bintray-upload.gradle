@@ -8,6 +8,7 @@ task generateSourcesJar(type: Jar) {
 task generateJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 afterEvaluate {
     generateJavadocs.classpath += files(android.libraryVariants.collect { variant ->
