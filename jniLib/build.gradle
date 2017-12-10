@@ -1,25 +1,17 @@
 apply plugin: 'com.android.library'
+apply from: "${rootDir}/android_module_common.gradle"
+
 project.archivesBaseName = 'common-jni'
 
 android {
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
-
     defaultConfig {
         minSdkVersion versions.minSdk
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         externalNativeBuild {
             ndkBuild {
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86"
             }
         }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {

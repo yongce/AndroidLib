@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
+apply from: "${rootDir}/android_module_common.gradle"
 
 android {
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
-
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion 26
@@ -20,15 +18,7 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     lintOptions {
-        textReport true
-        textOutput 'stdout'
-
         disable 'GoogleAppIndexingWarning'
         disable 'MyBaseActivity','MyToastHelper'
     }

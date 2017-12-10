@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
+apply from: "${rootDir}/android_module_common.gradle"
 
 android {
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
-
     defaultConfig {
         applicationId "me.ycdev.android.arch.demo"
         minSdkVersion 18 // for 'uiautomator'
@@ -19,15 +17,7 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     lintOptions {
-        textReport true
-        textOutput 'stdout'
-
         abortOnError false
 
         // comment the following line when debug lint rules

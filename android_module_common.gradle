@@ -1,0 +1,102 @@
+/**
+ * File: 'android_module_common.gradle'
+ * Version: 2017.12.10
+ * Ref: https://gist.github.com/yongce/cef32768dbdfdf32a54d2488afcf1ed3
+ * All android projects can copy and include this file.
+ */
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        manifestPlaceholders = [
+                MODULE_GIT_COMMIT_SHA1: getModuleProjectLastCommitSha1(),
+                ROOT_GIT_COMMIT_SHA1: getRootProjectLastCommitSha1()
+        ]
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    if (project.plugins.hasPlugin("com.android.application")) {
+        signingConfigs {
+            androidTestKey {
+                storeFile file("${rootDir}/aosp.keystore")
+                storePassword "android"
+                keyAlias "android.testkey"
+                keyPassword "android"
+            }
+
+            androidPlatformKey {
+                storeFile file("${rootDir}/aosp.keystore")
+                storePassword "android"
+                keyAlias "android.platformkey"
+                keyPassword "android"
+            }
+        }
+
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.androidTestKey
+            }
+
+            release {
+                signingConfig signingConfigs.androidTestKey
+
+                minifyEnabled true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                String buildType = variant.buildType.name
+                String abi = output.getFilter("ABI")
+                if (!buildType.equals("debug")) {
+                    String fileName = "${project.name}"
+                    if (variant.flavorName != null && !variant.flavorName.isEmpty()) {
+                        fileName += "-${variant.flavorName}"
+                    }
+                    if (abi != null && !abi.isEmpty()) {
+                        fileName += "-${abi}"
+                    }
+                    fileName += "-${variant.versionName}-${variant.versionCode}"
+                    output.outputFileName = "${fileName}.apk"
+                }
+
+                if (buildType.equals('release')) {
+                    output.assemble.doLast {
+                        copy {
+                            from output.outputFile.getAbsolutePath()
+                            into "${rootProject.ext.appsOutDir}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+
+        abortOnError true
+        ignoreWarnings isIgnoreLintWarnings()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    testOptions {
+        unitTests.all {
+            // All the usual Gradle options.
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen {false}
+                showStandardStreams = true
+            }
+        }
+    }
+}

@@ -1,20 +1,14 @@
 apply plugin: 'com.android.library'
+apply from: "${rootDir}/android_module_common.gradle"
+
 project.archivesBaseName = 'common-test'
 
 android {
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
-
     defaultConfig {
         minSdkVersion versions.minSdk
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     lintOptions {
-        textReport true
-        textOutput 'stdout'
-
         disable 'InvalidPackage'
     }
 }
