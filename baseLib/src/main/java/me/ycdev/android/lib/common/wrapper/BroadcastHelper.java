@@ -9,15 +9,15 @@ import android.support.annotation.NonNull;
 /**
  * A wrapper class to avoid security issues when sending/receiving broadcast.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class BroadcastHelper {
-    private static final String PERM_INTERNAL_BROADCAST_SUFFIX = ".permission.INTERNAL";
+    public static final String PERM_INTERNAL_BROADCAST_SUFFIX = ".permission.INTERNAL";
 
     private BroadcastHelper() {
         // nothing to do
     }
 
-    private static String getInternalBroadcastPerm(Context cxt) {
+    public static String getInternalBroadcastPerm(@NonNull Context cxt) {
         return cxt.getPackageName() + PERM_INTERNAL_BROADCAST_SUFFIX;
     }
 

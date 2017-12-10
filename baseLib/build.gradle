@@ -28,6 +28,7 @@ dependencies {
     api deps.support.annotations
     implementation deps.support.compat
     implementation deps.support.fragment
+    implementation deps.gson
 
     // Dependencies for local unit tests
     testImplementation project(':testLib')
