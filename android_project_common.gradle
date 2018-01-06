@@ -24,8 +24,14 @@ allprojects {
 // Define some common closures (methods) for code share
 ext.getModuleProjectCommitCount = {
     String gitCommitCountCmd = "git rev-list HEAD --count"
-    String cmdResult = gitCommitCountCmd.execute((String[])null, project.projectDir).text
-    return cmdResult.trim().toInteger()
+    Process process = gitCommitCountCmd.execute((String[])null, project.projectDir)
+    String errText = process.err.text
+    try {
+        return process.text.trim().toInteger()
+    } catch (Exception e) {
+        println String.format("Failed to execute #getModuleProjectCommitCount() with error [%s], " +
+                "which is caused by [%s].", e.toString(), errText)
+    }
 }
 
 ext.getModuleProjectLastCommitSha1 = {
