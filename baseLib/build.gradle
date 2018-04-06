@@ -18,6 +18,7 @@ dependencies {
     implementation deps.support.compat
     implementation deps.support.fragment
     implementation deps.gson
+    implementation deps.timber
 
     // Dependencies for local unit tests
     testImplementation project(':testLib')
@@ -28,6 +29,7 @@ dependencies {
     testImplementation deps.test.hamcrestCore
     testImplementation deps.test.powermockMockito
     testImplementation deps.test.powermockJunit
+    testImplementation deps.test.robolectric
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.test.supportRunner
