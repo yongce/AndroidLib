@@ -11,6 +11,17 @@ import android.support.annotation.VisibleForTesting;
 import me.ycdev.android.lib.common.utils.Preconditions;
 import timber.log.Timber;
 
+/**
+ * An utility class for processing tasks async. It's similar to {@link android.app.IntentService}
+ * and has following features:
+ * <li>1. All tasks are executed one-by-one in a worker thread by {@link Handler}.</li>
+ * <li>2. The worker thread is created when needed, and destroyed when not needed anymore.
+ *        Also, you can customize the delay time for the thread's auto destroying. </li>
+ * <p />
+ * Because of the background limits in Android O, we cannot use {@link android.app.IntentService}
+ * anymore in background (if the target API is set to Android O or higher versions).
+ * This class may be a possible replacement for it.
+ */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AsyncTaskQueue {
     private static final String TAG = "AsyncTaskQueue";
