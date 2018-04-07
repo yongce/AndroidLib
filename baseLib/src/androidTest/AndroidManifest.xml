@@ -19,9 +19,14 @@
         android:name="me.ycdev.android.lib.common.AndroidLibTestApplication">
 
         <provider
+            android:name="me.ycdev.android.lib.common.demo.provider.InfoProviderImpl"
             android:authorities="me.ycdev.android.lib.common.provider.InfoProvider"
-            android:name="me.ycdev.android.lib.common.provider.InfoProviderImpl"
             android:exported="true" />
+
+        <service android:name="me.ycdev.android.lib.common.demo.service.LocalService" />
+        <service
+            android:name="me.ycdev.android.lib.common.demo.service.RemoteService"
+            android:process=":remote" />
     </application>
 
 </manifest>

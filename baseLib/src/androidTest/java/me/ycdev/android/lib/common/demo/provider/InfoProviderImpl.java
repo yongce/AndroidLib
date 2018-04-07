@@ -1,8 +1,10 @@
-package me.ycdev.android.lib.common.provider;
+package me.ycdev.android.lib.common.demo.provider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+
+import me.ycdev.android.lib.common.provider.InfoProvider;
 
 public class InfoProviderImpl extends InfoProvider {
     @Override

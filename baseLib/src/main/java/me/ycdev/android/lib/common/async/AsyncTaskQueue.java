@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.RestrictTo;
 
 import me.ycdev.android.lib.common.utils.Preconditions;
 import timber.log.Timber;
@@ -71,7 +71,7 @@ public class AsyncTaskQueue {
         mMainHandler.obtainMessage(MSG_MAIN_REMOVE_TASK, task).sendToTarget();
     }
 
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.TESTS)
     Handler getTaskHandler() {
         return mTaskHandler;
     }

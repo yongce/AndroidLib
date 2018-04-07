@@ -9,12 +9,12 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.IInterface;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import java.lang.annotation.Retention;
@@ -22,13 +22,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.common.utils.Preconditions;
 import me.ycdev.android.lib.common.utils.WeakListenerManager;
+import timber.log.Timber;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract class ServiceClient<IServiceInterface extends IInterface> {
-    private static final String TAG = "ServiceClient";
+public abstract class ServiceConnector<IServiceInterface> {
+    private static final String TAG = "ServiceConnector";
 
     public static final int STATE_DISCONNECTED = 1;
     public static final int STATE_CONNECTING = 2;
@@ -53,8 +53,9 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     private final Object mConnectWaitLock = new Object();
     private AtomicInteger mState = new AtomicInteger(STATE_DISCONNECTED);
     private long mConnectStartTime;
+    private ServiceConnection mServiceConnection;
 
-    protected ServiceClient(Context cxt, String serviceName) {
+    protected ServiceConnector(Context cxt, String serviceName) {
         mAppContext = cxt.getApplicationContext();
         mServiceName = serviceName;
     }
@@ -70,24 +71,39 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     /**
      * Get Intent to bind the target service.
      */
+    @NonNull
     protected abstract Intent getServiceIntent();
+
+    protected boolean validatePermission(String permission) {
+        return true; // Skip to validate permission by default
+    }
 
     /**
      * Sub class can rewrite the candidate services select logic.
      */
-    protected ComponentName selectTargetService(List<ResolveInfo> servicesList) {
-        LibLogger.i(TAG, "[%s] Candidate services: %d", mServiceName, servicesList.size());
+    @Nullable
+    protected ComponentName selectTargetService(@NonNull List<ResolveInfo> servicesList) {
+        Timber.tag(TAG).i("[%s] Candidate services: %d", mServiceName, servicesList.size());
         Preconditions.checkArgument(servicesList.size() >= 1);
         ServiceInfo serviceInfo = servicesList.get(0).serviceInfo;
         for (ResolveInfo info : servicesList) {
+            if (!validatePermission(info.serviceInfo.permission)) {
+                Timber.tag(TAG).w("Skip not-matched permission candidate: %s, perm: %s",
+                        info.serviceInfo.name, info.serviceInfo.permission);
+                continue;
+            }
             if ((info.serviceInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) ==
                     ApplicationInfo.FLAG_SYSTEM) {
                 serviceInfo = info.serviceInfo; // search the system candidate
-                LibLogger.i(TAG, "[%s] Service from system found and select it", mServiceName);
+                Timber.tag(TAG).i("[%s] Service from system found and select it", mServiceName);
                 break;
             }
         }
-        return new ComponentName(serviceInfo.packageName, serviceInfo.name);
+
+        if (validatePermission(serviceInfo.permission)) {
+            return new ComponentName(serviceInfo.packageName, serviceInfo.name);
+        }
+        return null;
     }
 
     /**
@@ -107,18 +123,36 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
         mStateListeners.removeListener(listener);
     }
 
+    public boolean isServiceExist() {
+        Intent intent = getServiceIntent();
+        List<ResolveInfo> servicesList = mAppContext.getPackageManager().queryIntentServices(intent, 0);
+        return servicesList != null && servicesList.size() > 0 && selectTargetService(servicesList) != null;
+    }
+
     public void connect() {
         connectServiceIfNeeded(false);
     }
 
+    public void disconnect() {
+        Timber.tag(TAG).i("[%s] disconnect service...", mServiceName);
+        mConnectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK);
+        mConnectHandler.removeMessages(MSG_RECONNECT);
+        mService = null;
+        if (mServiceConnection != null) {
+            mAppContext.unbindService(mServiceConnection);
+            mServiceConnection = null;
+        }
+        updateConnectState(STATE_DISCONNECTED);
+    }
+
     private void connectServiceIfNeeded(boolean rebind) {
         if (mService != null) {
-            LibLogger.d(TAG, "[%s] service is connected", mServiceName);
+            Timber.tag(TAG).d("[%s] service is connected", mServiceName);
             return;
         }
         if (!rebind) {
             if (!mState.compareAndSet(STATE_DISCONNECTED, STATE_CONNECTING)) {
-                LibLogger.d(TAG, "[%s] Service is under connecting", mServiceName);
+                Timber.tag(TAG).d("[%s] Service is under connecting", mServiceName);
                 return;
             }
             updateConnectState(STATE_CONNECTING);
@@ -128,19 +162,25 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
         Intent intent = getServiceIntent();
         List<ResolveInfo> servicesList = mAppContext.getPackageManager().queryIntentServices(intent, 0);
         if (servicesList == null || servicesList.size() == 0) {
-            LibLogger.w(TAG, "[%s] no service component available, cannot connect", mServiceName);
+            Timber.tag(TAG).w("[%s] no service component available, cannot connect", mServiceName);
+            updateConnectState(STATE_DISCONNECTED);
+            return;
+        }
+        ComponentName candidateService = selectTargetService(servicesList);
+        if (candidateService == null) {
+            Timber.tag(TAG).w("[%s] no expected service component found, cannot connect", mServiceName);
             updateConnectState(STATE_DISCONNECTED);
             return;
         }
         // must set explicit component before bind/start service
-        intent.setComponent(selectTargetService(servicesList));
+        intent.setComponent(candidateService);
 
-        final ServiceConnection conn = new ServiceConnection() {
+        mServiceConnection = new ServiceConnection() {
             private boolean mConnectLost = false;
 
             @Override
             public void onServiceConnected(ComponentName cn, IBinder service) {
-                LibLogger.i(TAG, "[%s] service connected, cn: %s, mConnectLost: %s",
+                Timber.tag(TAG).i("[%s] service connected, cn: %s, mConnectLost: %s",
                         mServiceName,  cn, mConnectLost);
                 if (!mConnectLost) {
                     mService = asInterface(service);
@@ -151,7 +191,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
             @Override
             public void onServiceDisconnected(ComponentName cn) {
-                LibLogger.i(TAG, "[%s] service disconnected, cn: %s, mConnectLost: %s",
+                Timber.tag(TAG).i("[%s] service disconnected, cn: %s, mConnectLost: %s",
                         mServiceName, cn, mConnectLost);
                 if (mConnectLost) {
                     return;
@@ -159,17 +199,15 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
 
                 // Unbind the service and bind it again later
                 mConnectLost = true;
-                mService = null;
-                mAppContext.unbindService(this);
-                updateConnectState(STATE_DISCONNECTED);
+                disconnect();
 
                 mConnectHandler.sendEmptyMessageDelayed(MSG_RECONNECT, 1000);
             }
         };
 
-        LibLogger.i(TAG, "[%s] connecting service...", mServiceName);
-        if (!mAppContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
-            LibLogger.w(TAG, "[%s] cannot connect", mServiceName);
+        Timber.tag(TAG).i("[%s] connecting service...", mServiceName);
+        if (!mAppContext.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)) {
+            Timber.tag(TAG).w("[%s] cannot connect", mServiceName);
             updateConnectState(STATE_DISCONNECTED);
         } else {
             mConnectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK);
@@ -203,7 +241,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
     public void waitForConnected(long timeoutMillis) {
         Preconditions.checkNonMainThread();
         if (mService != null) {
-            LibLogger.d(TAG, "[%s] already connected", mServiceName);
+            Timber.tag(TAG).d("[%s] already connected", mServiceName);
             return;
         }
 
@@ -212,7 +250,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
             long sleepTime = 50;
             long timeElapsed = 0;
             while (true) {
-                LibLogger.d(TAG, "[%s] checking, service: %s, state: %d, time: %d/%d",
+                Timber.tag(TAG).d("[%s] checking, service: %s, state: %d, time: %d/%d",
                         mServiceName, mService, mState.get(), timeElapsed, timeoutMillis);
                 if (mService != null || mState.get() == STATE_DISCONNECTED) {
                     break;
@@ -225,7 +263,7 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
-                    LibLogger.w(TAG, "interrupted", e);
+                    Timber.tag(TAG).w(e, "interrupted");
                     break;
                 }
 
@@ -248,28 +286,41 @@ public abstract class ServiceClient<IServiceInterface extends IInterface> {
         return mState.get();
     }
 
+    public static String strConnectState(int state) {
+        if (state == STATE_DISCONNECTED) {
+            return "disconnected";
+        } else if (state == STATE_CONNECTING) {
+            return "connecting";
+        } else if (state == STATE_CONNECTED) {
+            return "connected";
+        } else {
+            return "unknown";
+        }
+    }
+
     private Handler mConnectHandler = new Handler(getConnectLooper()) {
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_RECONNECT: {
-                    LibLogger.d(TAG, "[%s] delayed reconnect fires...", mServiceName);
+                    Timber.tag(TAG).d("[%s] delayed reconnect fires...", mServiceName);
                     connect();
                     break;
                 }
 
                 case MSG_NOTIFY_LISTENERS: {
                     final @ConnectState int newState = msg.arg1;
+                    Timber.tag(TAG).d("State changed: %s", strConnectState(newState));
                     mStateListeners.notifyListeners(listener -> listener.onStateChanged(newState));
                     break;
                 }
 
                 case MSG_CONNECT_TIMEOUT_CHECK: {
-                    LibLogger.d(TAG, "checking connect timeout");
+                    Timber.tag(TAG).d("checking connect timeout");
                     int curState = mState.get();
                     if (SystemClock.elapsedRealtime() - mConnectStartTime >= FORCE_REBIND_TIME) {
-                        LibLogger.d(TAG, "[%s] connect timeout, state: %s",
+                        Timber.tag(TAG).d("[%s] connect timeout, state: %s",
                                 mServiceName, curState);
                         if (curState == STATE_CONNECTING) {
                             // force to rebind the service
