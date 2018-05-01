@@ -30,6 +30,7 @@ import me.ycdev.android.lib.common.type.IntegerHolder;
 import me.ycdev.android.lib.common.utils.GcHelper;
 import timber.log.Timber;
 
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -48,9 +49,13 @@ public class ServiceConnectorTest {
                 latch.countDown();
             }
         });
-        connector.connect();
-        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTING));
+
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
         assertThat(connector.getService(), nullValue());
+
+        connector.connect();
+        assertThat(connector.getConnectState(), anyOf(is(ServiceConnector.STATE_CONNECTING),
+                is(ServiceConnector.STATE_CONNECTED)));
 
         try {
             latch.await();
