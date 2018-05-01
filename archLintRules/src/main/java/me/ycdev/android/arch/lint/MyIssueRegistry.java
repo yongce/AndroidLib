@@ -17,4 +17,9 @@ public class MyIssueRegistry extends IssueRegistry {
                 MyIntentHelperDetector.ISSUE
         );
     }
+
+    @Override
+    public int getApi() {
+        return com.android.tools.lint.detector.api.ApiKt.CURRENT_API;
+    }
 }
