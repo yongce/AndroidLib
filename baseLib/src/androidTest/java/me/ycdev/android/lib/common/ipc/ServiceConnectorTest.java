@@ -26,6 +26,7 @@ import me.ycdev.android.lib.common.demo.service.LocalServiceConnector;
 import me.ycdev.android.lib.common.demo.service.RemoteService;
 import me.ycdev.android.lib.common.demo.service.RemoteServiceConnector;
 import me.ycdev.android.lib.common.type.BooleanHolder;
+import me.ycdev.android.lib.common.type.IntegerHolder;
 import me.ycdev.android.lib.common.utils.GcHelper;
 import timber.log.Timber;
 
@@ -33,14 +34,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
-// TODO not completed
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ServiceConnectorTest {
     private static final String TAG = "ServiceConnectorTest";
 
-    private static void connectSync(ServiceConnector connector) throws InterruptedException {
+    private static void connectSync(ServiceConnector connector) {
         CountDownLatch latch = new CountDownLatch(1);
         connector.addListener(newState -> {
             if (newState == ServiceConnector.STATE_CONNECTED) {
@@ -48,10 +49,22 @@ public class ServiceConnectorTest {
             }
         });
         connector.connect();
-        latch.await();
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTING));
+        assertThat(connector.getService(), nullValue());
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            fail("Should not happen: " + e);
+        }
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
+        assertThat(connector.getService(), notNullValue());
     }
 
-    private static void disconnectSync(ServiceConnector connector) throws InterruptedException {
+    private static void disconnectSync(ServiceConnector connector) {
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
+        assertThat(connector.getService(), notNullValue());
+
         CountDownLatch latch = new CountDownLatch(1);
         connector.addListener(newState -> {
             if (newState == ServiceConnector.STATE_DISCONNECTED) {
@@ -59,39 +72,41 @@ public class ServiceConnectorTest {
             }
         });
         connector.disconnect();
-        latch.await();
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
+        assertThat(connector.getService(), nullValue());
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            fail("Should not happen: " + e);
+        }
     }
 
     @Test @MediumTest
-    public void remoteService_connect_disconnect() throws InterruptedException {
+    public void connect_disconnect_remoteService() {
         Context context = InstrumentationRegistry.getContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
 
         connectSync(connector);
-        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
 
         // BinderProxy
         assertThat(connector.getService().asBinder().getClass().getName(),
                 is("android.os.BinderProxy"));
 
         disconnectSync(connector);
-        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
     }
 
     @Test @SmallTest
-    public void localeService_connect_disconnect() throws InterruptedException {
+    public void connect_disconnect_localeService() {
         Context context = InstrumentationRegistry.getContext();
         LocalServiceConnector connector = new LocalServiceConnector(context);
 
         connectSync(connector);
-        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
 
         // Local object
         assertThat(connector.getService().asBinder().getClass().getName(),
                 is("me.ycdev.android.lib.common.demo.service.LocalService$BinderServer"));
 
         disconnectSync(connector);
-        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
     }
 
     @Test @SmallTest
@@ -199,6 +214,117 @@ public class ServiceConnectorTest {
         connector.addListener(listener);
     }
 
+    @Test @SmallTest
+    public void disconnect_state_remoteService() {
+        Context context = InstrumentationRegistry.getContext();
+        RemoteServiceConnector connector = new RemoteServiceConnector(context);
+        test_disconnect_state(connector);
+    }
+
+    @Test @SmallTest
+    public void disconnect_state_localeService() {
+        Context context = InstrumentationRegistry.getContext();
+        LocalServiceConnector connector = new LocalServiceConnector(context);
+        test_disconnect_state(connector);
+    }
+
+    private void test_disconnect_state(ServiceConnector connector) {
+        connectSync(connector);
+        IntegerHolder stateChangeCount = new IntegerHolder(0);
+        connector.addListener(newState -> stateChangeCount.value++);
+        connector.disconnect();
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
+        assertThat(connector.getService(), nullValue());
+        assertThat(stateChangeCount.value, is(0));
+    }
+
+    @Test @MediumTest
+    public void waitForConnected_forever_remoteService() {
+        Context context = InstrumentationRegistry.getContext();
+        RemoteServiceConnector connector = new RemoteServiceConnector(context);
+        test_waitForConnected_forever(connector);
+    }
+
+    @Test @SmallTest
+    public void waitForConnected_forever_localService() {
+        Context context = InstrumentationRegistry.getContext();
+        LocalServiceConnector connector = new LocalServiceConnector(context);
+        test_waitForConnected_forever(connector);
+    }
+
+    private void test_waitForConnected_forever(ServiceConnector connector) {
+        IntegerHolder stateChangeCount = new IntegerHolder(0);
+        connector.addListener(newState -> stateChangeCount.value++);
+
+        connector.waitForConnected();
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
+        assertThat(connector.getService(), notNullValue());
+        assertThat(stateChangeCount.value, is(2)); // connecting & connected
+
+        connector.waitForConnected();
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
+        assertThat(stateChangeCount.value, is(2)); // already connected, no change anymore
+
+        disconnectSync(connector);
+        assertThat(stateChangeCount.value, is(3));
+    }
+
+    @Test @SmallTest
+    public void waitForConnected_unavailable() {
+        Context context = InstrumentationRegistry.getContext();
+        {
+            FakeServiceConnector connector = new FakeServiceConnector(context);
+            connector.waitForConnected(); // should fail immediately
+            assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
+        }
+        {
+            NoPermServiceConnector connector = new NoPermServiceConnector(context);
+            connector.waitForConnected(); // should fail immediately
+            assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
+        }
+    }
+
+    @Test @MediumTest
+    public void waitForConnected_timeout() {
+        Context context = InstrumentationRegistry.getContext();
+        ConnectDelayServiceConnector connector = new ConnectDelayServiceConnector(context, 300);
+
+        IntegerHolder stateChangeCount = new IntegerHolder(0);
+        connector.addListener(newState -> stateChangeCount.value++);
+
+        connector.waitForConnected(100); //
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTING));
+        assertThat(stateChangeCount.value, is(1)); // connecting
+
+        connector.waitForConnected();
+        assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
+        assertThat(stateChangeCount.value, is(2)); // connected
+
+        disconnectSync(connector);
+        assertThat(stateChangeCount.value, is(3));
+    }
+
+    @Test @SmallTest
+    public void getService() {
+        Context context = InstrumentationRegistry.getContext();
+        RemoteServiceConnector connector = new RemoteServiceConnector(context);
+        assertThat(connector.getService(), nullValue());
+
+        connector.addListener(newState -> {
+            if (newState == ServiceConnector.STATE_CONNECTED) {
+                assertThat(connector.getService(), notNullValue());
+            } else {
+                assertThat(connector.getService(), nullValue());
+            }
+        });
+
+        connector.waitForConnected();
+        assertThat(connector.getService(), notNullValue());
+
+        connector.disconnect();
+        assertThat(connector.getService(), nullValue());
+    }
+
     private static class FakeServiceConnector extends ServiceConnector<IDemoService> {
         FakeServiceConnector(Context cxt) {
             super(cxt, "FakeService");
@@ -224,6 +350,21 @@ public class ServiceConnectorTest {
         @Override
         protected boolean validatePermission(String permission) {
             return false; // test no permission
+        }
+    }
+
+    private static class ConnectDelayServiceConnector extends RemoteServiceConnector {
+        long mConnectDelay;
+
+        ConnectDelayServiceConnector(Context cxt, long delay) {
+            super(cxt);
+            mConnectDelay = delay;
+        }
+
+        @Override
+        protected IDemoService asInterface(IBinder service) {
+            SystemClock.sleep(mConnectDelay);
+            return super.asInterface(service);
         }
     }
 

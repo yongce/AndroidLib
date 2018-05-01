@@ -52,6 +52,10 @@ public class ServiceClientBase<IService> implements ConnectStateListener, Handle
         }
     }
 
+    public boolean isAutoDisconnectEnabled() {
+        return mAutoDisconnect;
+    }
+
     @NonNull
     public ServiceConnector<IService> getServiceConnector() {
         return mServiceConnector;
