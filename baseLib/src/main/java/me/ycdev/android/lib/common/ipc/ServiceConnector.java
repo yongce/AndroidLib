@@ -183,6 +183,7 @@ public abstract class ServiceConnector<IServiceInterface> {
                 Timber.tag(TAG).i("[%s] service connected, cn: %s, mConnectLost: %s",
                         mServiceName,  cn, mConnectLost);
                 if (!mConnectLost) {
+                    // update 'mService' first, and then update the connect state and notify
                     mService = asInterface(service);
                     mConnectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK);
                     updateConnectState(STATE_CONNECTED);
@@ -250,9 +251,10 @@ public abstract class ServiceConnector<IServiceInterface> {
             long sleepTime = 50;
             long timeElapsed = 0;
             while (true) {
+                int connectState = mState.get();
                 Timber.tag(TAG).d("[%s] checking, service: %s, state: %d, time: %d/%d",
-                        mServiceName, mService, mState.get(), timeElapsed, timeoutMillis);
-                if (mService != null || mState.get() == STATE_DISCONNECTED) {
+                        mServiceName, mService, connectState, timeElapsed, timeoutMillis);
+                if (connectState == STATE_CONNECTED || connectState == STATE_DISCONNECTED) {
                     break;
                 }
                 if (timeoutMillis >= 0 && timeElapsed >= timeoutMillis) {
