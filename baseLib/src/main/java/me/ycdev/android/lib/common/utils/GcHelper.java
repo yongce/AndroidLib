@@ -1,7 +1,5 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.os.SystemClock;
-
 import me.ycdev.android.lib.common.type.BooleanHolder;
 import timber.log.Timber;
 
@@ -10,14 +8,14 @@ public class GcHelper {
 
     public static void forceGc(BooleanHolder gcState) {
         // Now, 'objPartner' can be collected by GC!
-        final long timeStart = SystemClock.elapsedRealtime();
+        final long timeStart = System.currentTimeMillis();
 
         // create a lot of objects to force GC
         final int MEM_ALLOC_SIZE = 1024 * 1024; // 1MB
         long memAllocCount = 0;
         while (true) {
             System.gc();
-            SystemClock.sleep(100); // wait for GC
+            ThreadUtils.sleep(100); // wait for GC
             if (gcState.value) {
                 break; // GC happened
             }
@@ -27,7 +25,7 @@ public class GcHelper {
             memAllocCount++;
         }
 
-        long timeUsed = SystemClock.elapsedRealtime() - timeStart;
+        long timeUsed = System.currentTimeMillis() - timeStart;
         Timber.tag(TAG).d("Force GC, time used: %d, memAlloc: %dMB", timeUsed, memAllocCount);
     }
 
@@ -43,7 +41,6 @@ public class GcHelper {
         Object objPartner = new Object() {
             @Override
             protected void finalize() throws Throwable {
-                super.finalize();
                 Timber.tag(TAG).d("GC Partner object was collected");
                 gcState.value = true;
             }
