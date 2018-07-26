@@ -104,6 +104,11 @@ public class ServiceClientBase<IService> implements ConnectStateListener, Handle
             } catch (RemoteException e) {
                 Timber.tag(TAG).w(e, "[%s] Failed to handle incoming operation: %s",
                         mServiceName, operation);
+                // add it into the queue again
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, "[%s] Cannot execute incoming operation: %s. Discard it.",
+                        mServiceName, operation);
+                return; // discard the operation
             }
         }
 
