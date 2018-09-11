@@ -5,7 +5,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
+import android.support.annotation.VisibleForTesting;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -24,6 +27,7 @@ import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_T
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_4G;
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_MOBILE;
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_NONE;
+import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_COMPANION_PROXY;
 import static me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_WIFI;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -31,10 +35,13 @@ public class NetworkUtils {
     private static final String TAG = "NetworkUtils";
     private static final boolean DEBUG = LibConfigs.DEBUG_LOG;
 
+    public static final int WEAR_OS_COMPANION_PROXY = 16;
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
             NETWORK_TYPE_NONE, NETWORK_TYPE_WIFI, NETWORK_TYPE_MOBILE,
-            NETWORK_TYPE_2G, NETWORK_TYPE_3G, NETWORK_TYPE_4G
+            NETWORK_TYPE_2G, NETWORK_TYPE_3G, NETWORK_TYPE_4G,
+            NETWORK_TYPE_COMPANION_PROXY
     })
     public @interface NetworkType {
         int NETWORK_TYPE_NONE = -1;
@@ -43,6 +50,22 @@ public class NetworkUtils {
         int NETWORK_TYPE_2G = 10;
         int NETWORK_TYPE_3G = 11;
         int NETWORK_TYPE_4G = 12;
+        int NETWORK_TYPE_COMPANION_PROXY = 20;
+    }
+
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
+    @NonNull
+    public static String dumpActiveNetworkInfo(@NonNull Context cxt) {
+        NetworkInfo info = getActiveNetworkInfo(cxt);
+        if (info == null) {
+            return "No active network";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("type=").append(info.getType())
+                .append(", subType=").append(info.getSubtype())
+                .append(", infoDump=").append(info);
+        return sb.toString();
     }
 
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
@@ -76,8 +99,12 @@ public class NetworkUtils {
             return NETWORK_TYPE_NONE;
         }
 
-        int type = netInfo.getType();
+        return getNetworkType(netInfo.getType(), netInfo.getSubtype());
+    }
 
+    @NetworkType
+    @VisibleForTesting
+    static int getNetworkType(int type, int subType) {
         if (type == ConnectivityManager.TYPE_WIFI
                 || type == ConnectivityManager.TYPE_WIMAX
                 || type == ConnectivityManager.TYPE_ETHERNET) {
@@ -85,6 +112,9 @@ public class NetworkUtils {
         } else if (type == ConnectivityManager.TYPE_MOBILE
                 || type == ConnectivityManager.TYPE_MOBILE_MMS) {
             return NETWORK_TYPE_MOBILE;
+        } else if (type == WEAR_OS_COMPANION_PROXY) {
+            // Wear OS
+            return NETWORK_TYPE_COMPANION_PROXY;
         }
         return NETWORK_TYPE_NONE; // Take unknown networks as none
     }

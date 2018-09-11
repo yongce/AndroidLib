@@ -56,6 +56,7 @@ ext {
 
             // google
             'gms'              : "11.4.2",
+            'wearableSupport'  : "2.3.0",
 
             // infrastructure
             'butterknife'      : "8.8.1",
@@ -153,6 +154,8 @@ ext {
             'google': [
                     'gmsAuth'          : "com.google.android.gms:play-services-auth:${versions.gms}",
                     'gmsLocation'      : "com.google.android.gms:play-services-location:${versions.gms}",
+                    'wearableFramework': "com.google.android.wearable:wearable:${versions.wearableSupport}",
+                    'wearableSupport'  : "com.google.android.support:wearable:${versions.wearableSupport}",
             ],
 
             // infrastructure
