@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
@@ -130,6 +131,7 @@ public class LibLogger {
             return isLoggable(tag, level) || sLogEnabled;
         }
 
+        @SuppressLint("LogNotTimber")
         private static boolean isLoggable(String tag, int level) {
             try {
                 return Log.isLoggable(tag, level);
