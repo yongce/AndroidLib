@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class SysResourceLimitHelperTest {
-    private static final String TAG = "SysResourceLimitHelperTest";
+    private static final String TAG = "SRLimitHelperTest";
 
     @Test
     public void test_getOpenFilesNumberLimit() {

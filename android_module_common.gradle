@@ -144,5 +144,9 @@ android {
                 showStandardStreams = true
             }
         }
+
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }

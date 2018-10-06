@@ -44,11 +44,12 @@ public class ServiceConnectorTest {
 
     private static void connectSync(ServiceConnector connector) {
         CountDownLatch latch = new CountDownLatch(1);
-        connector.addListener(newState -> {
+        ConnectStateListener listener = newState -> {
             if (newState == ServiceConnector.STATE_CONNECTED) {
                 latch.countDown();
             }
-        });
+        };
+        connector.addListener(listener);
 
         assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
         assertThat(connector.getService(), nullValue());
@@ -71,11 +72,12 @@ public class ServiceConnectorTest {
         assertThat(connector.getService(), notNullValue());
 
         CountDownLatch latch = new CountDownLatch(1);
-        connector.addListener(newState -> {
+        ConnectStateListener listener = newState -> {
             if (newState == ServiceConnector.STATE_DISCONNECTED) {
                 latch.countDown();
             }
-        });
+        };
+        connector.addListener(listener);
         connector.disconnect();
         assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
         assertThat(connector.getService(), nullValue());
@@ -236,7 +238,8 @@ public class ServiceConnectorTest {
     private void test_disconnect_state(ServiceConnector connector) {
         connectSync(connector);
         IntegerHolder stateChangeCount = new IntegerHolder(0);
-        connector.addListener(newState -> stateChangeCount.value++);
+        ConnectStateListener listener = newState -> stateChangeCount.value++;
+        connector.addListener(listener);
         connector.disconnect();
         assertThat(connector.getConnectState(), is(ServiceConnector.STATE_DISCONNECTED));
         assertThat(connector.getService(), nullValue());
@@ -259,7 +262,8 @@ public class ServiceConnectorTest {
 
     private void test_waitForConnected_forever(ServiceConnector connector) {
         IntegerHolder stateChangeCount = new IntegerHolder(0);
-        connector.addListener(newState -> stateChangeCount.value++);
+        ConnectStateListener listener = newState -> stateChangeCount.value++;
+        connector.addListener(listener);
 
         connector.waitForConnected();
         assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTED));
@@ -295,7 +299,8 @@ public class ServiceConnectorTest {
         ConnectDelayServiceConnector connector = new ConnectDelayServiceConnector(context, 300);
 
         IntegerHolder stateChangeCount = new IntegerHolder(0);
-        connector.addListener(newState -> stateChangeCount.value++);
+        ConnectStateListener listener = newState -> stateChangeCount.value++;
+        connector.addListener(listener);
 
         connector.waitForConnected(100); //
         assertThat(connector.getConnectState(), is(ServiceConnector.STATE_CONNECTING));
@@ -315,13 +320,14 @@ public class ServiceConnectorTest {
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
         assertThat(connector.getService(), nullValue());
 
-        connector.addListener(newState -> {
+        ConnectStateListener listener = newState -> {
             if (newState == ServiceConnector.STATE_CONNECTED) {
                 assertThat(connector.getService(), notNullValue());
             } else {
                 assertThat(connector.getService(), nullValue());
             }
-        });
+        };
+        connector.addListener(listener);
 
         connector.waitForConnected();
         assertThat(connector.getService(), notNullValue());

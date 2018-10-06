@@ -14,10 +14,11 @@ android {
 }
 
 dependencies {
+    compileOnly deps.test.junit
+    compileOnly deps.test.robolectric
+
     implementation deps.support.annotations
     implementation deps.timber
-    implementation deps.test.junit
-    implementation deps.test.robolectric
 
     // Dependencies for local unit tests
     testImplementation deps.test.junit
