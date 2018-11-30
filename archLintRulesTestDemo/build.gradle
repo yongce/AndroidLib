@@ -8,6 +8,8 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -31,12 +33,12 @@ android {
 dependencies {
     implementation project(':archLib')
 
-    implementation deps.support.appcompat
+    implementation deps.androidx.appcompat
 
     // The following dependencies are just for checking new versions of library
-//    implementation "com.android.support:multidex:${versions.multidexLib}"
-    implementation "com.android.support:support-annotations:${versions.supportLib}"
-    implementation "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
+    implementation "androidx.multidex:multidex:${versions.multidexLib}"
+    implementation "androidx.annotation:annotation:1.0.0"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
 
     implementation ("com.google.android.gms:play-services-auth:${versions.gms}", {
         exclude group: 'com.android.support'
@@ -64,14 +66,14 @@ dependencies {
     implementation "com.google.zxing:core:${versions.zxing}"
 
     testImplementation "junit:junit:$versions.junit"
-    testImplementation "com.android.support.test:runner:${versions.runner}"
-    testImplementation "com.android.support.test:rules:${versions.rules}"
+    testImplementation "androidx.test:runner:${versions.runner}"
+    testImplementation "androidx.test:rules:${versions.rules}"
     testImplementation "org.hamcrest:hamcrest-core:${versions.hamcrest}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation "org.powermock:powermock-api-mockito:${versions.powermock}"
     testImplementation "org.robolectric:robolectric:${versions.robolectric}"
 
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${versions.espresso}"
-    androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:${versions.uiautomator}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
 }
 

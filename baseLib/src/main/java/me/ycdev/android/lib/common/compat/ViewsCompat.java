@@ -4,7 +4,7 @@ import me.ycdev.android.lib.common.utils.AndroidVersionUtils;
 
 import android.annotation.TargetApi;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.ImageView;
 
 @SuppressWarnings("unused")

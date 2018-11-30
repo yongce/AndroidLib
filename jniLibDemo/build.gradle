@@ -28,5 +28,5 @@ dependencies {
     implementation project(':jniLib')
     implementation project(':archLib')
 
-    implementation deps.support.appcompat
+    implementation deps.androidx.appcompat
 }

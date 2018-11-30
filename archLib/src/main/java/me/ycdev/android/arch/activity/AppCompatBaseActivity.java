@@ -1,12 +1,12 @@
 package me.ycdev.android.arch.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Base class for Activity which wants to inherit
- * {@link android.support.v7.app.AppCompatActivity}.
+ * {@link androidx.appcompat.app.AppCompatActivity}.
  */
 public abstract class AppCompatBaseActivity extends AppCompatActivity {
     @Override

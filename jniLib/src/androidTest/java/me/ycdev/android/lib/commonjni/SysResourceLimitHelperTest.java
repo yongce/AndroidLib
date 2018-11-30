@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.commonjni;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

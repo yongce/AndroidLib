@@ -4,7 +4,7 @@ import java.lang.ref.WeakReference;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class WeakHandler extends Handler {

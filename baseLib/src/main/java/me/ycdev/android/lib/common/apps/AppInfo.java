@@ -1,7 +1,7 @@
 package me.ycdev.android.lib.common.apps;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.text.Collator;
 import java.util.Comparator;

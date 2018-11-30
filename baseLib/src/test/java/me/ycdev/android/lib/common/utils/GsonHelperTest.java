@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 

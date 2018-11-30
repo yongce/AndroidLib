@@ -17,7 +17,7 @@ dependencies {
     compileOnly deps.test.junit
     compileOnly deps.test.robolectric
 
-    implementation deps.support.annotations
+    implementation deps.androidx.annotation
     implementation deps.timber
 
     // Dependencies for local unit tests
@@ -26,8 +26,8 @@ dependencies {
     testImplementation deps.test.hamcrestCore
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation deps.test.supportRunner
-    androidTestImplementation deps.test.supportRules
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.rules
 }
 
 project.ext {

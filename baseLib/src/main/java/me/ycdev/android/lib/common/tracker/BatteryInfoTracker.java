@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import me.ycdev.android.lib.common.utils.LibLogger;
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper;

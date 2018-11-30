@@ -3,7 +3,7 @@ package me.ycdev.android.lib.common.async;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class HandlerThreadExecutor extends HandlerExecutor {

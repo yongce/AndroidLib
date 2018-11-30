@@ -14,17 +14,17 @@ android {
 }
 
 dependencies {
-    api deps.support.annotations
-    implementation deps.support.compat
-    implementation deps.support.fragment
+    api deps.androidx.annotation
+    implementation deps.androidx.core
+    implementation deps.androidx.fragment
     implementation deps.gson
     implementation deps.timber
 
     // Dependencies for local unit tests
     testImplementation project(':testLib')
     testImplementation deps.test.junit
-    testImplementation deps.test.supportRunner
-    testImplementation deps.test.supportRules
+    testImplementation deps.test.runner
+    testImplementation deps.test.rules
     testImplementation deps.test.mockitoCore
     testImplementation deps.test.hamcrestCore
     testImplementation deps.test.hamcrestLibrary
@@ -33,8 +33,8 @@ dependencies {
     testImplementation deps.test.robolectric
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation deps.test.supportRunner
-    androidTestImplementation deps.test.supportRules
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.rules
     androidTestImplementation deps.test.hamcrestLibrary
 }
 

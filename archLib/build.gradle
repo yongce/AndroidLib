@@ -16,7 +16,7 @@ dependencies {
     lintChecks project(':archLintRules')
     api project(':baseLib')
 
-    implementation deps.support.appcompat
+    implementation deps.androidx.appcompat
 }
 
 project.ext {

@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.common.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class StringUtils {

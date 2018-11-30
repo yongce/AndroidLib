@@ -17,7 +17,7 @@ dependencies {
     api project(':archLib')
     api project(':baseLib')
 
-    implementation deps.support.appcompat
+    implementation deps.androidx.appcompat
 }
 
 project.ext {

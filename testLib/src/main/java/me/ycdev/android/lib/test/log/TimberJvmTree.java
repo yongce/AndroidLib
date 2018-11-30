@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.test.log;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import timber.log.Timber;
 

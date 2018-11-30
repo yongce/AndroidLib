@@ -9,7 +9,7 @@ import me.ycdev.android.lib.common.utils.LibLogger;
 
 import android.annotation.SuppressLint;
 import android.os.Environment;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 @SuppressLint("PrivateApi")

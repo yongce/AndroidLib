@@ -1,7 +1,7 @@
 package me.ycdev.android.arch.utils;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import me.ycdev.android.lib.common.utils.FileLogger;

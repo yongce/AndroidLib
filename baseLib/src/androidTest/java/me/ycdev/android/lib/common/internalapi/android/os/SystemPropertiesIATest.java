@@ -1,7 +1,7 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.os.Build;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;

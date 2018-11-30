@@ -1,6 +1,6 @@
 package me.ycdev.android.arch;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.widget.Toast;
 
 import java.lang.annotation.Retention;

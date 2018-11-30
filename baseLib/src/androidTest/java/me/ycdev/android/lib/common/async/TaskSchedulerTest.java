@@ -1,6 +1,6 @@
 package me.ycdev.android.lib.common.async;
 
-import android.support.test.filters.LargeTest;
+import androidx.test.filters.LargeTest;
 
 import org.junit.Test;
 

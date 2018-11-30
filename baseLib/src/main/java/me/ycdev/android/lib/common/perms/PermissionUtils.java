@@ -4,10 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,7 @@ public class PermissionUtils {
     /**
      * Check if all requested permissions have been granted.
      * @see Activity#onRequestPermissionsResult(int, String[], int[])
-     * @see android.support.v4.app.FragmentActivity#onRequestPermissionsResult(int, String[], int[])
+     * @see FragmentActivity#onRequestPermissionsResult(int, String[], int[])
      */
     public static boolean verifyPermissions(@NonNull int[] grantResults) {
         // At least one result must be checked.

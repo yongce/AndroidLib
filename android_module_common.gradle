@@ -61,7 +61,7 @@ android {
                 ROOT_GIT_COMMIT_SHA1: getRootProjectLastCommitSha1()
         ]
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     if (project.plugins.hasPlugin("com.android.application")) {

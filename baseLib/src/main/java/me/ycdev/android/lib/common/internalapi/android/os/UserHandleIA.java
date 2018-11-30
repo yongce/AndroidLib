@@ -2,7 +2,7 @@ package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
