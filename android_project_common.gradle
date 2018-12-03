@@ -82,7 +82,7 @@ ext {
             'rxandroid'        : "2.0.2",
 
             // ycdev
-            'androidLib'       : "1.2.1",
+            'androidLib'       : "1.4.0",
 
             // others
             'zxing'            : "3.3.1",
