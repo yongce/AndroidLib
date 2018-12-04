@@ -11,11 +11,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.CoreMatchers.both;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.number.OrderingComparison.greaterThan;
-import static org.hamcrest.number.OrderingComparison.lessThan;
-import static org.junit.Assert.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 @LargeTest
 public class HandlerExecutorTest {
@@ -26,7 +22,7 @@ public class HandlerExecutorTest {
         CountDownLatch latch = new CountDownLatch(4);
         executor.postTasks(createTasks(latch, 4, 150));
         latch.await(1, TimeUnit.SECONDS);
-        assertThat(latch.getCount(), is(0L));
+        assertThat(latch.getCount()).isEqualTo(0L);
     }
 
     @Test
@@ -37,7 +33,8 @@ public class HandlerExecutorTest {
         SystemClock.sleep(250);
         executor.clearTasks();
         latch.await(1, TimeUnit.SECONDS);
-        assertThat(latch.getCount(), both(greaterThan(1L)).and(lessThan(5L)));
+        assertThat(latch.getCount()).isGreaterThan(1L);
+        assertThat(latch.getCount()).isLessThan(5L);
     }
 
     private List<Runnable> createTasks(CountDownLatch latch, int count, long sleepMs) {
@@ -45,7 +42,7 @@ public class HandlerExecutorTest {
         for (int i = 0; i < count; i++) {
             tasks.add(() -> {
                 System.out.println("main thread id=" + Thread.currentThread().getId());
-                assertThat(Looper.myLooper(), is(Looper.getMainLooper()));
+                assertThat(Looper.myLooper()).isSameAs(Looper.getMainLooper());
                 SystemClock.sleep(sleepMs);
                 latch.countDown();
             });

@@ -3,10 +3,10 @@ package me.ycdev.android.lib.common.async;
 import android.os.Handler;
 import android.os.SystemClock;
 import androidx.annotation.Nullable;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.filters.MediumTest;
 import androidx.test.filters.SmallTest;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +17,7 @@ import java.util.concurrent.TimeUnit;
 import me.ycdev.android.lib.common.utils.ThreadUtils;
 import timber.log.Timber;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -34,7 +30,7 @@ public class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN);
 
         // No task added yet
-        assertThat(taskQueue.getTaskHandler(), nullValue());
+        assertThat(taskQueue.getTaskHandler()).isNull();
 
         CountDownLatch latch = new CountDownLatch(2);
         Runnable task1 = () -> {
@@ -46,7 +42,7 @@ public class AsyncTaskQueueTest {
         Runnable task2 = () -> {
             Timber.tag(TAG).d("Executing task2 BEGIN");
             // Task1 must be done
-            assertThat(latch.getCount(), is(1L));
+            assertThat(latch.getCount()).isEqualTo(1);
             SystemClock.sleep(2000);
             latch.countDown();
             Timber.tag(TAG).d("Executing task2 END");
@@ -59,26 +55,26 @@ public class AsyncTaskQueueTest {
         // Give some time to setup the task handler and check it
         SystemClock.sleep(100);
         Handler taskHandler = taskQueue.getTaskHandler();
-        assertThat(taskHandler, notNullValue());
+        assertThat(taskHandler).isNotNull();
         Thread taskThread = taskHandler.getLooper().getThread();
         long taskTid = taskThread.getId();
-        assertThat(taskThread.getName(), is(TAG));
-        assertThat(taskThread.isAlive(), is(true));
-        assertThat(ThreadUtils.isThreadRunning(taskTid), is(true));
-        assertThat(taskTid, not(Thread.currentThread().getId()));
+        assertThat(taskThread.getName()).isEqualTo(TAG);
+        assertThat(taskThread.isAlive()).isTrue();
+        assertThat(ThreadUtils.isThreadRunning(taskTid)).isTrue();
+        assertThat(taskTid).isNotEqualTo(Thread.currentThread().getId());
 
         // Waiting for the task done
-        assertThat(latch.getCount(), is(2L));
+        assertThat(latch.getCount()).isEqualTo(2);
         latch.await(1000, TimeUnit.MILLISECONDS);
-        assertThat(latch.getCount(), is(1L));
+        assertThat(latch.getCount()).isEqualTo(1);
         latch.await(2000, TimeUnit.MILLISECONDS);
-        assertThat(latch.getCount(), is(0L));
+        assertThat(latch.getCount()).isEqualTo(0);
 
         // Waiting for the task thread quit
-        assertThat(taskHandler, notNullValue());
+        assertThat(taskHandler).isNotNull();
         SystemClock.sleep(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN + 100);
-        assertThat(taskQueue.getTaskHandler(), nullValue());
-        assertThat(ThreadUtils.isThreadRunning(taskTid), is(false));
+        assertThat(taskQueue.getTaskHandler()).isNull();
+        assertThat(ThreadUtils.isThreadRunning(taskTid)).isFalse();
     }
 
     @Test @LargeTest
@@ -94,7 +90,7 @@ public class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN);
 
         // No task added yet
-        assertThat(taskQueue.getTaskHandler(), nullValue());
+        assertThat(taskQueue.getTaskHandler()).isNull();
 
         Timber.tag(TAG).d("Add tasks...with delay: %sms", delay);
         final int N = 1000;
@@ -113,12 +109,12 @@ public class AsyncTaskQueueTest {
                 // check tid (should only one task thread created)
                 long curTid = Thread.currentThread().getId();
                 if (taskTidHolder[0] != -1L) {
-                    assertThat(curTid, is(taskTidHolder[0]));
+                    assertThat(curTid).isEqualTo(taskTidHolder[0]);
                 } else {
                     taskTidHolder[0] = curTid; // init
                 }
                 // check order
-                assertThat(latch.getCount(), is((long)(taskCount - taskIndex)));
+                assertThat(latch.getCount()).isEqualTo(taskCount - taskIndex);
                 latch.countDown();
             };
             taskQueue.addTask(task, taskDelay);
@@ -138,7 +134,7 @@ public class AsyncTaskQueueTest {
         }
 
         latch.await();
-        assertThat(countTask.getExecutedCount(), is(N));
+        assertThat(countTask.getExecutedCount()).isEqualTo(N);
     }
 
     @Test @MediumTest
@@ -154,7 +150,7 @@ public class AsyncTaskQueueTest {
         }
 
         latch.await();
-        assertThat(countTask.getExecutedCount(), is(N));
+        assertThat(countTask.getExecutedCount()).isEqualTo(N);
     }
 
     @Test @MediumTest
@@ -167,7 +163,7 @@ public class AsyncTaskQueueTest {
         taskQueue.removeTask(countTask);
 
         SystemClock.sleep(500);
-        assertThat(countTask.getExecutedCount(), is(0));
+        assertThat(countTask.getExecutedCount()).isEqualTo(0);
     }
 
     @Test @MediumTest
@@ -183,7 +179,7 @@ public class AsyncTaskQueueTest {
         taskQueue.removeTask(countTask);
 
         SystemClock.sleep(500);
-        assertThat(countTask.getExecutedCount(), is(0));
+        assertThat(countTask.getExecutedCount()).isEqualTo(0);
     }
 
     @Test @MediumTest
@@ -200,8 +196,8 @@ public class AsyncTaskQueueTest {
         }
 
         latch.await(500, TimeUnit.MILLISECONDS);
-        assertThat(latch.getCount(), is((long)(N - 1)));
-        assertThat(countTask.getExecutedCount(), is(1));
+        assertThat(latch.getCount()).isEqualTo(N - 1);
+        assertThat(countTask.getExecutedCount()).isEqualTo(1);
     }
 
     @Test @LargeTest
@@ -215,9 +211,9 @@ public class AsyncTaskQueueTest {
         latch.await();
 
         // check if task thread already quited
-        assertThat(taskQueue.getTaskHandler(), notNullValue());
+        assertThat(taskQueue.getTaskHandler()).isNotNull();
         SystemClock.sleep(AUTO_QUIT_DELAY + 100);
-        assertThat(taskQueue.getTaskHandler(), nullValue());
+        assertThat(taskQueue.getTaskHandler()).isNull();
     }
 
     @Test @LargeTest
@@ -230,9 +226,9 @@ public class AsyncTaskQueueTest {
         latch.await();
 
         // check if task thread already quited
-        assertThat(taskQueue.getTaskHandler(), notNullValue());
+        assertThat(taskQueue.getTaskHandler()).isNotNull();
         SystemClock.sleep(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN + 100);
-        assertThat(taskQueue.getTaskHandler(), nullValue());
+        assertThat(taskQueue.getTaskHandler()).isNull();
     }
 
     @Test @SmallTest
@@ -256,12 +252,12 @@ public class AsyncTaskQueueTest {
         latch1.await();
         latch2.await();
 
-        assertThat(taskTidHolder1[0], not(-1L));
-        assertThat(taskTidHolder1[0], not(Thread.currentThread().getId()));
-        assertThat(taskTidHolder2[0], not(-1L));
-        assertThat(taskTidHolder2[0], not(Thread.currentThread().getId()));
+        assertThat(taskTidHolder1[0]).isNotEqualTo(-1L);
+        assertThat(taskTidHolder1[0]).isNotEqualTo(Thread.currentThread().getId());
+        assertThat(taskTidHolder2[0]).isNotEqualTo(-1L);
+        assertThat(taskTidHolder2[0]).isNotEqualTo(Thread.currentThread().getId());
 
-        assertThat(taskTidHolder1[0], not(taskTidHolder2[0]));
+        assertThat(taskTidHolder1[0]).isNotEqualTo(taskTidHolder2[0]);
     }
 
     private static class CountTask implements Runnable {

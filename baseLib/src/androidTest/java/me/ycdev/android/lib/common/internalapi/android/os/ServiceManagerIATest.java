@@ -1,30 +1,14 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
-import androidx.test.runner.AndroidJUnit4;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import me.ycdev.android.lib.common.utils.LibLogger;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ServiceManagerIATest {
-    private static final String TAG = "ServiceManagerIATest";
-
-    @Before
-    public void setUp() throws Exception {
-        LibLogger.i(TAG, "setup");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        LibLogger.i(TAG, "tearDown");
-    }
-
     @Test
     public void test_getService() {
         assertTrue(ServiceManagerIA.checkReflect_getService());

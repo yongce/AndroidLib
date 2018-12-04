@@ -3,8 +3,6 @@ package me.ycdev.android.lib.common.provider;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +11,10 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class InfoProviderClientTest {
@@ -28,7 +27,7 @@ public class InfoProviderClientTest {
 
     @Before
     public void setup() {
-        mInfoClient = new InfoProviderClient(InstrumentationRegistry.getContext(),
+        mInfoClient = new InfoProviderClient(ApplicationProvider.getApplicationContext(),
                 "me.ycdev.android.lib.common.provider.InfoProvider");
 
         // clear dirty data
@@ -40,69 +39,69 @@ public class InfoProviderClientTest {
     @Test
     public void getAndPutString() {
         String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, "");
-        assertThat(value, equalTo(""));
+        assertThat(value).isEqualTo("");
 
         value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, nullValue());
+        assertThat(value).isNull();
 
         boolean result = mInfoClient.putString(TABLE_TEST, KEY_STR_1, "value_str1");
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, equalTo("value_str1"));
+        assertThat(value).isEqualTo("value_str1");
     }
 
     @Test
     public void getAndPutBoolean() {
         boolean value = mInfoClient.getBoolean(TABLE_TEST, KEY_BOOL_1, true);
-        assertThat(value, equalTo(true));
+        assertThat(value).isTrue();
 
         value = mInfoClient.getBoolean(TABLE_TEST, KEY_BOOL_1, false);
-        assertThat(value, equalTo(false));
+        assertThat(value).isFalse();
 
         boolean result = mInfoClient.putBoolean(TABLE_TEST, KEY_BOOL_1, true);
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getBoolean(TABLE_TEST, KEY_BOOL_1, false);
-        assertThat(value, equalTo(true));
+        assertThat(value).isTrue();
     }
 
     @Test
     public void getAndPutInt() {
         int value = mInfoClient.getInt(TABLE_TEST, KEY_INT_1, 1);
-        assertThat(value, equalTo(1));
+        assertThat(value).isEqualTo(1);
 
         value = mInfoClient.getInt(TABLE_TEST, KEY_INT_1, 2);
-        assertThat(value, equalTo(2));
+        assertThat(value).isEqualTo(2);
 
         boolean result = mInfoClient.putInt(TABLE_TEST, KEY_INT_1, 3);
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getInt(TABLE_TEST, KEY_INT_1, 1);
-        assertThat(value, equalTo(3));
+        assertThat(value).isEqualTo(3);
     }
 
     @Test
     public void putAndAddContentObserver() throws InterruptedException {
         String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, nullValue());
+        assertThat(value).isNull();
 
         final CountDownLatch latch = new CountDownLatch(1);
         ContentObserver observer = new ContentObserver(new Handler(Looper.getMainLooper())) {
             @Override
             public void onChange(boolean selfChange) {
                 String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-                assertThat(value, equalTo("value_str1"));
+                assertThat(value).isEqualTo("value_str1");
                 latch.countDown();
             }
         };
         mInfoClient.registerObserver(TABLE_TEST, KEY_STR_1, observer);
 
         boolean result = mInfoClient.putString(TABLE_TEST, KEY_STR_1, "value_str1");
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, equalTo("value_str1"));
+        assertThat(value).isEqualTo("value_str1");
 
         latch.await();
         mInfoClient.unregisterObserver(observer);
@@ -111,27 +110,27 @@ public class InfoProviderClientTest {
     @Test
     public void removeAndAddContentObserver() throws InterruptedException {
         boolean result = mInfoClient.putString(TABLE_TEST, KEY_STR_1, "value_str1");
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, equalTo("value_str1"));
+        assertThat(value).isEqualTo("value_str1");
 
         final CountDownLatch latch = new CountDownLatch(1);
         ContentObserver observer = new ContentObserver(new Handler(Looper.getMainLooper())) {
             @Override
             public void onChange(boolean selfChange) {
                 String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-                assertThat(value, nullValue());
+                assertThat(value).isNull();
                 latch.countDown();
             }
         };
         mInfoClient.registerObserver(TABLE_TEST, KEY_STR_1, observer);
 
         result = mInfoClient.remove(TABLE_TEST, KEY_STR_1);
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, nullValue());
+        assertThat(value).isNull();
 
         latch.await();
         mInfoClient.unregisterObserver(observer);
@@ -140,14 +139,14 @@ public class InfoProviderClientTest {
     @Test
     public void putButNoChange() throws InterruptedException {
         String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, nullValue());
+        assertThat(value).isNull();
 
         final CountDownLatch latch = new CountDownLatch(2);
         ContentObserver observer = new ContentObserver(new Handler(Looper.getMainLooper())) {
             @Override
             public void onChange(boolean selfChange) {
                 String value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-                assertThat(value, equalTo("value_str1"));
+                assertThat(value).isEqualTo("value_str1");
                 latch.countDown();
             }
         };
@@ -155,20 +154,20 @@ public class InfoProviderClientTest {
 
         // put 1
         boolean result = mInfoClient.putString(TABLE_TEST, KEY_STR_1, "value_str1");
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, equalTo("value_str1"));
+        assertThat(value).isEqualTo("value_str1");
 
         // put 2 (but no value change)
         result = mInfoClient.putString(TABLE_TEST, KEY_STR_1, "value_str1");
-        assertThat(result, equalTo(true));
+        assertThat(result).isTrue();
 
         value = mInfoClient.getString(TABLE_TEST, KEY_STR_1, null);
-        assertThat(value, equalTo("value_str1"));
+        assertThat(value).isEqualTo("value_str1");
 
         latch.await(5, TimeUnit.SECONDS);
-        assertThat(latch.getCount(), equalTo(1L));
+        assertThat(latch.getCount()).isEqualTo(1);
 
         mInfoClient.unregisterObserver(observer);
     }

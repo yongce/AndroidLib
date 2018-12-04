@@ -7,20 +7,19 @@ import android.content.pm.ResolveInfo;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.filters.LargeTest;
-import androidx.test.filters.MediumTest;
-import androidx.test.filters.SmallTest;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+import androidx.test.filters.MediumTest;
+import androidx.test.filters.SmallTest;
 import me.ycdev.android.lib.common.demo.service.IDemoService;
 import me.ycdev.android.lib.common.demo.service.LocalServiceConnector;
 import me.ycdev.android.lib.common.demo.service.RemoteService;
@@ -90,7 +89,7 @@ public class ServiceConnectorTest {
 
     @Test @MediumTest
     public void connect_disconnect_remoteService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
 
         connectSync(connector);
@@ -104,7 +103,7 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void connect_disconnect_localeService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         LocalServiceConnector connector = new LocalServiceConnector(context);
 
         connectSync(connector);
@@ -118,7 +117,7 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void getConnectLooper() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         {
             RemoteServiceConnector connector = new RemoteServiceConnector(context);
             assertThat(connector.getConnectLooper(), is(Looper.getMainLooper()));
@@ -132,7 +131,7 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void isServiceExist() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         {
             RemoteServiceConnector connector = new RemoteServiceConnector(context);
             assertThat(connector.isServiceExist(), is(true));
@@ -153,7 +152,7 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void selectTargetService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         {
             ServiceConnector connector = new RemoteServiceConnector(context);
             List<ResolveInfo> servicesList = context.getPackageManager().queryIntentServices(
@@ -174,7 +173,7 @@ public class ServiceConnectorTest {
 
     @Test @MediumTest
     public void listeners_addAndRemove() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
 
         CountDownLatch latch1 = new CountDownLatch(2);
@@ -207,8 +206,8 @@ public class ServiceConnectorTest {
     }
 
     @Test @LargeTest
-    public void listeners_weakReference() throws IOException {
-        Context context = InstrumentationRegistry.getContext();
+    public void listeners_weakReference() {
+        Context context = ApplicationProvider.getApplicationContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
         BooleanHolder gcState = new BooleanHolder(false);
         // Must use another method to add the listener. Don't know why!
@@ -223,14 +222,14 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void disconnect_state_remoteService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
         test_disconnect_state(connector);
     }
 
     @Test @SmallTest
     public void disconnect_state_localeService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         LocalServiceConnector connector = new LocalServiceConnector(context);
         test_disconnect_state(connector);
     }
@@ -248,14 +247,14 @@ public class ServiceConnectorTest {
 
     @Test @MediumTest
     public void waitForConnected_forever_remoteService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
         test_waitForConnected_forever(connector);
     }
 
     @Test @SmallTest
     public void waitForConnected_forever_localService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         LocalServiceConnector connector = new LocalServiceConnector(context);
         test_waitForConnected_forever(connector);
     }
@@ -280,7 +279,7 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void waitForConnected_unavailable() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         {
             FakeServiceConnector connector = new FakeServiceConnector(context);
             connector.waitForConnected(); // should fail immediately
@@ -295,7 +294,7 @@ public class ServiceConnectorTest {
 
     @Test @MediumTest
     public void waitForConnected_timeout() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         ConnectDelayServiceConnector connector = new ConnectDelayServiceConnector(context, 300);
 
         IntegerHolder stateChangeCount = new IntegerHolder(0);
@@ -316,7 +315,7 @@ public class ServiceConnectorTest {
 
     @Test @SmallTest
     public void getService() {
-        Context context = InstrumentationRegistry.getContext();
+        Context context = ApplicationProvider.getApplicationContext();
         RemoteServiceConnector connector = new RemoteServiceConnector(context);
         assertThat(connector.getService(), nullValue());
 

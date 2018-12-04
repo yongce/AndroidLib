@@ -1,7 +1,7 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.RequiresDevice;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

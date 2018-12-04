@@ -7,8 +7,7 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 // TODO not completed
 @LargeTest
@@ -23,7 +22,7 @@ public class TaskSchedulerTest {
             CountDownLatch latch = new CountDownLatch(1);
             taskScheduler.schedule(latch::countDown, 1000);
             latch.await(2, TimeUnit.SECONDS);
-            assertThat(latch.getCount(), is(0L));
+            assertThat(latch.getCount()).isEqualTo(0);
         }
 
         // add a period task
@@ -31,7 +30,7 @@ public class TaskSchedulerTest {
             CountDownLatch latch = new CountDownLatch(2);
             taskScheduler.schedule(latch::countDown, 0, 2000);
             latch.await(5, TimeUnit.SECONDS);
-            assertThat(latch.getCount(), is(0L));
+            assertThat(latch.getCount()).isEqualTo(0);
         }
     }
 }

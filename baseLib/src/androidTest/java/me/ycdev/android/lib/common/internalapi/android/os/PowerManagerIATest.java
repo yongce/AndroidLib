@@ -2,43 +2,29 @@ package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.content.Context;
 import android.os.IBinder;
-import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import me.ycdev.android.lib.common.utils.LibLogger;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class PowerManagerIATest {
-    private static final String TAG = "PowerManagerIATest";
-
-    @Before
-    public void setUp() throws Exception {
-        LibLogger.i(TAG, "setup");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        LibLogger.i(TAG, "tearDown");
-    }
-
     @Test
     public void test_asInterface() {
         IBinder binder = ServiceManagerIA.getService(Context.POWER_SERVICE);
-        assertTrue(binder != null);
+        assertNotNull(binder);
 
         Object service = PowerManagerIA.asInterface(binder);
-        assertTrue(service != null);
+        assertNotNull(service);
     }
 
     @Test
     public void test_getIPowerManager() {
-        assertTrue(PowerManagerIA.getIPowerManager() != null);
+        assertNotNull(PowerManagerIA.getIPowerManager());
     }
 
     @Test

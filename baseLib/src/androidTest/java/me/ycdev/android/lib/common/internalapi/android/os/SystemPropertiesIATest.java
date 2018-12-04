@@ -1,32 +1,17 @@
 package me.ycdev.android.lib.common.internalapi.android.os;
 
 import android.os.Build;
-import androidx.test.runner.AndroidJUnit4;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import me.ycdev.android.lib.common.utils.LibLogger;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class SystemPropertiesIATest {
-    private static final String TAG = "SystemPropertiesIATest";
-
     private static final String TEST_KEY_NONE = "test.internalapis.none";
-
-    @Before
-    public void setUp() throws Exception {
-        LibLogger.i(TAG, "setup");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        LibLogger.i(TAG, "tearDown");
-    }
 
     @Test
     public void test_get() {
