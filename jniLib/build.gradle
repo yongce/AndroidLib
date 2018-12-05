@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 
 project.archivesBaseName = 'common-jni'
@@ -29,6 +31,8 @@ android {
 }
 
 dependencies {
+    implementation deps.kotlin.stdlib
+
     // Android Testing Support Library's runner and rules
     androidTestImplementation project(':baseLib')
     androidTestImplementation deps.test.runner

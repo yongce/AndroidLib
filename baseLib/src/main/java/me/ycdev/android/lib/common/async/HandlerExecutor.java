@@ -25,4 +25,8 @@ public class HandlerExecutor implements ITaskExecutor {
     public void clearTasks() {
         mTaskHandler.removeCallbacksAndMessages(null);
     }
+
+    public static HandlerExecutor withMainLooper() {
+        return new HandlerExecutor(Looper.getMainLooper());
+    }
 }

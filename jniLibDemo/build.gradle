@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 
 android {
@@ -28,5 +30,7 @@ dependencies {
     implementation project(':jniLib')
     implementation project(':archLib')
 
+    implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
 }
+

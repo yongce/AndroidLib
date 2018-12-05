@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 
 android {
@@ -33,6 +34,7 @@ android {
 dependencies {
     implementation project(':archLib')
 
+    implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
 
     // The following dependencies are just for checking new versions of library
@@ -76,4 +78,3 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
 }
-

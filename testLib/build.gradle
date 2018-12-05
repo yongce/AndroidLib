@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 
 project.archivesBaseName = 'common-test'
@@ -17,6 +19,7 @@ dependencies {
     compileOnly deps.test.junit
     compileOnly deps.test.robolectric
 
+    implementation deps.kotlin.stdlib
     implementation deps.androidx.annotation
     implementation deps.timber
 

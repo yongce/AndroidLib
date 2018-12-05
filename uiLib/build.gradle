@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 
 project.archivesBaseName = 'common-ui'
@@ -17,6 +19,7 @@ dependencies {
     api project(':archLib')
     api project(':baseLib')
 
+    implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
 }
 

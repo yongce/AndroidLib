@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 
 project.archivesBaseName = 'common-base'
@@ -15,6 +17,8 @@ android {
 
 dependencies {
     api deps.androidx.annotation
+
+    implementation deps.kotlin.stdlib
     implementation deps.androidx.core
     implementation deps.androidx.fragment
     implementation deps.gson

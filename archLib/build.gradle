@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
 
 project.archivesBaseName = 'common-arch'
@@ -16,6 +18,7 @@ dependencies {
     lintChecks project(':archLintRules')
     api project(':baseLib')
 
+    implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
 }
 
