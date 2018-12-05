@@ -19,6 +19,11 @@ buildscript {
     }
 }
 
+// Add plugin for 'spotless'
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.16.0"
+}
+
 allprojects {
     repositories {
         google()
@@ -42,4 +47,11 @@ ext {
             'developerName': 'Yongce Tu',
             'developerEmail': 'yongce.tu@gmail.com',
     ]
+}
+
+spotless {
+    kotlin {
+        target "**/*.kt"
+        ktlint(versions.ktlint)
+    }
 }

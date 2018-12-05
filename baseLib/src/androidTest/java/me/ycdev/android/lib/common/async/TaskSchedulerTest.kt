@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 @LargeTest
 class TaskSchedulerTest {
-    private fun createScheduler(mainThread : Boolean) : TaskScheduler {
+    private fun createScheduler(mainThread: Boolean): TaskScheduler {
         val taskExecutor = if (mainThread) HandlerExecutor.withMainLooper() else HandlerThreadExecutor("test")
         val taskScheduler = TaskScheduler(taskExecutor, "test")
         taskScheduler.enableDebugLogs(mainThread)
@@ -330,12 +330,11 @@ class TaskSchedulerTest {
         latch.await(2, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(1)
     }
-
 }
 
-class SameTaskWrapper(target: Runnable, id : Int) : Runnable {
-    private val mTarget : Runnable = target
-    private val mId : Int = id
+class SameTaskWrapper(target: Runnable, id: Int) : Runnable {
+    private val mTarget: Runnable = target
+    private val mId: Int = id
 
     override fun run() {
         mTarget.run()
@@ -343,7 +342,7 @@ class SameTaskWrapper(target: Runnable, id : Int) : Runnable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
-            return  true
+            return true
         }
 
         if (other !is SameTaskWrapper) {
