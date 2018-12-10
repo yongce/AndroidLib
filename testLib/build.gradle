@@ -25,12 +25,13 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation deps.test.junit
+    testImplementation deps.test.truth
     testImplementation deps.test.mockitoCore
-    testImplementation deps.test.hamcrestCore
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.rules
+    androidTestImplementation deps.test.truth
 }
 
 project.ext {

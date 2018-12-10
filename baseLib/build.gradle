@@ -31,8 +31,6 @@ dependencies {
     testImplementation deps.test.rules
     testImplementation deps.test.truth
     testImplementation deps.test.mockitoCore
-    testImplementation deps.test.hamcrestCore
-    testImplementation deps.test.hamcrestLibrary
     testImplementation deps.test.powermockMockito
     testImplementation deps.test.powermockJunit
     testImplementation deps.test.robolectric

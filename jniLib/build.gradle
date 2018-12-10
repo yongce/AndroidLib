@@ -35,6 +35,8 @@ dependencies {
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation project(':baseLib')
+    androidTestImplementation deps.test.core
+    androidTestImplementation deps.test.junit
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.rules
 }

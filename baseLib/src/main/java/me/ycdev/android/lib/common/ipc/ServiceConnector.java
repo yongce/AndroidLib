@@ -74,7 +74,7 @@ public abstract class ServiceConnector<IServiceInterface> {
     @NonNull
     protected abstract Intent getServiceIntent();
 
-    protected boolean validatePermission(String permission) {
+    protected boolean validatePermission(@Nullable String permission) {
         return true; // Skip to validate permission by default
     }
 
