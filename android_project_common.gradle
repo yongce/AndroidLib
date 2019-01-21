@@ -37,9 +37,9 @@ ext {
             // Android official support
             'kotlin'           : "1.3.11",
             'supportLib'       : "28.0.0",
-            'multidexLib'      : "2.0.0",
+            'multidexLib'      : "2.0.1",
             'constraintLayout' : "1.1.3",
-            'lintLib'          : "26.2.0",
+            'lintLib'          : "26.3.0",
             'archCore'         : "2.0.0-rc01",
             'lifecycle'        : "2.0.0-rc01",
             'room'             : "2.0.0-rc01",
@@ -60,7 +60,7 @@ ext {
             'wearableSupport'  : "2.3.0",
 
             // infrastructure
-            'butterknife'      : "8.8.1",
+            'butterknife'      : "10.0.0",
             'timber'           : "4.7.1",
             'guava'            : "23.5-android",
 
@@ -207,6 +207,7 @@ ext {
                     'androidBase'      : "me.ycdev.android:common-base:${versions.androidLib}",
                     'androidArch'      : "me.ycdev.android:common-arch:${versions.androidLib}",
                     'androidUi'        : "me.ycdev.android:common-ui:${versions.androidLib}",
+                    'androidTest'      : "me.ycdev.android:common-test:${versions.androidLib}"
             ],
 
             // others
