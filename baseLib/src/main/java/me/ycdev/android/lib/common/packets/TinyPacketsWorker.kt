@@ -133,10 +133,10 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
                 var headerMagicFound = false
                 val searchPos = readBuffer.position()
                 while (readBuffer.remaining() >= 4) {
-                    if (readBuffer.get() == HEADER_MAGIC[0]
-                        && readBuffer.get() == HEADER_MAGIC[1]
-                        && readBuffer.get() == HEADER_MAGIC[2]
-                        && readBuffer.get() == HEADER_MAGIC[3]
+                    if (readBuffer.get() == HEADER_MAGIC[0] &&
+                        readBuffer.get() == HEADER_MAGIC[1] &&
+                        readBuffer.get() == HEADER_MAGIC[2] &&
+                        readBuffer.get() == HEADER_MAGIC[3]
                     ) {
                         headerMagicFound = true
                         break
