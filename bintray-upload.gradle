@@ -26,7 +26,7 @@ task generateJavadocsJar(type: Jar, dependsOn: generateJavadocs) {
 
 artifacts {
     archives generateSourcesJar
-    archives generateJavadocsJar
+//    archives generateJavadocsJar
 }
 
 // For the plugin 'com.jfrog.bintray'
