@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import me.ycdev.android.lib.common.packets.PacketsWorker.ParserState
 import me.ycdev.android.lib.common.packets.PacketsWorker.Version
+import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 import me.ycdev.android.lib.test.log.TimberJvmTree
 import org.junit.Test
 import timber.log.Timber
@@ -265,6 +266,24 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
             }
             assertThat(buffer.array()).isEqualTo(data)
         }
+    }
+
+    @Test
+    fun packetData_case1() {
+        val packetsWorker = TinyPacketsWorker(parserCallback)
+        packetsWorker.maxPacketSize = 20
+
+        val data = "ACK{This is a Ping message#1 from MagicPingClient}".toByteArray()
+        val packets = packetsWorker.packetData(data)
+        assertThat(packets.size).isEqualTo(3)
+        assertThat(encodeWithHex(packets[0])).isEqualTo("8B4F993B0101053241434B7B5468697320697320")
+        assertThat(encodeWithHex(packets[1])).isEqualTo("612050696E67206D65737361676523312066726F")
+        assertThat(encodeWithHex(packets[2])).isEqualTo("6D204D6167696350696E67436C69656E747D")
+
+        packetsWorker.parsePackets(packets[0])
+        packetsWorker.parsePackets(packets[1])
+        packetsWorker.parsePackets(packets[2])
+        assertThat(parserCallback.getData()).isEqualTo(data)
     }
 
     @Test

@@ -4,11 +4,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import me.ycdev.android.lib.common.utils.LibLogger
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import timber.log.Timber
 
 @RunWith(AndroidJUnit4::class)
 class SysResourceLimitHelperTest {
@@ -17,7 +17,7 @@ class SysResourceLimitHelperTest {
     fun test_getOpenFilesNumberLimit() {
         val ofLimit = SysResourceLimitHelper.getOpenFilesLimit()
         assertNotNull("failed to get open files limit", ofLimit)
-        LibLogger.d(TAG, "cur limit: " + ofLimit.curLimit + ", max limit: " + ofLimit.maxLimit)
+        Timber.tag(TAG).d("cur limit: " + ofLimit.curLimit + ", max limit: " + ofLimit.maxLimit)
     }
 
     @Test

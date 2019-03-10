@@ -230,7 +230,7 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         private const val DATA_SIZE_WARNING = 1024 * 100 // 100KB
 
         @VisibleForTesting
-        internal val HEADER_MAGIC = byteArrayOf(-117, 79, -103, 59)
+        internal val HEADER_MAGIC = byteArrayOf(0x8B.toByte(), 0x4F, 0x99.toByte(), 0x3B)
 
         @VisibleForTesting
         internal fun calculateVersion(dataSize: Int): Byte {

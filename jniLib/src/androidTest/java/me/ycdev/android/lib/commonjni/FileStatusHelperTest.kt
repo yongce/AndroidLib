@@ -3,10 +3,10 @@ package me.ycdev.android.lib.commonjni
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import me.ycdev.android.lib.common.utils.LibLogger
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 
 @RunWith(AndroidJUnit4::class)
 class FileStatusHelperTest {
@@ -19,8 +19,7 @@ class FileStatusHelperTest {
         val fileStatus = FileStatusHelper.getFileStatus(
             testFile.absolutePath
         )
-        LibLogger.i(
-            TAG, "uid: " + fileStatus.uid + ", gid: " + fileStatus.gid +
+        Timber.tag(TAG).i("uid: " + fileStatus.uid + ", gid: " + fileStatus.gid +
                     ", mode: " + Integer.toOctalString(fileStatus.mode)
         )
         assertEquals("check uid", targetUid.toLong(), fileStatus.uid.toLong())
