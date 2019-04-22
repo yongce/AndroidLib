@@ -16,6 +16,7 @@ android {
 
 dependencies {
     lintChecks project(':archLintRules')
+    lintPublish project(':archLintRules')
     api project(':baseLib')
 
     implementation deps.kotlin.stdlib

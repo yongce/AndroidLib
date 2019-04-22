@@ -98,7 +98,7 @@ android {
             variant.outputs.each { output ->
                 String buildType = variant.buildType.name
                 String abi = output.getFilter("ABI")
-                if (!buildType.equals("debug")) {
+                if (buildType != "debug") {
                     String fileName = "${project.name}"
                     if (variant.flavorName != null && !variant.flavorName.isEmpty()) {
                         fileName += "-${variant.flavorName}"
@@ -110,11 +110,13 @@ android {
                     output.outputFileName = "${fileName}.apk"
                 }
 
-                if (buildType.equals('release')) {
-                    output.assemble.doLast {
-                        copy {
-                            from output.outputFile.getAbsolutePath()
-                            into "${rootProject.ext.appsOutDir}"
+                if (buildType == 'release') {
+                    variant.getAssembleProvider().configure() {
+                        it.doLast {
+                            copy {
+                                from output.outputFile.getAbsolutePath()
+                                into "${rootProject.ext.appsOutDir}"
+                            }
                         }
                     }
                 }

@@ -39,7 +39,7 @@ dependencies {
 
     // The following dependencies are just for checking new versions of library
     implementation "androidx.multidex:multidex:${versions.multidexLib}"
-    implementation "androidx.annotation:annotation:1.0.1"
+    implementation "androidx.annotation:annotation:1.0.2"
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
 
     implementation ("com.google.android.gms:play-services-auth:${versions.gms}", {

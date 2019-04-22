@@ -12,10 +12,14 @@ task generateJavadocs(type: Javadoc) {
 }
 afterEvaluate {
     generateJavadocs.classpath += files(android.libraryVariants.collect { variant ->
-        variant.javaCompile.classpath
+        variant.getJavaCompileProvider().configure() {
+            it.classpath
+        }
     })
     generateJavadocs.classpath += files(android.libraryVariants.collect { variant ->
-        variant.javaCompile.outputs
+        variant.getJavaCompileProvider().configure() {
+            it.outputs
+        }
     })
 }
 
