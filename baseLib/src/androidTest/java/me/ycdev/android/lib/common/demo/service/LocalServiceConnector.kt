@@ -11,10 +11,10 @@ class LocalServiceConnector(cxt: Context) : ServiceConnector<IDemoService>(cxt, 
 
     @NonNull
     override fun getServiceIntent(): Intent {
-        return Intent(mAppContext, LocalService::class.java)
+        return Intent(appContext, LocalService::class.java)
     }
 
-    override fun asInterface(service: IBinder): IDemoService? {
+    override fun asInterface(service: IBinder): IDemoService {
         return IDemoService.Stub.asInterface(service)
     }
 

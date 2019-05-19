@@ -12,7 +12,9 @@ import java.util.concurrent.TimeUnit
 @LargeTest
 class TaskSchedulerTest {
     private fun createScheduler(mainThread: Boolean): TaskScheduler {
-        val taskExecutor = if (mainThread) HandlerExecutor.withMainLooper() else HandlerThreadExecutor("test")
+        val taskExecutor =
+            if (mainThread) HandlerExecutor.withMainLooper()
+            else HandlerExecutor.withHandlerThread("test")
         val taskScheduler = TaskScheduler(taskExecutor, "test")
         taskScheduler.enableDebugLogs(mainThread)
         return taskScheduler
@@ -28,7 +30,7 @@ class TaskSchedulerTest {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(1)
         val startTime = SystemClock.elapsedRealtime()
-        taskScheduler.scheduleAt({
+        taskScheduler.scheduleAt(Runnable {
             assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
             latch.countDown()
         }, 500)
@@ -51,7 +53,7 @@ class TaskSchedulerTest {
             latch.countDown()
         }
         taskScheduler.scheduleAt(task, 500)
-        taskScheduler.scheduleAt(task, 500, TaskScheduler.SchedulePolicy.NO_CHECK)
+        taskScheduler.scheduleAt(task, 500, TaskScheduler.SCHEDULE_POLICY_NO_CHECK)
         taskScheduler.scheduleAt(task, 500)
         latch.await(1, TimeUnit.SECONDS)
         assertThat(latch.count).isEqualTo(0)
@@ -67,11 +69,11 @@ class TaskSchedulerTest {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         taskScheduler.scheduleAt(SameTaskWrapper(Runnable { latch.countDown() }, 101),
-                500, TaskScheduler.SchedulePolicy.IGNORE)
+                500, TaskScheduler.SCHEDULE_POLICY_IGNORE)
         taskScheduler.scheduleAt(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, TaskScheduler.SchedulePolicy.IGNORE)
+                500, TaskScheduler.SCHEDULE_POLICY_IGNORE)
         taskScheduler.scheduleAt(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, TaskScheduler.SchedulePolicy.IGNORE)
+                500, TaskScheduler.SCHEDULE_POLICY_IGNORE)
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
     }
@@ -86,11 +88,11 @@ class TaskSchedulerTest {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         taskScheduler.scheduleAt(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, TaskScheduler.SchedulePolicy.REPLACE)
+                500, TaskScheduler.SCHEDULE_POLICY_REPLACE)
         taskScheduler.scheduleAt(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, TaskScheduler.SchedulePolicy.REPLACE)
+                500, TaskScheduler.SCHEDULE_POLICY_REPLACE)
         taskScheduler.scheduleAt(SameTaskWrapper(Runnable { latch.countDown() }, 101),
-                500, TaskScheduler.SchedulePolicy.REPLACE)
+                500, TaskScheduler.SCHEDULE_POLICY_REPLACE)
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
     }
@@ -132,7 +134,7 @@ class TaskSchedulerTest {
             latch.countDown()
         }
         taskScheduler.schedulePeriod(task, 500, 1000)
-        taskScheduler.schedulePeriod(task, 500, 1000, TaskScheduler.SchedulePolicy.NO_CHECK)
+        taskScheduler.schedulePeriod(task, 500, 1000, TaskScheduler.SCHEDULE_POLICY_NO_CHECK)
         taskScheduler.schedulePeriod(task, 500, 1000)
         latch.await(1, TimeUnit.SECONDS)
         assertThat(latch.count).isEqualTo(0)
@@ -153,11 +155,11 @@ class TaskSchedulerTest {
             assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
             latch.countDown()
         }, 101)
-        taskScheduler.schedulePeriod(task, 500, 1000, TaskScheduler.SchedulePolicy.IGNORE)
+        taskScheduler.schedulePeriod(task, 500, 1000, TaskScheduler.SCHEDULE_POLICY_IGNORE)
         taskScheduler.schedulePeriod(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, 1000, TaskScheduler.SchedulePolicy.IGNORE)
+                500, 1000, TaskScheduler.SCHEDULE_POLICY_IGNORE)
         taskScheduler.schedulePeriod(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, 1000, TaskScheduler.SchedulePolicy.IGNORE)
+                500, 1000, TaskScheduler.SCHEDULE_POLICY_IGNORE)
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
         taskScheduler.cancel(task)
@@ -178,10 +180,10 @@ class TaskSchedulerTest {
             latch.countDown()
         }, 101)
         taskScheduler.schedulePeriod(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, 1000, TaskScheduler.SchedulePolicy.REPLACE)
+                500, 1000, TaskScheduler.SCHEDULE_POLICY_REPLACE)
         taskScheduler.schedulePeriod(SameTaskWrapper(Runnable { fail("Should be ignored") }, 101),
-                500, 1000, TaskScheduler.SchedulePolicy.REPLACE)
-        taskScheduler.schedulePeriod(task, 500, 1000, TaskScheduler.SchedulePolicy.REPLACE)
+                500, 1000, TaskScheduler.SCHEDULE_POLICY_REPLACE)
+        taskScheduler.schedulePeriod(task, 500, 1000, TaskScheduler.SCHEDULE_POLICY_REPLACE)
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
         taskScheduler.cancel(task)
@@ -323,8 +325,8 @@ class TaskSchedulerTest {
     private fun clear(mainThread: Boolean) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(2)
-        taskScheduler.scheduleAt({ latch.countDown() }, 1500)
-        taskScheduler.schedulePeriod({ latch.countDown() }, 500, 1000)
+        taskScheduler.scheduleAt(Runnable { latch.countDown() }, 1500)
+        taskScheduler.schedulePeriod(Runnable { latch.countDown() }, 500, 1000)
         SystemClock.sleep(1000)
         taskScheduler.clear()
         latch.await(2, TimeUnit.SECONDS) // will timeout

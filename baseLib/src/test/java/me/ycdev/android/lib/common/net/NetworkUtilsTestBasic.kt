@@ -3,9 +3,9 @@ package me.ycdev.android.lib.common.net
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
 import com.google.common.truth.Truth.assertThat
-import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_COMPANION_PROXY
-import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_MOBILE
-import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType.NETWORK_TYPE_WIFI
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_COMPANION_PROXY
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_MOBILE
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_WIFI
 import me.ycdev.android.lib.common.net.NetworkUtils.WEAR_OS_COMPANION_PROXY
 import org.junit.Test
 

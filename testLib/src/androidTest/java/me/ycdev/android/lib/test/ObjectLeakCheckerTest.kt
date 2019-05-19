@@ -1,8 +1,7 @@
 package me.ycdev.android.lib.test
 
-import org.junit.Test
-
 import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 
 class ObjectLeakCheckerTest {
     private class Dummy
@@ -32,7 +31,7 @@ class ObjectLeakCheckerTest {
             }
 
             override fun operate(obj: Dummy) {
-                sHolder = obj
+                holder = obj
             }
         }
         val checker = ObjectLeakChecker(operator)
@@ -43,6 +42,6 @@ class ObjectLeakCheckerTest {
 
     companion object {
 
-        private var sHolder: Dummy? = null
+        private var holder: Dummy? = null
     }
 }

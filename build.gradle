@@ -32,7 +32,7 @@ allprojects {
 }
 
 ext {
-    versions.minSdk = 15
+    versions.minSdk = 21
 
     // For bintray upload
     bintrayMaven = [

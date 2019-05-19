@@ -12,10 +12,10 @@ open class RemoteServiceConnector(cxt: Context) :
 
     @NonNull
     public override fun getServiceIntent(): Intent {
-        return Intent(mAppContext, RemoteService::class.java)
+        return Intent(appContext, RemoteService::class.java)
     }
 
-    override fun asInterface(service: IBinder): IDemoService? {
+    override fun asInterface(service: IBinder): IDemoService {
         return IDemoService.Stub.asInterface(service)
     }
 

@@ -26,6 +26,6 @@ class ActivityManagerIATest {
 
     @Test
     fun test_forceStopPackage() {
-        assertTrue(ActivityManagerIA.checkReflect_forceStopPackage())
+        assertTrue(ActivityManagerIA.checkReflectForceStopPackage())
     }
 }

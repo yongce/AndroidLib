@@ -21,6 +21,7 @@ import me.ycdev.android.lib.common.demo.service.operation.HelloOperation
 import me.ycdev.android.lib.common.utils.ThreadManager
 
 import com.google.common.truth.Truth.assertThat
+import me.ycdev.android.lib.common.demo.service.IDemoService
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -36,11 +37,13 @@ class ServiceClientBaseTest {
         // Service not connected
         run {
             val latch = CountDownLatch(1)
-            client.addOperation { service ->
-                assertThat(service).isNotNull()
-                assertThat(Looper.myLooper()!!).isSameAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
-                latch.countDown()
-            }
+            client.addOperation(object : IpcOperation<IDemoService> {
+                override fun execute(service: IDemoService) {
+                    assertThat(service).isNotNull()
+                    assertThat(Looper.myLooper()!!).isSameAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
+                    latch.countDown()
+                }
+            })
 
             assertThat(latch.count).isEqualTo(1)
             // Waiting for service connected and operation executed
@@ -50,11 +53,13 @@ class ServiceClientBaseTest {
         // Service already connected
         run {
             val latch = CountDownLatch(1)
-            client.addOperation { service ->
-                assertThat(service).isNotNull()
-                assertThat(Looper.myLooper()!!).isSameAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
-                latch.countDown()
-            }
+            client.addOperation(object : IpcOperation<IDemoService> {
+                override fun execute(service: IDemoService) {
+                    assertThat(service).isNotNull()
+                    assertThat(Looper.myLooper()!!).isSameAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
+                    latch.countDown()
+                }
+            })
 
             assertThat(latch.count).isEqualTo(1)
             // Waiting for service connected and operation executed
@@ -91,20 +96,22 @@ class ServiceClientBaseTest {
             val latch = CountDownLatch(1)
             client.addOperation(HelloOperation("Hello, world").setNotifier(latch))
 
-            assertThat(client.serviceConnector.service).isNull()
+            assertThat(client.serviceConnector.getService()).isNull()
             latch.await()
-            assertThat(client.serviceConnector.service).isNotNull()
+            assertThat(client.serviceConnector.getService()).isNotNull()
             timeStart = SystemClock.elapsedRealtime()
         }
 
         // Waiting for the service disconnected and check the timeout
         run {
             val latch = CountDownLatch(1)
-            client.serviceConnector.addListener { newState ->
-                if (newState == ServiceConnector.STATE_DISCONNECTED) {
-                    latch.countDown()
+            client.serviceConnector.addListener(object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                        latch.countDown()
+                    }
                 }
-            }
+            })
             latch.await()
             val timeUsed = SystemClock.elapsedRealtime() - timeStart
             assertThat(timeUsed).isGreaterThan(disconnectTimeout)
@@ -128,11 +135,13 @@ class ServiceClientBaseTest {
         // connect
         run {
             val latch = CountDownLatch(1)
-            client.serviceConnector.addListener { newState ->
-                if (newState == ServiceConnector.STATE_CONNECTED) {
-                    latch.countDown()
+            client.serviceConnector.addListener(object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_CONNECTED) {
+                        latch.countDown()
+                    }
                 }
-            }
+            })
 
             // Make sure the service will not be connected if no connect and no operations
             latch.await(500, TimeUnit.MILLISECONDS)
@@ -146,11 +155,13 @@ class ServiceClientBaseTest {
         // disconnect
         run {
             val latch = CountDownLatch(1)
-            client.serviceConnector.addListener { newState ->
-                if (newState == ServiceConnector.STATE_DISCONNECTED) {
-                    latch.countDown()
+            client.serviceConnector.addListener(object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                        latch.countDown()
+                    }
                 }
-            }
+            })
             client.disconnect()
             latch.await()
         }

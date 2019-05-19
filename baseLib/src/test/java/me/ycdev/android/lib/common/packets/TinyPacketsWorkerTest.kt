@@ -424,6 +424,7 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
     @Test
     fun setDebug_true() {
         val tree = TimberJvmTree()
+        tree.keepLogs()
         Timber.plant(tree)
 
         val packetsWorker = TinyPacketsWorker(parserCallback)

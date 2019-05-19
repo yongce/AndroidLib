@@ -101,7 +101,7 @@ class ReflectionUtilsTest {
                 TestB::class.java,
                 "a11",
                 String::class.java,
-                Long::class.javaPrimitiveType
+                Long::class.java
             )
             assertTrue(a11.declaringClass == TestA::class.java && a11.name == "a11")
             assertTrue(a11.invoke(objB, "a", 11L) == "a11")
@@ -111,14 +111,14 @@ class ReflectionUtilsTest {
             assertTrue(a13.invoke(null) == "a13")
 
             val a14 =
-                ReflectionUtils.findMethod(TestB::class.java, "a14", Long::class.javaPrimitiveType)
+                ReflectionUtils.findMethod(TestB::class.java, "a14", Long::class.java)
             assertTrue(a14.declaringClass == TestA::class.java && a14.name == "a14")
             assertTrue(a14.invoke(null, 14L) as Long == 14L)
 
             val a15 = ReflectionUtils.findMethod(
                 TestB::class.java,
                 "a15",
-                Int::class.javaPrimitiveType,
+                Int::class.java,
                 String::class.java
             )
             assertTrue(a15.declaringClass == TestA::class.java && a15.name == "a15")
@@ -130,7 +130,7 @@ class ReflectionUtilsTest {
             assertTrue(a9.invoke(objB) == "a9")
 
             val a10 =
-                ReflectionUtils.findMethod(TestB::class.java, "a10", Int::class.javaPrimitiveType)
+                ReflectionUtils.findMethod(TestB::class.java, "a10", Int::class.java)
             assertTrue(a10.declaringClass == TestB::class.java && a10.name == "a10")
             assertTrue(a10.invoke(objB, 10) as Int == 10)
 
@@ -138,7 +138,7 @@ class ReflectionUtilsTest {
                 TestB::class.java,
                 "b11",
                 String::class.java,
-                Long::class.javaPrimitiveType
+                Long::class.java
             )
             assertTrue(b11.declaringClass == TestB::class.java && b11.name == "b11")
             assertTrue(b11.invoke(objB, "b", 11L) == "b11")
@@ -148,14 +148,14 @@ class ReflectionUtilsTest {
             assertTrue(b13.invoke(null) == "b13")
 
             val b14 =
-                ReflectionUtils.findMethod(TestB::class.java, "b14", Long::class.javaPrimitiveType)
+                ReflectionUtils.findMethod(TestB::class.java, "b14", Long::class.java)
             assertTrue(b14.declaringClass == TestB::class.java && b14.name == "b14")
             assertTrue(b14.invoke(null, 14L) as Long == 14L)
 
             val b15 = ReflectionUtils.findMethod(
                 TestB::class.java,
                 "b15",
-                Int::class.javaPrimitiveType,
+                Int::class.java,
                 String::class.java
             )
             assertTrue(b15.declaringClass == TestB::class.java && b15.name == "b15")

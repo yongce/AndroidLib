@@ -19,7 +19,8 @@ class FileStatusHelperTest {
         val fileStatus = FileStatusHelper.getFileStatus(
             testFile.absolutePath
         )
-        Timber.tag(TAG).i("uid: " + fileStatus.uid + ", gid: " + fileStatus.gid +
+        Timber.tag(TAG).i(
+            "uid: " + fileStatus.uid + ", gid: " + fileStatus.gid +
                     ", mode: " + Integer.toOctalString(fileStatus.mode)
         )
         assertEquals("check uid", targetUid.toLong(), fileStatus.uid.toLong())

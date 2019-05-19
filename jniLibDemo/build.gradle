@@ -32,5 +32,6 @@ dependencies {
 
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
+    implementation deps.timber
 }
 

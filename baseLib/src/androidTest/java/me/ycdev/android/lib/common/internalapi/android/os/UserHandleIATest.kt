@@ -11,6 +11,6 @@ import org.junit.Assert.assertTrue
 class UserHandleIATest {
     @Test
     fun test_myUserId() {
-        assertTrue(UserHandleIA.checkReflect_myUserId())
+        assertTrue(UserHandleIA.checkReflectMyUserId())
     }
 }

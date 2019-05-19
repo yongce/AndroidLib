@@ -11,21 +11,21 @@ import org.junit.Assert.assertTrue
 class ServiceManagerIATest {
     @Test
     fun test_getService() {
-        assertTrue(ServiceManagerIA.checkReflect_getService())
+        assertTrue(ServiceManagerIA.checkReflectGetService())
     }
 
     @Test
     fun test_checkService() {
-        assertTrue(ServiceManagerIA.checkReflect_checkService())
+        assertTrue(ServiceManagerIA.checkReflectCheckService())
     }
 
     @Test
     fun test_addService() {
-        assertTrue(ServiceManagerIA.checkReflect_addService())
+        assertTrue(ServiceManagerIA.checkReflectAddService())
     }
 
     @Test
     fun test_listServices() {
-        assertTrue(ServiceManagerIA.checkReflect_listServices())
+        assertTrue(ServiceManagerIA.checkReflectListServices())
     }
 }

@@ -38,7 +38,8 @@ class ServiceConnectorTest {
         connectSync(connector)
 
         // BinderProxy
-        assertThat(connector.service.asBinder().javaClass.name).isEqualTo("android.os.BinderProxy")
+
+        assertThat(connector.getService()!!.asBinder().javaClass.name).isEqualTo("android.os.BinderProxy")
         disconnectSync(connector)
     }
 
@@ -51,7 +52,7 @@ class ServiceConnectorTest {
         connectSync(connector)
 
         // Local object
-        assertThat(connector.service.asBinder().javaClass.name)
+        assertThat(connector.getService()!!.asBinder().javaClass.name)
             .isEqualTo("me.ycdev.android.lib.common.demo.service.LocalService\$BinderServer")
         disconnectSync(connector)
     }
@@ -62,12 +63,12 @@ class ServiceConnectorTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         run {
             val connector = RemoteServiceConnector(context)
-            assertThat(connector.connectLooper).isEqualTo(Looper.getMainLooper())
+            assertThat(connector.getConnectLooper()).isEqualTo(Looper.getMainLooper())
         }
 
         run {
             val connector = LocalServiceConnector(context)
-            assertThat(connector.connectLooper).isEqualTo(Looper.getMainLooper())
+            assertThat(connector.getConnectLooper()).isEqualTo(Looper.getMainLooper())
         }
     }
 
@@ -77,19 +78,19 @@ class ServiceConnectorTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         run {
             val connector = RemoteServiceConnector(context)
-            assertThat(connector.isServiceExist).isTrue()
+            assertThat(connector.isServiceExist()).isTrue()
         }
         run {
             val connector = LocalServiceConnector(context)
-            assertThat(connector.isServiceExist).isTrue()
+            assertThat(connector.isServiceExist()).isTrue()
         }
         run {
             val connector = FakeServiceConnector(context)
-            assertThat(connector.isServiceExist).isFalse()
+            assertThat(connector.isServiceExist()).isFalse()
         }
         run {
             val connector = NoPermServiceConnector(context)
-            assertThat(connector.isServiceExist).isFalse()
+            assertThat(connector.isServiceExist()).isFalse()
         }
     }
 
@@ -100,7 +101,7 @@ class ServiceConnectorTest {
         run {
             val connector = RemoteServiceConnector(context)
             val servicesList = context.packageManager.queryIntentServices(
-                connector.serviceIntent, 0
+                connector.getServiceIntent(), 0
             )
             assertThat(servicesList).isNotNull()
             val cn = connector.selectTargetService(servicesList)
@@ -110,7 +111,7 @@ class ServiceConnectorTest {
         run {
             val connector = NoPermServiceConnector(context)
             val servicesList = context.packageManager.queryIntentServices(
-                connector.serviceIntent, 0
+                connector.getServiceIntent(), 0
             )
             assertThat(servicesList).isNotNull()
             assertThat(connector.selectTargetService(servicesList)).isNull()
@@ -125,14 +126,18 @@ class ServiceConnectorTest {
 
         val latch1 = CountDownLatch(2)
         val latch2 = CountDownLatch(2)
-        val listener1 = ConnectStateListener { newState ->
-            if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
-                latch1.countDown()
+        val listener1 = object : ConnectStateListener {
+            override fun onStateChanged(newState: Int) {
+                if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
+                    latch1.countDown()
+                }
             }
         }
-        val listener2 = ConnectStateListener { newState ->
-            if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
-                latch2.countDown()
+        val listener2 = object : ConnectStateListener {
+            override fun onStateChanged(newState: Int) {
+                if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
+                    latch2.countDown()
+                }
             }
         }
         connector.addListener(listener1)
@@ -180,11 +185,15 @@ class ServiceConnectorTest {
     private fun test_disconnect_state(connector: ServiceConnector<*>) {
         connectSync(connector)
         val stateChangeCount = IntegerHolder(0)
-        val listener = ConnectStateListener { stateChangeCount.value++ }
+        val listener = object : ConnectStateListener {
+            override fun onStateChanged(newState: Int) {
+                stateChangeCount.value++
+            }
+        }
         connector.addListener(listener)
         connector.disconnect()
-        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
-        assertThat(connector.service).isNull()
+        assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+        assertThat(connector.getService()).isNull()
         assertThat(stateChangeCount.value).isEqualTo(0)
     }
 
@@ -206,16 +215,20 @@ class ServiceConnectorTest {
 
     private fun test_waitForConnected_forever(connector: ServiceConnector<*>) {
         val stateChangeCount = IntegerHolder(0)
-        val listener = ConnectStateListener { stateChangeCount.value++ }
+        val listener = object : ConnectStateListener {
+            override fun onStateChanged(newState: Int) {
+                stateChangeCount.value++
+            }
+        }
         connector.addListener(listener)
 
         connector.waitForConnected()
-        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
-        assertThat(connector.service).isNotNull()
+        assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_CONNECTED)
+        assertThat(connector.getService()).isNotNull()
         assertThat(stateChangeCount.value).isEqualTo(2) // connecting & connected
 
         connector.waitForConnected()
-        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
+        assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_CONNECTED)
         assertThat(stateChangeCount.value).isEqualTo(2) // already connected, no change anymore
 
         disconnectSync(connector)
@@ -229,12 +242,12 @@ class ServiceConnectorTest {
         run {
             val connector = FakeServiceConnector(context)
             connector.waitForConnected() // should fail immediately
-            assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+            assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
         }
         run {
             val connector = NoPermServiceConnector(context)
             connector.waitForConnected() // should fail immediately
-            assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+            assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
         }
     }
 
@@ -245,15 +258,19 @@ class ServiceConnectorTest {
         val connector = ConnectDelayServiceConnector(context, 300)
 
         val stateChangeCount = IntegerHolder(0)
-        val listener = ConnectStateListener { stateChangeCount.value++ }
+        val listener = object : ConnectStateListener {
+            override fun onStateChanged(newState: Int) {
+                stateChangeCount.value++
+            }
+        }
         connector.addListener(listener)
 
         connector.waitForConnected(100) //
-        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTING)
+        assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_CONNECTING)
         assertThat(stateChangeCount.value).isEqualTo(1) // connecting
 
         connector.waitForConnected()
-        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
+        assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_CONNECTED)
         assertThat(stateChangeCount.value).isEqualTo(2) // connected
 
         disconnectSync(connector)
@@ -265,22 +282,24 @@ class ServiceConnectorTest {
     fun getService() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val connector = RemoteServiceConnector(context)
-        assertThat(connector.service).isNull()
+        assertThat(connector.getService()).isNull()
 
-        val listener = ConnectStateListener { newState ->
-            if (newState == ServiceConnector.STATE_CONNECTED) {
-                assertThat(connector.service).isNotNull()
-            } else {
-                assertThat(connector.service).isNull()
+        val listener = object : ConnectStateListener {
+            override fun onStateChanged(newState: Int) {
+                if (newState == ServiceConnector.STATE_CONNECTED) {
+                    assertThat(connector.getService()).isNotNull()
+                } else {
+                    assertThat(connector.getService()).isNull()
+                }
             }
         }
         connector.addListener(listener)
 
         connector.waitForConnected()
-        assertThat(connector.service).isNotNull()
+        assertThat(connector.getService()).isNotNull()
 
         connector.disconnect()
-        assertThat(connector.service).isNull()
+        assertThat(connector.getService()).isNull()
     }
 
     private class FakeServiceConnector internal constructor(cxt: Context) :
@@ -291,8 +310,8 @@ class ServiceConnectorTest {
             return Intent("me.ycdev.android.lib.common.demo.action.FAKE_SERVICE")
         }
 
-        override fun asInterface(service: IBinder): IDemoService? {
-            return null
+        override fun asInterface(service: IBinder): IDemoService {
+            return IDemoService.Stub.asInterface(service)
         }
     }
 
@@ -309,7 +328,7 @@ class ServiceConnectorTest {
         internal var mConnectDelay: Long
     ) : RemoteServiceConnector(cxt) {
 
-        override fun asInterface(service: IBinder): IDemoService? {
+        override fun asInterface(service: IBinder): IDemoService {
             SystemClock.sleep(mConnectDelay)
             return super.asInterface(service)
         }
@@ -337,18 +356,20 @@ class ServiceConnectorTest {
 
         private fun connectSync(connector: ServiceConnector<*>) {
             val latch = CountDownLatch(1)
-            val listener = ConnectStateListener { newState ->
-                if (newState == ServiceConnector.STATE_CONNECTED) {
-                    latch.countDown()
+            val listener = object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_CONNECTED) {
+                        latch.countDown()
+                    }
                 }
             }
             connector.addListener(listener)
 
-            assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
-            assertThat(connector.service).isNull()
+            assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+            assertThat(connector.getService()).isNull()
 
             connector.connect()
-            assertThat(connector.connectState)
+            assertThat(connector.getConnectState())
                 .isAnyOf(ServiceConnector.STATE_CONNECTING, ServiceConnector.STATE_CONNECTED)
 
             try {
@@ -357,24 +378,26 @@ class ServiceConnectorTest {
                 fail("Should not happen: $e")
             }
 
-            assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
-            assertThat(connector.service).isNotNull()
+            assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_CONNECTED)
+            assertThat(connector.getService()).isNotNull()
         }
 
         private fun disconnectSync(connector: ServiceConnector<*>) {
-            assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
-            assertThat(connector.service).isNotNull()
+            assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_CONNECTED)
+            assertThat(connector.getService()).isNotNull()
 
             val latch = CountDownLatch(1)
-            val listener = ConnectStateListener { newState ->
-                if (newState == ServiceConnector.STATE_DISCONNECTED) {
-                    latch.countDown()
+            val listener = object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                        latch.countDown()
+                    }
                 }
             }
             connector.addListener(listener)
             connector.disconnect()
-            assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
-            assertThat(connector.service).isNull()
+            assertThat(connector.getConnectState()).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+            assertThat(connector.getService()).isNull()
             try {
                 latch.await()
             } catch (e: InterruptedException) {

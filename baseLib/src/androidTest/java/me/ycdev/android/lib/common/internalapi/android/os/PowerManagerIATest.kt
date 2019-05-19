@@ -20,26 +20,26 @@ class PowerManagerIATest {
 
     @Test
     fun test_getIPowerManager() {
-        assertNotNull(PowerManagerIA.getIPowerManager())
+        assertNotNull(PowerManagerIA.iPowerManager)
     }
 
     @Test
     fun test_reboot() {
-        assertTrue(PowerManagerIA.checkReflect_reboot())
+        assertTrue(PowerManagerIA.checkReflectReboot())
     }
 
     @Test
     fun test_shutdown() {
-        assertTrue(PowerManagerIA.checkReflect_shutdown())
+        assertTrue(PowerManagerIA.checkReflectShutdown())
     }
 
     @Test
     fun test_crash() {
-        assertTrue(PowerManagerIA.checkReflect_crash())
+        assertTrue(PowerManagerIA.checkReflectCrash())
     }
 
     @Test
     fun test_goToSleep() {
-        assertTrue(PowerManagerIA.checkReflect_goToSleep())
+        assertTrue(PowerManagerIA.checkReflectGoToSleep())
     }
 }

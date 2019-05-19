@@ -29,13 +29,13 @@ class AsyncTaskQueueTest {
         assertThat(taskQueue.taskHandler).isNull()
 
         val latch = CountDownLatch(2)
-        val task1 = {
+        val task1 = Runnable {
             Timber.tag(TAG).d("Executing task1 BEGIN")
             SystemClock.sleep(1000)
             latch.countDown()
             Timber.tag(TAG).d("Executing task1 END")
         }
-        val task2 = {
+        val task2 = Runnable {
             Timber.tag(TAG).d("Executing task2 BEGIN")
             // Task1 must be done
             assertThat(latch.count).isEqualTo(1)
@@ -52,7 +52,7 @@ class AsyncTaskQueueTest {
         SystemClock.sleep(100)
         val taskHandler = taskQueue.taskHandler
         assertThat(taskHandler).isNotNull()
-        val taskThread = taskHandler.looper.thread
+        val taskThread = taskHandler!!.looper.thread
         val taskTid = taskThread.id
         assertThat(taskThread.name).isEqualTo(TAG)
         assertThat(taskThread.isAlive).isTrue()
@@ -179,7 +179,7 @@ class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(autoQuitDelay)
 
         val latch = CountDownLatch(1)
-        taskQueue.addTask({ latch.countDown() }, 100)
+        taskQueue.addTask(Runnable { latch.countDown() }, 100)
         latch.await()
 
         // check if task thread already quited
@@ -196,7 +196,7 @@ class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(0)
 
         val latch = CountDownLatch(1)
-        taskQueue.addTask({ latch.countDown() }, 100)
+        taskQueue.addTask(Runnable { latch.countDown() }, 100)
         latch.await()
 
         // check if task thread already quited
@@ -275,7 +275,7 @@ class AsyncTaskQueueTest {
             taskTidHolder: LongArray
         ) {
             for (i in 0 until taskCount) {
-                val task = {
+                val task = Runnable {
                     // check tid (should only one task thread created)
                     val curTid = Thread.currentThread().id
                     if (taskTidHolder[0] != -1L) {

@@ -14,17 +14,17 @@ import org.junit.Assert.assertTrue
 class ProcessIATest {
     @Test
     fun test_setArgV0() {
-        assertTrue("failed to reflect #setArgV0", ProcessIA.checkReflect_setArgV0())
+        assertTrue("failed to reflect #setArgV0", ProcessIA.checkReflectSetArgV0())
     }
 
     @Test
     fun test_readProcLines() {
-        assertTrue("failed to reflect #readProcLines", ProcessIA.checkReflect_readProcLines())
+        assertTrue("failed to reflect #readProcLines", ProcessIA.checkReflectReadProcLines())
     }
 
     @Test
     fun test_getParentPid() {
-        assertTrue("failed to reflect #getParentPid", ProcessIA.checkReflect_getParentPid())
+        assertTrue("failed to reflect #getParentPid", ProcessIA.checkReflectGetParentPid())
         // app process --> zygote
         val pid = android.os.Process.myPid()
         val zygotePid = ProcessIA.getParentPid(pid)
@@ -33,7 +33,7 @@ class ProcessIATest {
 
     @Test
     fun test_myPpid() {
-        assertTrue("failed to reflect #myPpid", ProcessIA.checkReflect_myPpid())
+        assertTrue("failed to reflect #myPpid", ProcessIA.checkReflectMyPpid())
         // app process --> zygote
         val pid = android.os.Process.myPid()
         val zygotePid = ProcessIA.myPpid()
