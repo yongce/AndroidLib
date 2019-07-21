@@ -39,7 +39,7 @@ dependencies {
 
     // The following dependencies are just for checking new versions of library
     implementation "androidx.multidex:multidex:${versions.multidexLib}"
-    implementation "androidx.annotation:annotation:1.0.2"
+    implementation "androidx.annotation:annotation:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
     implementation "androidx.arch.core:core-common:${versions.archCore}"
     implementation "androidx.lifecycle:lifecycle-common:${versions.lifecycle}"
@@ -70,9 +70,9 @@ dependencies {
 
     implementation "com.google.zxing:core:${versions.zxing}"
 
-    testImplementation "junit:junit:$versions.junit"
-    testImplementation "androidx.test:runner:${versions.runner}"
-    testImplementation "androidx.test:rules:${versions.rules}"
+    testImplementation "androidx.test.ext:junit:1.1.1"
+    testImplementation "androidx.test:runner:${versions.testCore}"
+    testImplementation "androidx.test:rules:${versions.testCore}"
     testImplementation "org.hamcrest:hamcrest-core:${versions.hamcrest}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
     testImplementation "org.powermock:powermock-api-mockito:${versions.powermock}"

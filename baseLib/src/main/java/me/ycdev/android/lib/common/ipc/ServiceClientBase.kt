@@ -55,7 +55,7 @@ open class ServiceClientBase<IService> protected constructor(
     }
 
     fun addOperation(operation: IpcOperation<IService>) {
-        if (serviceConnector.getConnectState() == ServiceConnector.STATE_DISCONNECTED) {
+        if (serviceConnector.connectState == ServiceConnector.STATE_DISCONNECTED) {
             // try to connect if not connected or connecting
             // (such as the Service APK was installed after the previous connecting)
             // (such as autoDisconnect enabled)
@@ -75,7 +75,7 @@ open class ServiceClientBase<IService> protected constructor(
 
     @WorkerThread
     private fun handleOperation(operation: IpcOperation<IService>) {
-        val service = serviceConnector.getService()
+        val service = serviceConnector.service
         if (service != null) {
             try {
                 operation.execute(service)
@@ -107,7 +107,7 @@ open class ServiceClientBase<IService> protected constructor(
     @WorkerThread
     private fun handlePendingOperations() {
         Timber.tag(TAG).d("[%s] handlePendingOperations: %d", serviceName, pendingOperations.size)
-        while (serviceConnector.getService() != null) {
+        while (serviceConnector.service != null) {
             val operation = pendingOperations.poll() ?: break
             handleOperation(operation)
         }

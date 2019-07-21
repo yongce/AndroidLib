@@ -96,9 +96,9 @@ class ServiceClientBaseTest {
             val latch = CountDownLatch(1)
             client.addOperation(HelloOperation("Hello, world").setNotifier(latch))
 
-            assertThat(client.serviceConnector.getService()).isNull()
+            assertThat(client.serviceConnector.service).isNull()
             latch.await()
-            assertThat(client.serviceConnector.getService()).isNotNull()
+            assertThat(client.serviceConnector.service).isNotNull()
             timeStart = SystemClock.elapsedRealtime()
         }
 

@@ -19,9 +19,16 @@ import me.ycdev.android.lib.common.utils.WeakListenerManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
 
+/**
+ * @constructor
+ * @param serviceName Used to print logs only.
+ * @param connectLooper The looper used to connect/reconnect target Service.
+ *               By default, it's the main looper.
+ */
 abstract class ServiceConnector<IServiceInterface> protected constructor(
     cxt: Context,
-    protected var serviceName: String
+    protected var serviceName: String,
+    val connectLooper: Looper = Looper.getMainLooper()
 ) {
     protected var appContext: Context = cxt.applicationContext
 
@@ -30,13 +37,13 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
     private val state = AtomicInteger(STATE_DISCONNECTED)
     private var connectStartTime: Long = 0
     private var serviceConnection: ServiceConnection? = null
-    private var service: IServiceInterface? = null
 
-    /**
-     * Get the looper used to connect/reconnect target Service.
-     * By default, it's the main looper.
-     */
-    fun getConnectLooper(): Looper = Looper.getMainLooper()
+    var service: IServiceInterface? = null
+        private set
+
+    @ConnectState
+    val connectState: Int
+        get() = state.get()
 
     /**
      * Get Intent to bind the target service.
@@ -86,11 +93,6 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         } else null
     }
 
-    @ConnectState
-    fun getConnectState(): Int = state.get()
-
-    fun getService(): IServiceInterface? = service
-
     /**
      * Add a connect state listener, using [WeakListenerManager] to manager listeners.
      * Callbacks will be invoked in [.getConnectLooper] thread.
@@ -111,6 +113,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         Timber.tag(TAG).i("[%s] disconnect service...", serviceName)
         connectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK)
         connectHandler.removeMessages(MSG_RECONNECT)
+        connectHandler.removeMessages(MSG_NOTIFY_LISTENERS)
         service = null
         if (serviceConnection != null) {
             appContext.unbindService(serviceConnection!!)
@@ -251,8 +254,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         }
     }
 
-    private val connectHandler = object : Handler(getConnectLooper()) {
-
+    private val connectHandler = object : Handler(connectLooper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_RECONNECT -> {
@@ -307,7 +309,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         private const val MSG_CONNECT_TIMEOUT_CHECK = 3
 
         private const val CONNECT_TIMEOUT_CHECK_INTERVAL: Long = 5000 // 5s
-        private const val FORCE_REBIND_TIME = (30 * 1000).toLong() // 30 seconds
+        private const val FORCE_REBIND_TIME: Long = 30 * 1000 // 30 seconds
 
         fun strConnectState(state: Int): String {
             return when (state) {
