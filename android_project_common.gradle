@@ -74,7 +74,7 @@ ext {
             'guava'            : "23.5-android",
 
             // debug
-            'leakcanary'       : "1.5.4",
+            'leakcanary'       : "1.6.3",
             'stetho'           : "1.5.0",
             'ktlint'           : "0.29.0",
 

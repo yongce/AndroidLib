@@ -1,7 +1,4 @@
-apply plugin: 'java-library'
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+apply plugin: 'kotlin'
 
 dependencies {
     compileOnly "com.android.tools.lint:lint-api:${versions.lintLib}"
@@ -16,5 +13,13 @@ dependencies {
 jar {
     manifest {
         attributes("Lint-Registry-v2": "me.ycdev.android.arch.lint.MyIssueRegistry")
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
     }
 }
