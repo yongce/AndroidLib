@@ -257,7 +257,6 @@ class MyBaseActivityDetectorTest {
             )
     }
 
-
     @Test
     fun testLintViolationActivity_kotlin() {
         val testFile = TestFiles.kotlin(

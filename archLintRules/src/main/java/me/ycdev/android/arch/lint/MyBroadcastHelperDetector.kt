@@ -27,8 +27,8 @@ class MyBroadcastHelperDetector : WrapperDetectorBase() {
         internal val ISSUE = Issue.create(
             "MyBroadcastHelper",
             "BroadcastHelper should be used.",
-            "Please use the wrapper class 'BroadcastHelper' to register broadcast receivers"
-                    + " and send broadcasts to avoid security issues.",
+            "Please use the wrapper class 'BroadcastHelper' to register broadcast receivers" +
+                    " and send broadcasts to avoid security issues.",
             Category.CORRECTNESS, 5, Severity.ERROR,
             Implementation(MyBroadcastHelperDetector::class.java, Scope.JAVA_FILE_SCOPE)
         )

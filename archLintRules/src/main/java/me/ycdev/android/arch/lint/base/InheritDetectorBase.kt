@@ -17,7 +17,7 @@ abstract class InheritDetectorBase : Detector(), Detector.UastScanner {
         val wrappers = wrapperClasses
         val className = declaration.qualifiedName
         if (wrappers.contains(className)) {
-            return  // ignore the wrapper classes
+            return // ignore the wrapper classes
         }
 
         val evaluator = context.evaluator
