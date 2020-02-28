@@ -49,7 +49,7 @@ dependencies {
         exclude group: 'com.android.support'
     })
 
-    implementation "com.jakewharton:butterknife:${versions.butterknife}"
+    annotationProcessor "com.jakewharton:butterknife:${versions.butterknife}"
     implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation "com.google.guava:guava:${versions.guava}"
 

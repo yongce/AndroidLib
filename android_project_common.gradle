@@ -70,7 +70,7 @@ ext {
             'wearableSupport'  : "2.3.0",
 
             // infrastructure
-            'butterknife'      : "10.1.0",
+            'butterknife'      : "10.2.1",
             'timber'           : "4.7.1",
             'guava'            : "23.5-android",
 
@@ -86,7 +86,7 @@ ext {
             // network & image
             'okhttp'           : "3.9.0",
             'retrofit'         : "2.3.0",
-            'glide'            : "4.2.0",
+            'glide'            : "4.10.0",
             'glideTrans'       : "4.0.0",
 
             // rx
