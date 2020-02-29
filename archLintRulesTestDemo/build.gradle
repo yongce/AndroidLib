@@ -13,6 +13,8 @@ android {
         multiDexEnabled true
     }
 
+    ndkVersion versions.ndkVersion
+
     buildTypes {
         release {
             minifyEnabled false

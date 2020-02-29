@@ -13,6 +13,8 @@ android {
         versionName "1.0"
     }
 
+    ndkVersion versions.ndkVersion
+
     buildTypes {
         release {
             minifyEnabled false

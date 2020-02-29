@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0'
+        classpath 'com.android.tools.build:gradle:3.6.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
@@ -33,6 +33,7 @@ allprojects {
 
 ext {
     versions.minSdk = 21
+    versions.ndkVersion = "21.0.6113669"
 
     // For bintray upload
     bintrayMaven = [

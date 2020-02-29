@@ -9,10 +9,16 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdk
 
-        externalNativeBuild {
-            ndkBuild {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86"
-            }
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
+        }
+    }
+
+    ndkVersion versions.ndkVersion
+    externalNativeBuild {
+        cmake {
+            version "3.10.2"
+            path file('CMakeLists.txt')
         }
     }
 
@@ -20,12 +26,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    externalNativeBuild {
-        ndkBuild {
-            path file("src/main/jni/Android.mk")
         }
     }
 }
