@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-abstract class ListAdapterBase<ItemType, VH : ViewHolderBase>(context: Context) :
+abstract class ListAdapterBase<ItemType, VH : ViewHolderBase>(protected val context: Context) :
     BaseAdapter() {
     protected var inflater: LayoutInflater = if (context is Activity) {
         context.layoutInflater
@@ -31,7 +31,7 @@ abstract class ListAdapterBase<ItemType, VH : ViewHolderBase>(context: Context) 
         return list
     }
 
-    fun setData(data: List<ItemType>?) {
+    open fun setData(data: List<ItemType>?) {
         list = data
         notifyDataSetChanged()
     }

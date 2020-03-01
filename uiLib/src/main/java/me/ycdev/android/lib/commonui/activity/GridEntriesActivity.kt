@@ -26,10 +26,10 @@ import me.ycdev.android.arch.ArchConstants.IntentType
 abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItemClickListener,
     AdapterView.OnItemLongClickListener {
 
-    protected lateinit var mAdapter: SystemEntriesAdapter
-    protected lateinit var mGridView: GridView
+    protected lateinit var adapter: SystemEntriesAdapter
+    protected lateinit var gridView: GridView
 
-    protected val contentViewLayout: Int
+    protected open val contentViewLayout: Int
         @LayoutRes get() = R.layout.commonui_grid_entries
 
     protected abstract val intents: List<IntentEntry>
@@ -52,12 +52,12 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
         super.onCreate(savedInstanceState)
         setContentView(contentViewLayout)
 
-        mAdapter = SystemEntriesAdapter(this)
+        adapter = SystemEntriesAdapter(this)
 
-        mGridView = findViewById(R.id.grid)
-        mGridView.adapter = mAdapter
-        mGridView.onItemClickListener = this
-        mGridView.onItemLongClickListener = this
+        gridView = findViewById(R.id.grid)
+        gridView.adapter = adapter
+        gridView.onItemClickListener = this
+        gridView.onItemLongClickListener = this
 
         loadItems()
     }
@@ -71,16 +71,16 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
                 }
 
                 override fun onPostExecute(result: List<IntentEntry>) {
-                    mAdapter.setData(intents)
+                    adapter.setData(intents)
                 }
             }.execute()
         } else {
-            mAdapter.setData(intents)
+            adapter.setData(intents)
         }
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val item = mAdapter.getItem(position)
+        val item = adapter.getItem(position)
         onItemClicked(item)
     }
 
@@ -90,7 +90,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
         position: Int,
         id: Long
     ): Boolean {
-        val item = mAdapter.getItem(position)
+        val item = adapter.getItem(position)
         ToastHelper.show(this, item.desc, Toast.LENGTH_LONG)
         return true
     }
@@ -99,11 +99,11 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
      * Decide if we need to invoke [.getIntent] async.
      * @return true for async and false for sync. false by default
      */
-    protected fun needLoadIntentsAsync(): Boolean {
+    protected open fun needLoadIntentsAsync(): Boolean {
         return false
     }
 
-    protected fun onItemClicked(item: IntentEntry) {
+    protected open fun onItemClicked(item: IntentEntry) {
         if (IntentUtils.canStartActivity(this, item.intent)) {
             startActivity(item.intent)
         } else {
