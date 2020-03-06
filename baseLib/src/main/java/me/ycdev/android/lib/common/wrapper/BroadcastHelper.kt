@@ -54,7 +54,7 @@ object BroadcastHelper {
     fun sendToExternal(
         cxt: Context,
         intent: Intent,
-        perm: String
+        perm: String?
     ) {
         cxt.sendBroadcast(intent, perm)
     }

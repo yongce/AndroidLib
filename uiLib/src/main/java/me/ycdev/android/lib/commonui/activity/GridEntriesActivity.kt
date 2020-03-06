@@ -64,7 +64,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
 
     @SuppressLint("StaticFieldLeak")
     private fun loadItems() {
-        if (needLoadIntentsAsync()) {
+        if (needLoadIntentsAsync) {
             object : AsyncTask<Void, Void, List<IntentEntry>>() {
                 override fun doInBackground(vararg params: Void): List<IntentEntry> {
                     return intents
@@ -99,9 +99,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
      * Decide if we need to invoke [.getIntent] async.
      * @return true for async and false for sync. false by default
      */
-    protected open fun needLoadIntentsAsync(): Boolean {
-        return false
-    }
+    protected open val needLoadIntentsAsync: Boolean = false
 
     protected open fun onItemClicked(item: IntentEntry) {
         if (IntentUtils.canStartActivity(this, item.intent)) {

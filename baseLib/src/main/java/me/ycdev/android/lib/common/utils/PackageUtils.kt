@@ -96,6 +96,10 @@ object PackageUtils {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_RECEIVERS or PackageManager.MATCH_DISABLED_COMPONENTS
             val pkgInfo = pm.getPackageInfo(pkgName, flags)
+            if (pkgInfo.receivers == null) {
+                return emptyArray()
+            }
+
             if (onlyExported) {
                 val tmpArray = arrayOfNulls<ActivityInfo>(pkgInfo.receivers.size)
                 var size = 0
@@ -122,6 +126,10 @@ object PackageUtils {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_SERVICES or PackageManager.MATCH_DISABLED_COMPONENTS
             val pkgInfo = pm.getPackageInfo(pkgName, flags)
+            if (pkgInfo.services == null) {
+                return emptyArray()
+            }
+
             if (onlyExported) {
                 val tmpArray = arrayOfNulls<ServiceInfo>(pkgInfo.services.size)
                 var size = 0
@@ -152,6 +160,10 @@ object PackageUtils {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_ACTIVITIES or PackageManager.MATCH_DISABLED_COMPONENTS
             val pkgInfo = pm.getPackageInfo(pkgName, flags)
+            if (pkgInfo.activities == null) {
+                return emptyArray()
+            }
+
             if (onlyExported) {
                 val tmpArray = arrayOfNulls<ActivityInfo>(pkgInfo.activities.size)
                 var size = 0
