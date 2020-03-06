@@ -1,12 +1,12 @@
 package me.ycdev.android.lib.common.apps
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import me.ycdev.android.lib.common.kotlin.SingletonHolderP1
 import me.ycdev.android.lib.common.utils.MiscUtils
 import me.ycdev.android.lib.common.utils.PackageUtils
 import me.ycdev.android.lib.common.utils.StringUtils
@@ -15,15 +15,9 @@ import java.util.ArrayList
 import java.util.HashMap
 
 class AppsLoader private constructor(cxt: Context) {
-    private val appContext: Context
-    private val pm: PackageManager
-    private val myselfPkgName: String
-
-    init {
-        appContext = cxt.applicationContext
-        pm = cxt.packageManager
-        myselfPkgName = cxt.packageName
-    }
+    private val appContext: Context = cxt.applicationContext
+    private val pm: PackageManager = cxt.packageManager
+    private val myselfPkgName: String = cxt.packageName
 
     @TargetApi(Build.VERSION_CODES.N)
     fun loadInstalledApps(
@@ -134,21 +128,5 @@ class AppsLoader private constructor(cxt: Context) {
         return item
     }
 
-    companion object {
-
-        @SuppressLint("StaticFieldLeak")
-        @Volatile
-        private var instance: AppsLoader? = null
-
-        fun getInstance(cxt: Context): AppsLoader {
-            if (instance == null) {
-                synchronized(AppsLoader::class.java) {
-                    if (instance == null) {
-                        instance = AppsLoader(cxt)
-                    }
-                }
-            }
-            return instance!!
-        }
-    }
+    companion object : SingletonHolderP1<AppsLoader, Context>(::AppsLoader)
 }

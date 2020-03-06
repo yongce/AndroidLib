@@ -1,12 +1,11 @@
 package me.ycdev.android.lib.common.tracker
 
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
-
+import me.ycdev.android.lib.common.kotlin.SingletonHolderP1
 import me.ycdev.android.lib.common.utils.LibLogger
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.common.wrapper.IntentHelper
@@ -109,22 +108,7 @@ class BatteryInfoTracker private constructor(cxt: Context) :
         }
     }
 
-    companion object {
+    companion object : SingletonHolderP1<BatteryInfoTracker, Context>(::BatteryInfoTracker) {
         private const val TAG = "BatteryInfoTracker"
-
-        @SuppressLint("StaticFieldLeak")
-        private var instance: BatteryInfoTracker? = null
-
-        @Synchronized
-        fun getInstance(cxt: Context): BatteryInfoTracker {
-            if (instance == null) {
-                synchronized(BatteryInfoTracker::class.java) {
-                    if (instance == null) {
-                        instance = BatteryInfoTracker(cxt)
-                    }
-                }
-            }
-            return instance!!
-        }
     }
 }

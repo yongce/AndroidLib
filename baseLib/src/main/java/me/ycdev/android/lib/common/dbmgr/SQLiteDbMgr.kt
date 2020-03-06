@@ -1,10 +1,9 @@
 package me.ycdev.android.lib.common.dbmgr
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import me.ycdev.android.lib.common.kotlin.SingletonHolderP1
 import timber.log.Timber
-
 import java.util.HashMap
 
 @Suppress("unused")
@@ -57,23 +56,8 @@ class SQLiteDbMgr private constructor(cxt: Context) {
         }
     }
 
-    companion object {
+    companion object : SingletonHolderP1<SQLiteDbMgr, Context>(::SQLiteDbMgr) {
         private const val TAG = "SQLiteDbMgr"
-
-        @SuppressLint("StaticFieldLeak")
-        @Volatile
-        private var instance: SQLiteDbMgr? = null
-
-        private fun getInstance(cxt: Context): SQLiteDbMgr {
-            if (instance == null) {
-                synchronized(SQLiteDbMgr::class.java) {
-                    if (instance == null) {
-                        instance = SQLiteDbMgr(cxt)
-                    }
-                }
-            }
-            return instance!!
-        }
 
         fun acquireDatabase(
             cxt: Context,
