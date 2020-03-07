@@ -51,7 +51,15 @@ open class ServiceClientBase<IService> protected constructor(
      * Disconnect the Service connection. This may cause the pending operations to lost!
      */
     fun disconnect() {
-        serviceConnector.disconnect()
+        disconnectDelayed(0);
+    }
+
+    /**
+     * Disconnect the Service connection. This may cause the pending operations to lost!
+     */
+    fun disconnectDelayed(delayMs: Long) {
+        operationHandler.removeMessages(MSG_DELAY_DISCONNECT);
+        operationHandler.sendEmptyMessageDelayed(MSG_DELAY_DISCONNECT, delayMs);
     }
 
     fun addOperation(operation: IpcOperation<IService>) {
@@ -62,6 +70,7 @@ open class ServiceClientBase<IService> protected constructor(
             serviceConnector.connect()
         }
         operationHandler.removeMessages(MSG_AUTO_DISCONNECT)
+        operationHandler.removeMessages(MSG_DELAY_DISCONNECT)
         Message.obtain(operationHandler, MSG_NEW_OPERATION, operation).sendToTarget()
     }
 
@@ -133,6 +142,11 @@ open class ServiceClientBase<IService> protected constructor(
                 Timber.tag(TAG).d("auto disconnect")
                 serviceConnector.disconnect()
             }
+
+            MSG_DELAY_DISCONNECT -> {
+                Timber.tag(TAG).d("delayed disconnect")
+                serviceConnector.disconnect()
+            }
         }
 
         if (isAutoDisconnectEnabled && msg.what != MSG_AUTO_DISCONNECT) {
@@ -149,5 +163,6 @@ open class ServiceClientBase<IService> protected constructor(
         private const val MSG_NEW_OPERATION = 1
         private const val MSG_PENDING_OPERATIONS = 2
         private const val MSG_AUTO_DISCONNECT = 3
+        private const val MSG_DELAY_DISCONNECT = 4
     }
 }

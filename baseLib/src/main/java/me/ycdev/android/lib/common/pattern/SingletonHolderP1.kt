@@ -1,4 +1,4 @@
-package me.ycdev.android.lib.common.kotlin
+package me.ycdev.android.lib.common.pattern
 
 open class SingletonHolderP1<out T, in P>(private val creator: (P) -> T) {
     @Volatile

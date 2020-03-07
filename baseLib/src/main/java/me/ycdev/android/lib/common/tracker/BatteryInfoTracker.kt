@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
-import me.ycdev.android.lib.common.kotlin.SingletonHolderP1
+import me.ycdev.android.lib.common.pattern.SingletonHolderP1
 import me.ycdev.android.lib.common.utils.LibLogger
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.common.wrapper.IntentHelper

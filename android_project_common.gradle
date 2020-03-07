@@ -1,6 +1,7 @@
-/**
+/*
  * File: 'android_project_common.gradle'
- * Version: 2018.5.26
+ * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
+ * Version: 2020.03.07
  * All android projects can copy and include this file.
  */
 
@@ -36,6 +37,7 @@ ext {
 
             // Android official support
             'kotlin'           : "1.3.61",
+            'kotlinCoroutine'  : "1.3.4",
             'multidexLib'      : "2.0.1",
             'androidxCore'     : "1.1.0",
             'fragment'         : "1.1.0",
@@ -103,6 +105,8 @@ ext {
             // Android official support
             'kotlin': [
                     'stdlib'           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+                    'coroutinesCore'   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinCoroutine}",
+                    'coroutinesAndroid' : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinCoroutine}"
             ],
             'androidx': [
                     // core

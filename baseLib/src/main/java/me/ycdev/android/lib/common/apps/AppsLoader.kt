@@ -6,7 +6,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import me.ycdev.android.lib.common.kotlin.SingletonHolderP1
+import me.ycdev.android.lib.common.pattern.SingletonHolderP1
 import me.ycdev.android.lib.common.utils.MiscUtils
 import me.ycdev.android.lib.common.utils.PackageUtils
 import me.ycdev.android.lib.common.utils.StringUtils

@@ -10,17 +10,16 @@ import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
-
 import androidx.annotation.LayoutRes
 import me.ycdev.android.arch.ArchConstants
+import me.ycdev.android.arch.ArchConstants.IntentType
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 import me.ycdev.android.arch.wrapper.ToastHelper
 import me.ycdev.android.lib.common.utils.IntentUtils
+import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.commonui.R
 import me.ycdev.android.lib.commonui.base.ListAdapterBase
 import me.ycdev.android.lib.commonui.base.ViewHolderBase
-
-import me.ycdev.android.arch.ArchConstants.IntentType
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItemClickListener,
@@ -32,19 +31,38 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
     protected open val contentViewLayout: Int
         @LayoutRes get() = R.layout.commonui_grid_entries
 
-    protected abstract val intents: List<IntentEntry>
+    protected abstract val intents: List<Entry>
 
-    class IntentEntry(var intent: Intent, var title: String, var desc: String) {
-        @IntentType
-        var type = ArchConstants.INTENT_TYPE_ACTIVITY
-        var perm: String? = null
+    open class Entry(
+        open val title: CharSequence,
+        open val desc: CharSequence,
+        open val clickAction: ((Context) -> Unit)? = null,
+        open val longClickAction: ((Context) -> Unit)? = null
+    )
 
-        constructor(@IntentType type: Int, intent: Intent, title: String, desc: String) : this(
-            intent,
-            title,
-            desc
-        ) {
-            this.type = type
+    open class IntentEntry(
+        @IntentType val type: Int = ArchConstants.INTENT_TYPE_ACTIVITY,
+        val intent: Intent,
+        title: String,
+        desc: String,
+        val perm: String? = null
+    ) : Entry(title, desc) {
+        constructor(intent: Intent, title: String, desc: String) :
+                this(ArchConstants.INTENT_TYPE_ACTIVITY, intent, title, desc)
+
+        override val clickAction: ((Context) -> Unit)? = ::onItemClicked
+        override val longClickAction: ((Context) -> Unit)? = ::onItemLongClicked
+
+        fun onItemClicked(context: Context) {
+            if (type == ArchConstants.INTENT_TYPE_ACTIVITY) {
+                IntentUtils.startActivity(context, intent)
+            } else if (type == ArchConstants.INTENT_TYPE_BROADCAST) {
+                BroadcastHelper.sendToExternal(context, intent, perm)
+            }
+        }
+
+        private fun onItemLongClicked(context: Context) {
+            ToastHelper.show(context, desc, Toast.LENGTH_LONG)
         }
     }
 
@@ -65,12 +83,12 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
     @SuppressLint("StaticFieldLeak")
     private fun loadItems() {
         if (needLoadIntentsAsync) {
-            object : AsyncTask<Void, Void, List<IntentEntry>>() {
-                override fun doInBackground(vararg params: Void): List<IntentEntry> {
+            object : AsyncTask<Void, Void, List<Entry>>() {
+                override fun doInBackground(vararg params: Void): List<Entry> {
                     return intents
                 }
 
-                override fun onPostExecute(result: List<IntentEntry>) {
+                override fun onPostExecute(result: List<Entry>) {
                     adapter.setData(intents)
                 }
             }.execute()
@@ -81,7 +99,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val item = adapter.getItem(position)
-        onItemClicked(item)
+        item.clickAction?.invoke(this)
     }
 
     override fun onItemLongClick(
@@ -91,7 +109,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
         id: Long
     ): Boolean {
         val item = adapter.getItem(position)
-        ToastHelper.show(this, item.desc, Toast.LENGTH_LONG)
+        item.longClickAction?.invoke(this)
         return true
     }
 
@@ -101,25 +119,16 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
      */
     protected open val needLoadIntentsAsync: Boolean = false
 
-    protected open fun onItemClicked(item: IntentEntry) {
-        if (IntentUtils.canStartActivity(this, item.intent)) {
-            startActivity(item.intent)
-        } else {
-            ToastHelper.show(this, item.desc, Toast.LENGTH_LONG)
-        }
-    }
-
     protected open class SystemEntriesAdapter(cxt: Context) :
-        ListAdapterBase<IntentEntry, SystemEntriesAdapter.ViewHolder>(cxt) {
+        ListAdapterBase<Entry, SystemEntriesAdapter.ViewHolder>(cxt) {
 
-        override val itemLayoutResId: Int
-            get() = R.layout.commonui_grid_entries_item
+        override val itemLayoutResId: Int = R.layout.commonui_grid_entries_item
 
         override fun createViewHolder(itemView: View, position: Int): ViewHolder {
             return ViewHolder(itemView, position)
         }
 
-        override fun bindView(item: IntentEntry, holder: ViewHolder) {
+        override fun bindView(item: Entry, holder: ViewHolder) {
             holder.titleView.text = item.title
         }
 
