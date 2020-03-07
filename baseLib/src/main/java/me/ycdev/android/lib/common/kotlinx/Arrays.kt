@@ -33,4 +33,3 @@ fun FloatArray?.isNullOrEmpty(): Boolean {
 fun DoubleArray?.isNullOrEmpty(): Boolean {
     return this == null || this.isEmpty()
 }
-

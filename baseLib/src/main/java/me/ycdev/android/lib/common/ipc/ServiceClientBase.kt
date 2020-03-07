@@ -51,15 +51,15 @@ open class ServiceClientBase<IService> protected constructor(
      * Disconnect the Service connection. This may cause the pending operations to lost!
      */
     fun disconnect() {
-        disconnectDelayed(0);
+        disconnectDelayed(0)
     }
 
     /**
      * Disconnect the Service connection. This may cause the pending operations to lost!
      */
     fun disconnectDelayed(delayMs: Long) {
-        operationHandler.removeMessages(MSG_DELAY_DISCONNECT);
-        operationHandler.sendEmptyMessageDelayed(MSG_DELAY_DISCONNECT, delayMs);
+        operationHandler.removeMessages(MSG_DELAY_DISCONNECT)
+        operationHandler.sendEmptyMessageDelayed(MSG_DELAY_DISCONNECT, delayMs)
     }
 
     fun addOperation(operation: IpcOperation<IService>) {
