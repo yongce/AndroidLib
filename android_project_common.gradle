@@ -1,7 +1,7 @@
 /*
  * File: 'android_project_common.gradle'
  * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
- * Version: 2020.03.08
+ * Version: 2020.03.12
  * All android projects can copy and include this file.
  */
 
@@ -263,6 +263,9 @@ ext {
             'retrofitRxjava'           : "com.squareup.retrofit2:adapter-rxjava:${versions.retrofit}",
             'glide'                    : "com.github.bumptech.glide:glide:${versions.glide}",
             'glideTrans'               : "jp.wasabeef:glide-transformations:${versions.glideTrans}",
+
+            // UI
+            'flexbox'                  : "com.google.android:flexbox:2.0.1",
 
             // rx
             'rx': [
