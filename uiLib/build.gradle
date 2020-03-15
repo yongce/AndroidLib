@@ -10,6 +10,8 @@ android {
         minSdkVersion versions.minSdk
     }
 
+    viewBinding.enabled = true
+
     lintOptions {
         disable 'UnusedResources'
     }
@@ -21,6 +23,8 @@ dependencies {
 
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
+    implementation deps.androidx.material
+    implementation deps.androidx.recyclerview
 }
 
 project.ext {

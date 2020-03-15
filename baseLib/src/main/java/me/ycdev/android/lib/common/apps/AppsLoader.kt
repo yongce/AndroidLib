@@ -40,7 +40,7 @@ class AppsLoader private constructor(cxt: Context) {
 
                 if (listener != null) {
                     i++
-                    val percent = MiscUtils.calcProgressPercent(1, 50, i, n)
+                    val percent = MiscUtils.calcProgressPercent(1, 90, i, n)
                     listener.onProgressUpdated(percent, item)
                 }
             }
@@ -67,7 +67,7 @@ class AppsLoader private constructor(cxt: Context) {
             }
             if (listener != null && item != null) {
                 i++
-                val percent = MiscUtils.calcProgressPercent(51, 100, i, n)
+                val percent = MiscUtils.calcProgressPercent(91, 100, i, n)
                 listener.onProgressUpdated(percent, item)
             }
         }

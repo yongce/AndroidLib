@@ -7,15 +7,17 @@
         <item name="commonuiDividerMargin">@dimen/commonui_divider_margin</item>
         <item name="commonuiDividerColor">@color/commonui_divider_color</item>
 
-        <item name="commonuiGridEntriesStyle">@style/Widget.CommonUiTheme.GridEntries</item>
         <item name="commonuiGridEntriesItemStyle">@style/Widget.CommonUiTheme.GridEntriesItem</item>
-        <item name="commonuiGridEntriesSpacing">@dimen/commonui_grid_entries_spacing</item>
-        <item name="commonuiGridEntriesItemWidth">@dimen/commonui_grid_entries_item_width</item>
         <item name="commonuiGridEntriesItemHeight">@dimen/commonui_grid_entries_item_height</item>
+        <item name="commonuiGridEntriesItemMargin">@dimen/commonui_grid_entries_item_margin</item>
         <item name="commonuiGridEntriesItemBkg">@drawable/commonui_grid_entries_item_bkg</item>
         <item name="commonuiGridEntriesItemTextAppearance">@android:style/TextAppearance.Small</item>
 
         <item name="commonuiListItemVerticalMargin">@dimen/commonui_list_view_item_vertical_margin</item>
 
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

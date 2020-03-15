@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.GridView
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import me.ycdev.android.arch.ArchConstants
 import me.ycdev.android.arch.ArchConstants.IntentType
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
@@ -18,15 +21,15 @@ import me.ycdev.android.arch.wrapper.ToastHelper
 import me.ycdev.android.lib.common.utils.IntentUtils
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.commonui.R
-import me.ycdev.android.lib.commonui.base.ListAdapterBase
-import me.ycdev.android.lib.commonui.base.ViewHolderBase
+import me.ycdev.android.lib.commonui.databinding.CommonuiGridEntriesItemBinding
+import me.ycdev.android.lib.commonui.recyclerview.MarginItemDecoration
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItemClickListener,
-    AdapterView.OnItemLongClickListener {
+abstract class GridEntriesActivity : AppCompatBaseActivity() {
 
-    protected lateinit var adapter: SystemEntriesAdapter
-    protected lateinit var gridView: GridView
+    protected lateinit var entriesAdapter: SystemEntriesAdapter
+    protected lateinit var gridView: RecyclerView
+    protected lateinit var loadingView: ProgressBar
 
     protected open val contentViewLayout: Int
         @LayoutRes get() = R.layout.commonui_grid_entries
@@ -53,7 +56,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
         override val clickAction: ((Context) -> Unit)? = ::onItemClicked
         override val longClickAction: ((Context) -> Unit)? = ::onItemLongClicked
 
-        fun onItemClicked(context: Context) {
+        protected open fun onItemClicked(context: Context) {
             if (type == ArchConstants.INTENT_TYPE_ACTIVITY) {
                 IntentUtils.startActivity(context, intent)
             } else if (type == ArchConstants.INTENT_TYPE_BROADCAST) {
@@ -61,7 +64,7 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
             }
         }
 
-        private fun onItemLongClicked(context: Context) {
+        protected open fun onItemLongClicked(context: Context) {
             ToastHelper.show(context, desc, Toast.LENGTH_LONG)
         }
     }
@@ -70,47 +73,51 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
         super.onCreate(savedInstanceState)
         setContentView(contentViewLayout)
 
-        adapter = SystemEntriesAdapter(this)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        entriesAdapter = SystemEntriesAdapter(this)
 
         gridView = findViewById(R.id.grid)
-        gridView.adapter = adapter
-        gridView.onItemClickListener = this
-        gridView.onItemLongClickListener = this
+        loadingView = findViewById(R.id.progress)
+
+        gridView.apply {
+            adapter = entriesAdapter
+            layoutManager = GridLayoutManager(this@GridEntriesActivity, 3)
+            addItemDecoration(MarginItemDecoration.create(getGridEntriesMargin()))
+        }
 
         loadItems()
     }
 
+    open fun getGridEntriesMargin(): Int {
+        val a = obtainStyledAttributes(intArrayOf(R.attr.commonuiGridEntriesItemMargin))
+        val margin: Int = a.getDimensionPixelSize(0, 0)
+        a.recycle()
+        return margin
+    }
+
     @SuppressLint("StaticFieldLeak")
-    private fun loadItems() {
+    protected open fun loadItems() {
         if (needLoadIntentsAsync) {
+            loadingView.visibility = View.VISIBLE
+
             object : AsyncTask<Void, Void, List<Entry>>() {
                 override fun doInBackground(vararg params: Void): List<Entry> {
                     return intents
                 }
 
                 override fun onPostExecute(result: List<Entry>) {
-                    adapter.setData(intents)
+                    loadingView.visibility = View.GONE
+                    entriesAdapter.data = intents
+                    entriesAdapter.notifyDataSetChanged()
                 }
             }.execute()
         } else {
-            adapter.setData(intents)
+            loadingView.visibility = View.GONE
+            entriesAdapter.data = intents
         }
-    }
-
-    override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val item = adapter.getItem(position)
-        item.clickAction?.invoke(this)
-    }
-
-    override fun onItemLongClick(
-        parent: AdapterView<*>,
-        view: View,
-        position: Int,
-        id: Long
-    ): Boolean {
-        val item = adapter.getItem(position)
-        item.longClickAction?.invoke(this)
-        return true
     }
 
     /**
@@ -119,22 +126,38 @@ abstract class GridEntriesActivity : AppCompatBaseActivity(), AdapterView.OnItem
      */
     protected open val needLoadIntentsAsync: Boolean = false
 
-    protected open class SystemEntriesAdapter(cxt: Context) :
-        ListAdapterBase<Entry, SystemEntriesAdapter.ViewHolder>(cxt) {
+    protected open class SystemEntriesAdapter(val context: Context) :
+        RecyclerView.Adapter<SystemEntriesAdapter.ViewHolder>() {
 
-        override val itemLayoutResId: Int = R.layout.commonui_grid_entries_item
+        var data: List<Entry>? = null
 
-        override fun createViewHolder(itemView: View, position: Int): ViewHolder {
-            return ViewHolder(itemView, position)
+        private fun getItem(position: Int): Entry {
+            return data!![position]
         }
 
-        override fun bindView(item: Entry, holder: ViewHolder) {
-            holder.titleView.text = item.title
+        override fun getItemCount(): Int {
+            return data?.size ?: 0
         }
 
-        class ViewHolder(itemView: View, position: Int) :
-            ViewHolderBase(itemView, position) {
-            var titleView: TextView = itemView.findViewById(R.id.title)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val itemView = LayoutInflater.from(context)
+                .inflate(R.layout.commonui_grid_entries_item, parent, false)
+            return ViewHolder(itemView)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val item = getItem(position)
+            holder.binding.title.text = item.title
+
+            holder.binding.root.setOnClickListener { item.clickAction?.invoke(context) }
+            holder.binding.root.setOnLongClickListener {
+                item.longClickAction?.invoke(context)
+                return@setOnLongClickListener true
+            }
+        }
+
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val binding: CommonuiGridEntriesItemBinding = CommonuiGridEntriesItemBinding.bind(itemView)
         }
     }
 }

@@ -9,5 +9,4 @@
 
     <public type="attr" name="commonuiActivityHorizontalMargin" />
     <public type="attr" name="commonuiActivityVerticalMargin" />
-    <public type="attr" name="commonuiGridEntriesStyle" />
 </resources>

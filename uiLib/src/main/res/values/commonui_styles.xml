@@ -12,8 +12,8 @@
     </style>
 
     <style name="Widget.CommonUiTheme.ActivityMargin">
-        <item name="android:paddingLeft">?attr/commonuiActivityHorizontalMargin</item>
-        <item name="android:paddingRight">?attr/commonuiActivityHorizontalMargin</item>
+        <item name="android:paddingStart">?attr/commonuiActivityHorizontalMargin</item>
+        <item name="android:paddingEnd">?attr/commonuiActivityHorizontalMargin</item>
         <item name="android:paddingTop">?attr/commonuiActivityVerticalMargin</item>
         <item name="android:paddingBottom">?attr/commonuiActivityVerticalMargin</item>
     </style>
@@ -23,31 +23,11 @@
         <item name="android:clipToPadding">false</item>
     </style>
 
-    <style name="Widget.CommonUiTheme.GridView" parent="Widget.CommonUiTheme.ScrollView">
-        <item name="android:columnWidth">?attr/commonuiGridEntriesItemWidth</item>
-        <item name="android:horizontalSpacing">?attr/commonuiGridEntriesSpacing</item>
-        <item name="android:verticalSpacing">?attr/commonuiGridEntriesSpacing</item>
-        <item name="android:numColumns">auto_fit</item>
-        <item name="android:listSelector">@android:color/transparent</item>
-    </style>
-
-    <style name="Widget.CommonUiTheme.GridEntries" parent="Widget.CommonUiTheme.GridView">
-        <item name="android:paddingLeft">?attr/commonuiActivityHorizontalMargin</item>
-        <item name="android:paddingRight">?attr/commonuiActivityHorizontalMargin</item>
-        <item name="android:paddingTop">?attr/commonuiActivityVerticalMargin</item>
-        <item name="android:paddingBottom">?attr/commonuiActivityVerticalMargin</item>
-    </style>
-
     <style name="Widget.CommonUiTheme.GridEntriesItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/commonuiGridEntriesItemHeight</item>
         <item name="android:background">?attr/commonuiGridEntriesItemBkg</item>
         <item name="android:textAppearance">?attr/commonuiGridEntriesItemTextAppearance</item>
-    </style>
-
-    <style name="Widget.CommonUiTheme.ListView" parent="Widget.CommonUiTheme.ScrollView">
-        <item name="android:listSelector">@android:color/transparent</item>
-        <item name="android:fadeScrollbars">true</item>
     </style>
 
     <style name="Widget.CommonUiTheme.ListViewItem">
@@ -57,15 +37,18 @@
         <item name="android:paddingBottom">?attr/commonuiListItemVerticalMargin</item>
     </style>
 
-    <style name="Widget.CommonUiTheme.ListEntries" parent="Widget.CommonUiTheme.ListView">
-        <item name="android:paddingLeft">?attr/commonuiActivityHorizontalMargin</item>
-        <item name="android:paddingRight">?attr/commonuiActivityHorizontalMargin</item>
+    <style name="Widget.CommonUiTheme.RecyclerView">
+        <item name="android:paddingStart">?attr/commonuiActivityHorizontalMargin</item>
+        <item name="android:paddingEnd">?attr/commonuiActivityHorizontalMargin</item>
         <item name="android:paddingTop">?attr/commonuiActivityVerticalMargin</item>
         <item name="android:paddingBottom">?attr/commonuiActivityVerticalMargin</item>
     </style>
 
-    <style name="Widget.CommonUiTheme.ListEntries.FastScroll">
-        <item name="android:fastScrollEnabled">true</item>
+    <style name="Widget.CommonUiTheme.RecyclerView.FastScroll">
+        <item name="fastScrollEnabled">true</item>
+        <item name="fastScrollHorizontalTrackDrawable">@drawable/commonui_scrollbar_track</item>
+        <item name="fastScrollHorizontalThumbDrawable">@drawable/commonui_scrollbar_thumb</item>
+        <item name="fastScrollVerticalTrackDrawable">@drawable/commonui_scrollbar_track</item>
+        <item name="fastScrollVerticalThumbDrawable">@drawable/commonui_scrollbar_thumb</item>
     </style>
-
 </resources>
