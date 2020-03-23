@@ -22,6 +22,8 @@ data class AppInfo(val pkgName: String) {
     var isDisabled: Boolean = false
     var isUnmounted: Boolean = false
     var isSelected: Boolean = false
+    var targetSdkVersion: Int = 0
+    var minSdkVersion: Int = 0
 
     override fun toString(): String {
         val sb = StringBuilder()
@@ -45,10 +47,10 @@ data class AppInfo(val pkgName: String) {
     }
 
     class AppNameComparator : Comparator<AppInfo> {
-        private val mCollator = Collator.getInstance()
+        private val collator = Collator.getInstance()
 
         override fun compare(lhs: AppInfo, rhs: AppInfo): Int {
-            return mCollator.compare(lhs.appName, rhs.appName)
+            return collator.compare(lhs.appName, rhs.appName)
         }
     }
 
@@ -59,44 +61,50 @@ data class AppInfo(val pkgName: String) {
     }
 
     class UidComparator : Comparator<AppInfo> {
-        private val mPkgNameComparator = PkgNameComparator()
+        private val pkgNameComparator = PkgNameComparator()
 
         override fun compare(lhs: AppInfo, rhs: AppInfo): Int {
-            return if (lhs.appUid < rhs.appUid) {
-                -1
-            } else if (lhs.appUid > rhs.appUid) {
-                1
-            } else {
-                mPkgNameComparator.compare(lhs, rhs)
+            return when {
+                lhs.appUid < rhs.appUid -> -1
+                lhs.appUid > rhs.appUid -> 1
+                else -> pkgNameComparator.compare(lhs, rhs)
             }
         }
     }
 
     class InstallTimeComparator : Comparator<AppInfo> {
-        private val mPkgNameComparator = PkgNameComparator()
+        private val pkgNameComparator = PkgNameComparator()
 
         override fun compare(lhs: AppInfo, rhs: AppInfo): Int {
-            return if (lhs.installTime < rhs.installTime) {
-                1
-            } else if (lhs.installTime > rhs.installTime) {
-                -1
-            } else {
-                mPkgNameComparator.compare(lhs, rhs)
+            return when {
+                lhs.installTime < rhs.installTime -> 1
+                lhs.installTime > rhs.installTime -> -1
+                else -> pkgNameComparator.compare(lhs, rhs)
             }
         }
     }
 
     class UpdateTimeComparator : Comparator<AppInfo> {
-        private val mPkgNameComparator = PkgNameComparator()
+        private val pkgNameComparator = PkgNameComparator()
 
         override fun compare(lhs: AppInfo, rhs: AppInfo): Int {
-            return if (lhs.updateTime < rhs.updateTime) {
-                1
-            } else if (lhs.updateTime > rhs.updateTime) {
-                -1
-            } else {
-                mPkgNameComparator.compare(lhs, rhs)
+            return when {
+                lhs.updateTime < rhs.updateTime -> 1
+                lhs.updateTime > rhs.updateTime -> -1
+                else -> pkgNameComparator.compare(lhs, rhs)
             }
+        }
+    }
+
+    class TargetSdkComparator : Comparator<AppInfo> {
+        override fun compare(lhs: AppInfo, rhs: AppInfo): Int {
+            return lhs.targetSdkVersion - rhs.targetSdkVersion
+        }
+    }
+
+    class MinSdkComparator : Comparator<AppInfo> {
+        override fun compare(lhs: AppInfo, rhs: AppInfo): Int {
+            return lhs.minSdkVersion - rhs.minSdkVersion
         }
     }
 }

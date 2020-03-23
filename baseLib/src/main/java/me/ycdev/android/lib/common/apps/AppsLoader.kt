@@ -125,6 +125,11 @@ class AppsLoader private constructor(cxt: Context) {
             item.appIcon = pkgInfo.applicationInfo.loadIcon(pm)
         }
 
+        item.targetSdkVersion = pkgInfo.applicationInfo.targetSdkVersion
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            item.minSdkVersion = pkgInfo.applicationInfo.minSdkVersion
+        }
+
         return item
     }
 
