@@ -1,7 +1,7 @@
 /*
  * File: 'android_project_common.gradle'
  * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
- * Version: 2020.03.13
+ * Version: 2020.03.24
  * All android projects can copy and include this file.
  */
 
@@ -87,7 +87,7 @@ ext {
 
             // network & image
             'okhttp'           : "3.9.0",
-            'retrofit'         : "2.3.0",
+            'retrofit'         : "2.7.2",
             'glide'            : "4.10.0",
             'glideTrans'       : "4.0.0",
 
@@ -175,6 +175,7 @@ ext {
                     'rxjava'           : "androidx.room:room-rxjava2:${versions.room}",
                     'testing'          : "androidx.room:room-testing:${versions.room}",
                     'ktx'              : "androidx.room:room-ktx:${versions.room}",
+                    'coroutines'       : "androidx.room:room-coroutines:${versions.room}",
             ],
             'sqlite': [
                     'sqlite'           : "androidx.sqlite:sqlite:${versions.sqlite}",
