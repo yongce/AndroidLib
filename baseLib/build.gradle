@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
+apply from: '../build_common.gradle'
 
 project.archivesBaseName = 'common-base'
 
@@ -25,7 +26,7 @@ dependencies {
     implementation deps.timber
 
     // Dependencies for local unit tests
-    testImplementation project(':testLib')
+    testImplementation deps.ycdev.androidTest
     testImplementation deps.test.junit
     testImplementation deps.test.runner
     testImplementation deps.test.rules
@@ -48,5 +49,7 @@ project.ext {
     moduleDesc = 'Common basic module in AndroidLib project'
 }
 
-apply from: rootProject.file('bintray-install.gradle')
-apply from: rootProject.file('bintray-upload.gradle')
+if (bintrayUploadEnabled) {
+    apply from: rootProject.file('bintray-install.gradle')
+    apply from: rootProject.file('bintray-upload.gradle')
+}

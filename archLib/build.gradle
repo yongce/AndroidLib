@@ -2,8 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
-
-project.archivesBaseName = 'common-arch'
+apply from: '../build_common.gradle'
 
 android {
     defaultConfig {
@@ -17,16 +16,8 @@ android {
 dependencies {
     lintChecks project(':archLintRules')
     lintPublish project(':archLintRules')
-    api project(':baseLib')
+    api deps.ycdev.androidBase
 
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
 }
-
-project.ext {
-    moduleName = 'me.ycdev.android.common-arch'
-    moduleDesc = 'Common arch module in AndroidLib project'
-}
-
-apply from: rootProject.file('bintray-install.gradle')
-apply from: rootProject.file('bintray-upload.gradle')

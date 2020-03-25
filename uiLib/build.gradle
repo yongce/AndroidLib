@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "${androidModuleCommon}"
+apply from: '../build_common.gradle'
 
 project.archivesBaseName = 'common-ui'
 
@@ -18,8 +19,7 @@ android {
 }
 
 dependencies {
-    api project(':archLib')
-    api project(':baseLib')
+    api deps.ycdev.androidBase
 
     implementation deps.kotlin.stdlib
     implementation deps.androidx.appcompat
@@ -32,5 +32,7 @@ project.ext {
     moduleDesc = 'Common UI module in AndroidLib project'
 }
 
-apply from: rootProject.file('bintray-install.gradle')
-apply from: rootProject.file('bintray-upload.gradle')
+if (bintrayUploadEnabled) {
+    apply from: rootProject.file('bintray-install.gradle')
+    apply from: rootProject.file('bintray-upload.gradle')
+}

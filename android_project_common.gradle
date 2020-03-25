@@ -1,7 +1,7 @@
 /*
  * File: 'android_project_common.gradle'
  * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
- * Version: 2020.03.24
+ * Version: 2020.03.26
  * All android projects can copy and include this file.
  */
 
@@ -36,7 +36,7 @@ ext {
             'compileSdk'       : 29,
 
             // Android official support
-            'kotlin'           : "1.3.70",
+            'kotlin'           : "1.3.71",
             'kotlinCoroutine'  : "1.3.4",
             'multidexLib'      : "2.0.1",
             'androidxCore'     : "1.2.0",
@@ -96,7 +96,7 @@ ext {
             'rxandroid'        : "2.1.1",
 
             // ycdev
-            'androidLib'       : "1.5.5",
+            'androidLib'       : "1.6.0",
 
             // others
             'zxing'            : "3.3.1",

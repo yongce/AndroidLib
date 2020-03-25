@@ -32,10 +32,9 @@ allprojects {
 }
 
 ext {
-    versions.minSdk = 21
     versions.ndkVersion = "21.0.6113669"
 
-    // For bintray upload
+    bintrayUploadEnabled = true
     bintrayMaven = [
             'projectRepo': 'android',
             'projectUrl': 'https://github.com/yongce/AndroidLib',
@@ -43,10 +42,18 @@ ext {
             'projectScmDevConnection': 'ssh://git@github.com/yongce/AndroidLib.git',
             'projectInceptionYear': '2013',
             'groupId': 'me.ycdev.android',
-            'version': '1.5.5',
+            'version': '1.6.0',
             'developerId': 'yongce',
             'developerName': 'Yongce Tu',
             'developerEmail': 'yongce.tu@gmail.com',
+    ]
+
+    // Trick: other projects can redefine the mapping to include the modules directly
+    deps.ycdev = [
+            'androidBase': project(':baseLib'),
+            'androidUi'  : project(':uiLib'),
+            'androidJni' : project(':jniLib'),
+            'androidTest': project(':testLib'),
     ]
 }
 

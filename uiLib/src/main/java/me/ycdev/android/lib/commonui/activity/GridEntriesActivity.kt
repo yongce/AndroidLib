@@ -11,21 +11,20 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import me.ycdev.android.arch.ArchConstants
-import me.ycdev.android.arch.ArchConstants.IntentType
-import me.ycdev.android.arch.activity.AppCompatBaseActivity
-import me.ycdev.android.arch.wrapper.ToastHelper
 import me.ycdev.android.lib.common.utils.IntentUtils
+import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_ACTIVITY
+import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_BROADCAST
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.commonui.R
 import me.ycdev.android.lib.commonui.databinding.CommonuiGridEntriesItemBinding
 import me.ycdev.android.lib.commonui.recyclerview.MarginItemDecoration
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-abstract class GridEntriesActivity : AppCompatBaseActivity() {
+abstract class GridEntriesActivity : AppCompatActivity() {
 
     protected lateinit var entriesAdapter: SystemEntriesAdapter
     protected lateinit var gridView: RecyclerView
@@ -44,28 +43,28 @@ abstract class GridEntriesActivity : AppCompatBaseActivity() {
     )
 
     open class IntentEntry(
-        @IntentType val type: Int = ArchConstants.INTENT_TYPE_ACTIVITY,
+        @IntentUtils.IntentType val type: Int = INTENT_TYPE_ACTIVITY,
         val intent: Intent,
         title: String,
         desc: String,
         val perm: String? = null
     ) : Entry(title, desc) {
         constructor(intent: Intent, title: String, desc: String) :
-                this(ArchConstants.INTENT_TYPE_ACTIVITY, intent, title, desc)
+                this(INTENT_TYPE_ACTIVITY, intent, title, desc)
 
         override val clickAction: ((Context) -> Unit)? = ::onItemClicked
         override val longClickAction: ((Context) -> Unit)? = ::onItemLongClicked
 
         protected open fun onItemClicked(context: Context) {
-            if (type == ArchConstants.INTENT_TYPE_ACTIVITY) {
+            if (type == INTENT_TYPE_ACTIVITY) {
                 IntentUtils.startActivity(context, intent)
-            } else if (type == ArchConstants.INTENT_TYPE_BROADCAST) {
+            } else if (type == INTENT_TYPE_BROADCAST) {
                 BroadcastHelper.sendToExternal(context, intent, perm)
             }
         }
 
         protected open fun onItemLongClicked(context: Context) {
-            ToastHelper.show(context, desc, Toast.LENGTH_LONG)
+            Toast.makeText(context, desc, Toast.LENGTH_LONG).show()
         }
     }
 

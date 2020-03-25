@@ -10,11 +10,20 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.PowerManager
+import androidx.annotation.IntDef
 import timber.log.Timber
 
 @Suppress("MemberVisibilityCanBePrivate")
 object IntentUtils {
     private const val TAG = "IntentUtils"
+
+    const val INTENT_TYPE_ACTIVITY = 1
+    const val INTENT_TYPE_BROADCAST = 2
+    const val INTENT_TYPE_SERVICE = 3
+
+    @IntDef(INTENT_TYPE_ACTIVITY, INTENT_TYPE_BROADCAST, INTENT_TYPE_SERVICE)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class IntentType
 
     const val EXTRA_FOREGROUND_SERVICE = "extra.foreground_service"
 
