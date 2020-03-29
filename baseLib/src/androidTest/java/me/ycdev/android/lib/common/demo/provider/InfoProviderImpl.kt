@@ -3,7 +3,6 @@ package me.ycdev.android.lib.common.demo.provider
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.NonNull
-
 import me.ycdev.android.lib.common.provider.InfoProvider
 
 class InfoProviderImpl : InfoProvider() {

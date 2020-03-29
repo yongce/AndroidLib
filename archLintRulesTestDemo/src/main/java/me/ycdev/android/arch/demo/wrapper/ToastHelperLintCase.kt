@@ -2,7 +2,6 @@ package me.ycdev.android.arch.demo.wrapper
 
 import android.content.Context
 import android.widget.Toast
-
 import me.ycdev.android.arch.wrapper.ToastHelper
 
 object ToastHelperLintCase {

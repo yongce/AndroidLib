@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.RemoteException
 import androidx.annotation.Nullable
-
 import timber.log.Timber
 
 class RemoteService : Service() {

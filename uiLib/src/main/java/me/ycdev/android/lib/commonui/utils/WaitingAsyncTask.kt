@@ -2,7 +2,6 @@ package me.ycdev.android.lib.commonui.utils
 
 import android.app.Activity
 import android.os.SystemClock
-
 import me.ycdev.android.lib.commonui.base.WaitingAsyncTaskBase
 
 class WaitingAsyncTask(

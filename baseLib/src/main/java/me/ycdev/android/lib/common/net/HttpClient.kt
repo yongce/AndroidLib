@@ -1,7 +1,5 @@
 package me.ycdev.android.lib.common.net
 
-import me.ycdev.android.lib.common.utils.IoUtils
-import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -9,6 +7,8 @@ import java.net.HttpURLConnection
 import java.util.HashMap
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
+import me.ycdev.android.lib.common.utils.IoUtils
+import me.ycdev.android.lib.common.utils.LibLogger
 
 @Suppress("unused")
 class HttpClient {

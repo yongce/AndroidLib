@@ -1,7 +1,7 @@
 package me.ycdev.android.lib.test.log
 
-import timber.log.Timber
 import java.util.ArrayList
+import timber.log.Timber
 
 @Suppress("unused")
 class TimberJvmTree : Timber.Tree() {

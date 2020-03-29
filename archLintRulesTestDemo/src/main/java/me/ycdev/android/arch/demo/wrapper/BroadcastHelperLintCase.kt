@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 
 object BroadcastHelperLintCase {

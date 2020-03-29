@@ -6,7 +6,6 @@ import android.os.Looper
 import android.os.Message
 import androidx.annotation.MainThread
 import androidx.annotation.RestrictTo
-
 import me.ycdev.android.lib.common.utils.Preconditions
 import timber.log.Timber
 

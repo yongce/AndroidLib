@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.PowerManager
-
 import me.ycdev.android.lib.common.utils.LibLogger
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 

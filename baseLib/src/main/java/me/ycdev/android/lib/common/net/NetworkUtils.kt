@@ -8,11 +8,11 @@ import android.text.TextUtils
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
-import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import me.ycdev.android.lib.common.utils.LibLogger
 
 @Suppress("unused")
 object NetworkUtils {

@@ -3,13 +3,13 @@ package me.ycdev.android.lib.common.internalapi.android.os
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import androidx.annotation.RestrictTo
-import me.ycdev.android.lib.common.utils.IoUtils
-import me.ycdev.android.lib.common.utils.StringUtils
-import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import me.ycdev.android.lib.common.utils.IoUtils
+import me.ycdev.android.lib.common.utils.StringUtils
+import timber.log.Timber
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 @SuppressLint("PrivateApi")

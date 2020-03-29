@@ -6,7 +6,6 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-
 import me.ycdev.android.lib.common.utils.LibLogger
 
 class InfoProviderClient(cxt: Context, private val authority: String) {

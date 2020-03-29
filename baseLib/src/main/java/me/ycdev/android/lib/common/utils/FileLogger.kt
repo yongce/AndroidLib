@@ -5,7 +5,6 @@ import android.os.Process
 import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.GuardedBy
-
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException

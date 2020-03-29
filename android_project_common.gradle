@@ -1,7 +1,7 @@
 /*
  * File: 'android_project_common.gradle'
  * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
- * Version: 2020.03.26
+ * Version: 2020.03.30
  * All android projects can copy and include this file.
  */
 
@@ -79,7 +79,7 @@ ext {
             // debug
             'leakcanary'       : "1.6.3",
             'stetho'           : "1.5.0",
-            'ktlint'           : "0.29.0",
+            'ktlint'           : "0.36.0",
 
             // serializing
             'gson'             : "2.8.2",

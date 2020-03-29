@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.os.AsyncTask
-
 import me.ycdev.android.lib.common.utils.LibLogger
 import me.ycdev.android.lib.commonui.R
 

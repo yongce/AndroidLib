@@ -1,7 +1,6 @@
 package me.ycdev.android.lib.commonui.base
 
 import android.app.Activity
-
 import me.ycdev.android.lib.commonui.R
 
 @Suppress("unused")

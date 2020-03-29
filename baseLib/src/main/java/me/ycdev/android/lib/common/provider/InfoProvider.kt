@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-
 import me.ycdev.android.lib.common.utils.LibLogger
 
 abstract class InfoProvider : ContentProvider() {

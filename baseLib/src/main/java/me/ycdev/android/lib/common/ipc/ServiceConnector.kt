@@ -14,10 +14,10 @@ import android.os.SystemClock
 import androidx.annotation.IntDef
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import java.util.concurrent.atomic.AtomicInteger
 import me.ycdev.android.lib.common.utils.Preconditions
 import me.ycdev.android.lib.common.utils.WeakListenerManager
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @constructor

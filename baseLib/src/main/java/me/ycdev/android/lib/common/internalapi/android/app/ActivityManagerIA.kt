@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.IBinder
 import androidx.annotation.RestrictTo
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
 import me.ycdev.android.lib.common.internalapi.android.os.ServiceManagerIA
 import me.ycdev.android.lib.common.internalapi.android.os.UserHandleIA
 import timber.log.Timber
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
 
 @Suppress("unused")
 @SuppressLint("PrivateApi")

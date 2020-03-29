@@ -6,13 +6,13 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import java.io.File
+import java.util.ArrayList
+import java.util.HashMap
 import me.ycdev.android.lib.common.pattern.SingletonHolderP1
 import me.ycdev.android.lib.common.utils.MiscUtils
 import me.ycdev.android.lib.common.utils.PackageUtils
 import me.ycdev.android.lib.common.utils.StringUtils
-import java.io.File
-import java.util.ArrayList
-import java.util.HashMap
 
 class AppsLoader private constructor(cxt: Context) {
     private val appContext: Context = cxt.applicationContext

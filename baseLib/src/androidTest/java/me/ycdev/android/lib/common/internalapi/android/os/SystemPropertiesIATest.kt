@@ -1,13 +1,10 @@
 package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.os.Build
-
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import androidx.test.ext.junit.runners.AndroidJUnit4
-
-import org.junit.Assert.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class SystemPropertiesIATest {

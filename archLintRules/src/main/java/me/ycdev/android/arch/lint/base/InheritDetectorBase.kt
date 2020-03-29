@@ -2,9 +2,9 @@ package me.ycdev.android.arch.lint.base
 
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.JavaContext
+import java.util.HashSet
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
-import java.util.HashSet
 
 abstract class InheritDetectorBase : Detector(), Detector.UastScanner {
     protected abstract val applicableClasses: List<String>

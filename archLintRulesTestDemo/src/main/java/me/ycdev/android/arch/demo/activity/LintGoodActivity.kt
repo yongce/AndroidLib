@@ -3,7 +3,6 @@ package me.ycdev.android.arch.demo.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-
 import me.ycdev.android.arch.activity.AppCompatBaseActivity
 
 class LintGoodActivity : AppCompatBaseActivity() { // lint good

@@ -1,7 +1,6 @@
 package me.ycdev.android.lib.test
 
 import android.os.SystemClock
-
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
 

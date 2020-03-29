@@ -3,14 +3,11 @@ package me.ycdev.android.lib.common.async
 import android.os.Looper
 import android.os.SystemClock
 import androidx.test.filters.LargeTest
-
-import org.junit.Test
-
+import com.google.common.truth.Truth.assertThat
 import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-
-import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 
 @LargeTest
 class HandlerExecutorTest {

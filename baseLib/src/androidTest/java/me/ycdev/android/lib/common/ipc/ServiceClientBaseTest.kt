@@ -3,25 +3,20 @@ package me.ycdev.android.lib.common.ipc
 import android.content.Context
 import android.os.Looper
 import android.os.SystemClock
-
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SmallTest
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
+import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-
+import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.demo.service.LocalServiceClient
 import me.ycdev.android.lib.common.demo.service.RemoteServiceClient
 import me.ycdev.android.lib.common.demo.service.operation.HelloOperation
 import me.ycdev.android.lib.common.utils.ThreadManager
-
-import com.google.common.truth.Truth.assertThat
-import me.ycdev.android.lib.common.demo.service.IDemoService
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest

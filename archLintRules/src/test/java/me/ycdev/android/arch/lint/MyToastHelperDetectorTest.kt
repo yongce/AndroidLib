@@ -2,12 +2,9 @@ package me.ycdev.android.arch.lint
 
 import com.android.tools.lint.checks.infrastructure.TestFile
 import com.android.tools.lint.checks.infrastructure.TestFiles
-
-import org.junit.Test
-
-import me.ycdev.android.arch.lint.utils.TestFileStubs
-
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
+import me.ycdev.android.arch.lint.utils.TestFileStubs
+import org.junit.Test
 
 class MyToastHelperDetectorTest {
     @Test

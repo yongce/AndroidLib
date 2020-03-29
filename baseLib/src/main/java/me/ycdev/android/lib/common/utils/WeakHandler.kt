@@ -1,9 +1,8 @@
 package me.ycdev.android.lib.common.utils
 
-import java.lang.ref.WeakReference
-
 import android.os.Handler
 import android.os.Message
+import java.lang.ref.WeakReference
 
 @Suppress("unused")
 class WeakHandler(msgHandler: Callback) : Handler() {

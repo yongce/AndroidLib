@@ -1,10 +1,8 @@
 package me.ycdev.android.lib.common.apps
 
 import android.graphics.drawable.Drawable
-
 import java.text.Collator
 import java.util.Comparator
-
 import me.ycdev.android.lib.common.utils.DateTimeUtils
 
 data class AppInfo(val pkgName: String) {

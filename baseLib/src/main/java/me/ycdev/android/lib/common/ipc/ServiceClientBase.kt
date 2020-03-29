@@ -6,8 +6,8 @@ import android.os.Looper
 import android.os.Message
 import android.os.RemoteException
 import androidx.annotation.WorkerThread
-import timber.log.Timber
 import java.util.LinkedList
+import timber.log.Timber
 
 open class ServiceClientBase<IService> protected constructor(
     context: Context,

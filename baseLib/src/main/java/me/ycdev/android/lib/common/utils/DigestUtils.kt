@@ -1,6 +1,5 @@
 package me.ycdev.android.lib.common.utils
 
-import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -8,6 +7,7 @@ import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 
 @Suppress("unused")
 object DigestUtils {

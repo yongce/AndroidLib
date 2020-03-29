@@ -6,7 +6,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertWithMessage
-import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_2G
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_3G
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_4G
@@ -14,6 +13,7 @@ import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_COMPANION_PROXY
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_MOBILE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_NONE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_WIFI
+import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType
 import me.ycdev.android.lib.common.utils.SystemSwitchUtils
 import org.junit.Rule
 import org.junit.Test

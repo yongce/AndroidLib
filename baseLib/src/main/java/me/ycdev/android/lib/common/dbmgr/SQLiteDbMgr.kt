@@ -2,9 +2,9 @@ package me.ycdev.android.lib.common.dbmgr
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import java.util.HashMap
 import me.ycdev.android.lib.common.pattern.SingletonHolderP1
 import timber.log.Timber
-import java.util.HashMap
 
 @Suppress("unused")
 class SQLiteDbMgr private constructor(cxt: Context) {

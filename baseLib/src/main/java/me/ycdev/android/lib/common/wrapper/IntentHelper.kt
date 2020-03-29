@@ -3,9 +3,9 @@ package me.ycdev.android.lib.common.wrapper
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.Serializable
 import java.util.ArrayList
+import me.ycdev.android.lib.common.utils.LibLogger
 
 /**
  * A wrapper class to avoid security issues when parsing Intent extras.

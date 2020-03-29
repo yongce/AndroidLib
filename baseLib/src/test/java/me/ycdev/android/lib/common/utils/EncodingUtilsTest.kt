@@ -1,12 +1,11 @@
 package me.ycdev.android.lib.common.utils
 
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.ExpectedException
-
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.ExpectedException
 
 class EncodingUtilsTest {
     @get:Rule

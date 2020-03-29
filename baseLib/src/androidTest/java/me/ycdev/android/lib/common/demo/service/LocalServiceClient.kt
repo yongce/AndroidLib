@@ -2,7 +2,6 @@ package me.ycdev.android.lib.common.demo.service
 
 import android.content.Context
 import androidx.annotation.NonNull
-
 import me.ycdev.android.lib.common.ipc.ServiceClientBase
 import me.ycdev.android.lib.common.utils.ThreadManager
 

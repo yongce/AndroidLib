@@ -1,9 +1,8 @@
 package me.ycdev.android.lib.common.utils
 
-import org.junit.Test
-
 import me.ycdev.android.lib.common.type.BooleanHolder
 import me.ycdev.android.lib.test.base.NormalJUnitBase
+import org.junit.Test
 import timber.log.Timber
 
 class GcHelperTest : NormalJUnitBase() {

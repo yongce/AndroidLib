@@ -12,6 +12,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.MediumTest
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
+import java.util.concurrent.CountDownLatch
 import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.demo.service.LocalServiceConnector
 import me.ycdev.android.lib.common.demo.service.RemoteService
@@ -23,7 +24,6 @@ import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest

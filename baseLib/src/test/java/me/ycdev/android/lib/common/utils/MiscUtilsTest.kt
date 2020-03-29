@@ -1,12 +1,10 @@
 package me.ycdev.android.lib.common.utils
 
 import androidx.test.filters.SmallTest
-
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.assertEquals
 
 @SmallTest
 class MiscUtilsTest {

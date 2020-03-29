@@ -2,7 +2,6 @@ package me.ycdev.android.lib.common.utils
 
 import android.content.Context
 import android.os.Environment
-
 import java.io.File
 
 @Suppress("unused")

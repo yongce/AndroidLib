@@ -2,7 +2,6 @@ package me.ycdev.android.arch.demo.wrapper
 
 import android.content.Intent
 import android.os.Bundle
-
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 
 object IntentHelperLintCase {
