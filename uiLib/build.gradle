@@ -11,6 +11,7 @@ android {
         minSdkVersion versions.minSdk
     }
 
+    resourcePrefix 'ycdev'
     viewBinding.enabled = true
 
     lintOptions {

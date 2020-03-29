@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    For "public & private resources",
+    please refer https://developer.android.com/studio/projects/android-library.html#PrivateResources
+    !-->
+    <public type="string" name="ycdev_tips_loading" />
+    <public type="string" name="ycdev_tips_loading_percent" />
+
+    <public type="attr" name="ycdevActivityHorizontalMargin" />
+    <public type="attr" name="ycdevActivityVerticalMargin" />
+</resources>

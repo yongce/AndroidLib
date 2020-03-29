@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="YcdevWidget" parent="@android:style/Widget" />
+    <style name="YcdevWidget.Light" />
+
+    <style name="YcdevWidget.HorizontalDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">?attr/ycdevDividerMargin</item>
+        <item name="android:layout_marginBottom">?attr/ycdevDividerMargin</item>
+        <item name="android:background">?attr/ycdevDividerColor</item>
+    </style>
+
+    <style name="YcdevWidget.ActivityMargin">
+        <item name="android:paddingStart">?attr/ycdevActivityHorizontalMargin</item>
+        <item name="android:paddingEnd">?attr/ycdevActivityHorizontalMargin</item>
+        <item name="android:paddingTop">?attr/ycdevActivityVerticalMargin</item>
+        <item name="android:paddingBottom">?attr/ycdevActivityVerticalMargin</item>
+    </style>
+
+    <style name="YcdevWidget.ScrollView">
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
+    <style name="YcdevWidget.GridEntriesItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/ycdevGridEntriesItemHeight</item>
+        <item name="android:background">?attr/ycdevGridEntriesItemBkg</item>
+        <item name="android:textAppearance">?attr/ycdevGridEntriesItemTextAppearance</item>
+    </style>
+
+    <style name="YcdevWidget.ListViewItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">?attr/ycdevListItemVerticalMargin</item>
+        <item name="android:paddingBottom">?attr/ycdevListItemVerticalMargin</item>
+    </style>
+
+    <style name="YcdevWidget.RecyclerView">
+        <item name="android:paddingStart">?attr/ycdevActivityHorizontalMargin</item>
+        <item name="android:paddingEnd">?attr/ycdevActivityHorizontalMargin</item>
+        <item name="android:paddingTop">?attr/ycdevActivityVerticalMargin</item>
+        <item name="android:paddingBottom">?attr/ycdevActivityVerticalMargin</item>
+    </style>
+
+    <style name="YcdevWidget.RecyclerView.FastScroll">
+        <item name="fastScrollEnabled">true</item>
+        <item name="fastScrollHorizontalTrackDrawable">@drawable/ycdev_scrollbar_track</item>
+        <item name="fastScrollHorizontalThumbDrawable">@drawable/ycdev_scrollbar_thumb</item>
+        <item name="fastScrollVerticalTrackDrawable">@drawable/ycdev_scrollbar_track</item>
+        <item name="fastScrollVerticalThumbDrawable">@drawable/ycdev_scrollbar_thumb</item>
+    </style>
+</resources>

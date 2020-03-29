@@ -20,7 +20,7 @@ import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_ACTIVITY
 import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_BROADCAST
 import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.commonui.R
-import me.ycdev.android.lib.commonui.databinding.CommonuiGridEntriesItemBinding
+import me.ycdev.android.lib.commonui.databinding.YcdevGridEntriesItemBinding
 import me.ycdev.android.lib.commonui.recyclerview.MarginItemDecoration
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
@@ -31,7 +31,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
     protected lateinit var loadingView: ProgressBar
 
     protected open val contentViewLayout: Int
-        @LayoutRes get() = R.layout.commonui_grid_entries
+        @LayoutRes get() = R.layout.ycdev_grid_entries
 
     protected abstract val intents: List<Entry>
 
@@ -91,7 +91,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
     }
 
     open fun getGridEntriesMargin(): Int {
-        val a = obtainStyledAttributes(intArrayOf(R.attr.commonuiGridEntriesItemMargin))
+        val a = obtainStyledAttributes(intArrayOf(R.attr.ycdevGridEntriesItemMargin))
         val margin: Int = a.getDimensionPixelSize(0, 0)
         a.recycle()
         return margin
@@ -140,7 +140,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = LayoutInflater.from(context)
-                .inflate(R.layout.commonui_grid_entries_item, parent, false)
+                .inflate(R.layout.ycdev_grid_entries_item, parent, false)
             return ViewHolder(itemView)
         }
 
@@ -156,7 +156,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
         }
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val binding: CommonuiGridEntriesItemBinding = CommonuiGridEntriesItemBinding.bind(itemView)
+            val binding: YcdevGridEntriesItemBinding = YcdevGridEntriesItemBinding.bind(itemView)
         }
     }
 }

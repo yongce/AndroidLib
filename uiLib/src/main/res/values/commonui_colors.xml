@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="commonui_divider_color">#00aaaa</color>
-    <color name="commonui_grid_entries_item_bkg_normal">#007777</color>
-    <color name="commonui_grid_entries_item_bkg_focused">#008888</color>
-    <color name="commonui_grid_entries_item_bkg_pressed">#00aaaa</color>
-</resources>

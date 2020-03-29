@@ -8,7 +8,7 @@ import me.ycdev.android.lib.commonui.R
 abstract class LoadingAsyncTaskBase<Params, Result> : WaitingAsyncTaskBase<Params, Int, Result> {
 
     override val initMessage: String
-        get() = activity.getString(R.string.commonui_tips_loading_percent, 0)
+        get() = activity.getString(R.string.ycdev_tips_loading_percent, 0)
 
     constructor(activity: Activity) : super(activity)
 
@@ -21,7 +21,7 @@ abstract class LoadingAsyncTaskBase<Params, Result> : WaitingAsyncTaskBase<Param
     override fun onProgressUpdate(vararg values: Int?) {
         val percent = values[0]
         if (dialog.isShowing) {
-            dialog.setMessage(activity.getString(R.string.commonui_tips_loading_percent, percent))
+            dialog.setMessage(activity.getString(R.string.ycdev_tips_loading_percent, percent))
         }
     }
 }

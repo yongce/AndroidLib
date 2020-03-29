@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="YcdevTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="ycdevActivityHorizontalMargin">@dimen/ycdev_activity_horizontal_margin</item>
+        <item name="ycdevActivityVerticalMargin">@dimen/ycdev_activity_vertical_margin</item>
+
+        <item name="ycdevDividerMargin">@dimen/ycdev_divider_margin</item>
+        <item name="ycdevDividerColor">@color/ycdev_divider_color</item>
+
+        <item name="ycdevGridEntriesItemStyle">@style/YcdevWidget.GridEntriesItem</item>
+        <item name="ycdevGridEntriesItemHeight">@dimen/ycdev_grid_entries_item_height</item>
+        <item name="ycdevGridEntriesItemMargin">@dimen/ycdev_grid_entries_item_margin</item>
+        <item name="ycdevGridEntriesItemBkg">@drawable/ycdev_grid_entries_item_bkg</item>
+        <item name="ycdevGridEntriesItemTextAppearance">@android:style/TextAppearance.Small</item>
+
+        <item name="ycdevListItemVerticalMargin">@dimen/ycdev_list_view_item_vertical_margin</item>
+
+    </style>
+
+    <style name="YcdevTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="YcdevTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

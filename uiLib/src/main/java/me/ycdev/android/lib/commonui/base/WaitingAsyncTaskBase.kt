@@ -19,7 +19,7 @@ abstract class WaitingAsyncTaskBase<Params, Progress, Result> constructor(
     protected lateinit var dialog: ProgressDialog
 
     protected open val initMessage: String
-        get() = activity.getString(R.string.commonui_tips_loading)
+        get() = activity.getString(R.string.ycdev_tips_loading)
 
     fun setAutoFinishWhenCanceled(autoFinishWhenCanceled: Boolean) {
         mAutoFinishWhenCanceled = autoFinishWhenCanceled

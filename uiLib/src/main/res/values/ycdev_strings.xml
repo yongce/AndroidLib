@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ycdev_tips_loading">Loading…</string>
+    <string name="ycdev_tips_loading_percent">Loading…%1$d%%</string>
+
+</resources>

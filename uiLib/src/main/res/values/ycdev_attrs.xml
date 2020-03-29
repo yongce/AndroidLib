@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Attrs for CommonUi theme BEGIN -->
+    <attr name="ycdevActivityHorizontalMargin" format="dimension" />
+    <attr name="ycdevActivityVerticalMargin" format="dimension" />
+
+    <attr name="ycdevDividerMargin" format="dimension" />
+    <attr name="ycdevDividerColor" format="color" />
+
+    <attr name="ycdevGridEntriesItemStyle" format="reference" />
+    <attr name="ycdevGridEntriesItemHeight" format="dimension" />
+    <attr name="ycdevGridEntriesItemMargin" format="dimension" />
+    <attr name="ycdevGridEntriesItemBkg" format="reference" />
+    <attr name="ycdevGridEntriesItemTextAppearance" format="reference" />
+
+    <attr name="ycdevListItemVerticalMargin" format="dimension" />
+    <!-- Attrs for CommonUi theme END -->
+</resources>
