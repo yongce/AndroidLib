@@ -12,24 +12,3 @@ jobs:
 
     - name: Build the project
       run: ./gradlew build
-
-  connectedCheck:
-    runs-on: macos-latest
-
-    strategy:
-      matrix:
-        api-level: [21, 23, 29]
-        target: [default, google_apis]
-
-    steps:
-    - name: checkout
-      uses: actions/checkout@v2
-
-    - name: run connectedCheck
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: ${{ matrix.api-level }}
-        target: ${{ matrix.target }}
-        arch: x86_64
-        profile: Nexus 6
-        script: ./gradlew connectedCheck
