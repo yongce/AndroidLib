@@ -1,12 +1,12 @@
 package me.ycdev.android.lib.common.utils
 
 import com.google.common.truth.Truth.assertThat
-import me.ycdev.android.lib.common.type.BooleanHolder
-import org.junit.Test
-import timber.log.Timber
 import java.lang.ref.ReferenceQueue
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
+import me.ycdev.android.lib.common.type.BooleanHolder
+import org.junit.Test
+import timber.log.Timber
 
 class GcHelperTest2 {
 
