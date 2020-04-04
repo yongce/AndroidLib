@@ -40,7 +40,7 @@ class HandlerExecutorTest {
         for (i in 0 until count) {
             tasks.add(Runnable {
                 println("main thread id=" + Thread.currentThread().id)
-                assertThat(Looper.myLooper()!!).isSameAs(Looper.getMainLooper())
+                assertThat(Looper.myLooper()).isSameInstanceAs(Looper.getMainLooper())
                 SystemClock.sleep(sleepMs)
                 latch.countDown()
             })

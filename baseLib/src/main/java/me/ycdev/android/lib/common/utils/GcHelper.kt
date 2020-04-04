@@ -15,7 +15,7 @@ object GcHelper {
         val memAllocSize = 1024 * 1024 // 1MB
         var memAllocCount: Long = 0
         while (true) {
-            System.gc()
+            Runtime.getRuntime().gc()
             ThreadUtils.sleep(100) // wait for GC
             if (gcState.value) {
                 break // GC happened
@@ -31,12 +31,11 @@ object GcHelper {
 
     fun forceGc() {
         val gcState = BooleanHolder(false)
-        // Must use another method to create the GC object. Don't know why!
-        createGcObject(gcState)
+        createGcWatcherObject(gcState)
         forceGc(gcState)
     }
 
-    private fun createGcObject(gcState: BooleanHolder) {
+    private fun createGcWatcherObject(gcState: BooleanHolder) {
         object : Any() {
             @Throws(Throwable::class)
             protected fun finalize() {

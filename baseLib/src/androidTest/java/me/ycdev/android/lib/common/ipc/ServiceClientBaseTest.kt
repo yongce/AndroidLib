@@ -35,7 +35,7 @@ class ServiceClientBaseTest {
             client.addOperation(object : IpcOperation<IDemoService> {
                 override fun execute(service: IDemoService) {
                     assertThat(service).isNotNull()
-                    assertThat(Looper.myLooper()!!).isSameAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
+                    assertThat(Looper.myLooper()).isSameInstanceAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
                     latch.countDown()
                 }
             })
@@ -51,7 +51,7 @@ class ServiceClientBaseTest {
             client.addOperation(object : IpcOperation<IDemoService> {
                 override fun execute(service: IDemoService) {
                     assertThat(service).isNotNull()
-                    assertThat(Looper.myLooper()!!).isSameAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
+                    assertThat(Looper.myLooper()).isSameInstanceAs(ThreadManager.instance.remoteServiceRequestIpcLooper())
                     latch.countDown()
                 }
             })

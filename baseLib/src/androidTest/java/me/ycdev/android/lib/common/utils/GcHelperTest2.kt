@@ -1,15 +1,14 @@
 package me.ycdev.android.lib.common.utils
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import me.ycdev.android.lib.common.type.BooleanHolder
-import me.ycdev.android.lib.test.base.NormalJUnitBase
 import org.junit.Test
 import timber.log.Timber
 import java.lang.ref.ReferenceQueue
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
 
-class GcHelperTest : NormalJUnitBase() {
+class GcHelperTest2 {
 
     @Test
     fun forceGc_default() {
@@ -38,7 +37,7 @@ class GcHelperTest : NormalJUnitBase() {
     fun checkWeakReference_demo1() {
         val objHolder = createWeakReferenceObject()
         GcHelper.forceGc()
-        Truth.assertThat(objHolder.get()).isNull()
+        assertThat(objHolder.get()).isNull()
     }
 
     private fun createWeakReferenceObject(): WeakReference<Dummy> {
@@ -51,8 +50,8 @@ class GcHelperTest : NormalJUnitBase() {
         val refQueue = ReferenceQueue<Dummy>()
         val objHolder = createWeakReferenceObject(refQueue)
         GcHelper.forceGc()
-        Truth.assertThat(objHolder.get()).isNull()
-        Truth.assertThat(refQueue.poll()).isSameInstanceAs(objHolder)
+        assertThat(objHolder.get()).isNull()
+        assertThat(refQueue.poll()).isSameInstanceAs(objHolder)
     }
 
     private fun createWeakReferenceObject(refQueue: ReferenceQueue<Dummy>): WeakReference<Dummy> {
@@ -64,7 +63,7 @@ class GcHelperTest : NormalJUnitBase() {
     fun checkSoftReference() {
         val objHolder = createSoftReferenceObject()
         GcHelper.forceGc()
-        Truth.assertThat(objHolder.get()).isNotNull()
+        assertThat(objHolder.get()).isNotNull()
     }
 
     private fun createSoftReferenceObject(): SoftReference<Dummy> {
@@ -75,6 +74,6 @@ class GcHelperTest : NormalJUnitBase() {
     private class Dummy
 
     companion object {
-        private const val TAG = "GcHelperTest"
+        private const val TAG = "GcHelperTest2"
     }
 }

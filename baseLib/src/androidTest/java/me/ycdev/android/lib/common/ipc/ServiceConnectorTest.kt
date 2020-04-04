@@ -12,18 +12,17 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.MediumTest
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import java.util.concurrent.CountDownLatch
 import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.demo.service.LocalServiceConnector
 import me.ycdev.android.lib.common.demo.service.RemoteService
 import me.ycdev.android.lib.common.demo.service.RemoteServiceConnector
-import me.ycdev.android.lib.common.type.BooleanHolder
 import me.ycdev.android.lib.common.type.IntegerHolder
 import me.ycdev.android.lib.common.utils.GcHelper
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
+import java.lang.ref.WeakReference
+import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -160,10 +159,9 @@ class ServiceConnectorTest {
     fun listeners_weakReference() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val connector = RemoteServiceConnector(context)
-        val gcState = BooleanHolder(false)
-        // Must use another method to add the listener. Don't know why!
-        addNotReferencedListener(connector, gcState)
-        GcHelper.forceGc(gcState)
+        val objHolder = addNotReferencedListener(connector)
+        GcHelper.forceGc()
+        assertThat(objHolder.get()).isNull()
     }
 
     @Test
@@ -334,23 +332,6 @@ class ServiceConnectorTest {
         }
     }
 
-    private class GcMonitorConnectStateListener internal constructor(private val mGcState: BooleanHolder) :
-        ConnectStateListener {
-
-        override fun onStateChanged(newState: Int) {
-            Timber.tag(TAG).d(
-                "GcMonitorConnectStateListener, state changed: %s",
-                ServiceConnector.strConnectState(newState)
-            )
-        }
-
-        @Throws(Throwable::class)
-        protected fun finalize() {
-            Timber.tag(TAG).d("GcMonitorConnectStateListener, collected by GC")
-            mGcState.value = true
-        }
-    }
-
     companion object {
         private const val TAG = "ServiceConnectorTest"
 
@@ -406,11 +387,15 @@ class ServiceConnectorTest {
         }
 
         private fun addNotReferencedListener(
-            connector: RemoteServiceConnector,
-            gcState: BooleanHolder
-        ) {
-            val listener = GcMonitorConnectStateListener(gcState)
+            connector: RemoteServiceConnector
+        ): WeakReference<ConnectStateListener> {
+            val listener = object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    // ignore
+                }
+            }
             connector.addListener(listener)
+            return WeakReference(listener)
         }
     }
 }
