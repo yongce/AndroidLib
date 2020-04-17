@@ -182,17 +182,23 @@ class ServiceConnectorTest {
 
     private fun test_disconnect_state(connector: ServiceConnector<*>) {
         connectSync(connector)
+        val latch = CountDownLatch(1)
         val stateChangeCount = IntegerHolder(0)
         val listener = object : ConnectStateListener {
             override fun onStateChanged(newState: Int) {
                 stateChangeCount.value++
+                if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                    latch.countDown()
+                }
             }
         }
         connector.addListener(listener)
         connector.disconnect()
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
         assertThat(connector.service).isNull()
-        assertThat(stateChangeCount.value).isEqualTo(0)
+
+        latch.await()
+        assertThat(stateChangeCount.value).isEqualTo(1)
     }
 
     @Test
