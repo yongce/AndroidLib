@@ -2,7 +2,6 @@ package me.ycdev.android.lib.common.utils
 
 import com.google.common.truth.Truth.assertThat
 import java.lang.ref.ReferenceQueue
-import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
 import me.ycdev.android.lib.common.type.BooleanHolder
 import org.junit.Test
@@ -57,18 +56,6 @@ class GcHelperTest2 {
     private fun createWeakReferenceObject(refQueue: ReferenceQueue<Dummy>): WeakReference<Dummy> {
         val obj = Dummy()
         return WeakReference(obj, refQueue)
-    }
-
-    @Test
-    fun checkSoftReference() {
-        val objHolder = createSoftReferenceObject()
-        GcHelper.forceGc()
-        assertThat(objHolder.get()).isNotNull()
-    }
-
-    private fun createSoftReferenceObject(): SoftReference<Dummy> {
-        val obj = Dummy()
-        return SoftReference(obj)
     }
 
     private class Dummy

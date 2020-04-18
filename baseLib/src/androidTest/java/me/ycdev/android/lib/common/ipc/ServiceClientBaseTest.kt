@@ -88,10 +88,9 @@ class ServiceClientBaseTest {
 
         // Make the service be connected and operation be executed
         run {
+            assertThat(client.serviceConnector.service).isNull()
             val latch = CountDownLatch(1)
             client.addOperation(HelloOperation("Hello, world").setNotifier(latch))
-
-            assertThat(client.serviceConnector.service).isNull()
             latch.await()
             assertThat(client.serviceConnector.service).isNotNull()
             timeStart = SystemClock.elapsedRealtime()
