@@ -109,7 +109,7 @@ class ServiceClientBaseTest {
             latch.await()
             val timeUsed = SystemClock.elapsedRealtime() - timeStart
             assertThat(timeUsed).isGreaterThan(disconnectTimeout)
-            assertThat(timeUsed).isLessThan(disconnectTimeout + 100)
+            assertThat(timeUsed).isLessThan(disconnectTimeout + 500)
         }
     }
 

@@ -268,9 +268,13 @@ class ServiceConnectorTest {
         val connector = ConnectDelayServiceConnector(context, 300)
 
         val stateChangeCount = IntegerHolder(0)
+        val latch = CountDownLatch(1)
         val listener = object : ConnectStateListener {
             override fun onStateChanged(newState: Int) {
                 stateChangeCount.value++
+                if (newState == ServiceConnector.STATE_CONNECTED) {
+                    latch.countDown()
+                }
             }
         }
         connector.addListener(listener)
@@ -281,6 +285,8 @@ class ServiceConnectorTest {
 
         connector.waitForConnected()
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
+
+        latch.await()
         assertThat(stateChangeCount.value).isEqualTo(2) // connected
 
         disconnectSync(connector)
