@@ -219,9 +219,13 @@ class ServiceConnectorTest {
 
     private fun test_waitForConnected_forever(connector: ServiceConnector<*>) {
         val stateChangeCount = IntegerHolder(0)
+        val latch = CountDownLatch(1);
         val listener = object : ConnectStateListener {
             override fun onStateChanged(newState: Int) {
                 stateChangeCount.value++
+                if (newState == ServiceConnector.STATE_CONNECTED) {
+                    latch.countDown()
+                }
             }
         }
         connector.addListener(listener)
@@ -229,6 +233,8 @@ class ServiceConnectorTest {
         connector.waitForConnected()
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
         assertThat(connector.service).isNotNull()
+
+        latch.await()
         assertThat(stateChangeCount.value).isEqualTo(2) // connecting & connected
 
         connector.waitForConnected()
