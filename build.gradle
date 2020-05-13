@@ -32,7 +32,7 @@ allprojects {
 }
 
 ext {
-    versions.ndkVersion = "21.0.6113669"
+    versions.ndkVersion = "21.1.6352462"
 
     bintrayUploadEnabled = true
     bintrayMaven = [
