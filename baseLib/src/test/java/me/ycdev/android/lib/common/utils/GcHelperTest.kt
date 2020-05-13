@@ -5,11 +5,12 @@ import java.lang.ref.ReferenceQueue
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
 import me.ycdev.android.lib.common.type.BooleanHolder
-import me.ycdev.android.lib.test.base.NormalJUnitBase
+import me.ycdev.android.lib.test.rules.TimberJvmRule
+import org.junit.ClassRule
 import org.junit.Test
 import timber.log.Timber
 
-class GcHelperTest : NormalJUnitBase() {
+class GcHelperTest {
 
     @Test
     fun forceGc_default() {
@@ -76,5 +77,9 @@ class GcHelperTest : NormalJUnitBase() {
 
     companion object {
         private const val TAG = "GcHelperTest"
+
+        @ClassRule
+        @JvmField
+        val timberJvmRule = TimberJvmRule()
     }
 }
