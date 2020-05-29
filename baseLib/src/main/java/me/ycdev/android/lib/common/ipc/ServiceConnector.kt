@@ -62,7 +62,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
     fun isServiceExist(): Boolean {
         val intent = getServiceIntent()
         val servicesList = appContext.packageManager.queryIntentServices(intent, 0)
-        return servicesList != null && servicesList.size > 0 && selectTargetService(servicesList) != null
+        return servicesList.size > 0 && selectTargetService(servicesList) != null
     }
 
     /**
@@ -138,7 +138,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
 
         val intent = getServiceIntent()
         val servicesList = appContext.packageManager.queryIntentServices(intent, 0)
-        if (servicesList == null || servicesList.size == 0) {
+        if (servicesList.size == 0) {
             Timber.tag(TAG).w("[%s] no service component available, cannot connect", serviceName)
             updateConnectState(STATE_DISCONNECTED)
             return

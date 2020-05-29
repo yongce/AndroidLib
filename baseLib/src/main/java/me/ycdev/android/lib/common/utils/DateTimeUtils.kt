@@ -21,7 +21,8 @@ object DateTimeUtils {
      */
     @Throws(ParseException::class)
     fun parseFileName(timeStr: String): Long {
-        return SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).parse(timeStr).time
+        return SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).parse(timeStr)?.time
+            ?: throw ParseException("Cannot parse '$timeStr'", 0)
     }
 
     /**

@@ -48,8 +48,7 @@ class GsonHelperTest {
 
     @Test
     fun optString() {
-        val parser = JsonParser()
-        val json = parser.parse(FOO_DEMO).asJsonObject
+        val json = JsonParser.parseString(FOO_DEMO).asJsonObject
         assertThat(GsonHelper.optString(json, "name", null)).isEqualTo("Task1")
         assertThat(GsonHelper.optString(json, "not-exist", null)).isNull()
         assertThat(GsonHelper.optString(json, "not-exist", "def")).isEqualTo("def")
@@ -57,8 +56,7 @@ class GsonHelperTest {
 
     @Test
     fun optBoolean() {
-        val parser = JsonParser()
-        val json = parser.parse(FOO_DEMO).asJsonObject
+        val json = JsonParser.parseString(FOO_DEMO).asJsonObject
         assertThat(GsonHelper.optBoolean(json, "done", false)).isTrue()
         assertThat(GsonHelper.optBoolean(json, "not-exist", true)).isTrue()
         assertThat(GsonHelper.optBoolean(json, "not-exist", false)).isFalse()
@@ -66,8 +64,7 @@ class GsonHelperTest {
 
     @Test
     fun optInt() {
-        val parser = JsonParser()
-        val json = parser.parse(FOO_DEMO).asJsonObject
+        val json = JsonParser.parseString(FOO_DEMO).asJsonObject
         assertThat(GsonHelper.optInt(json, "count", 0)).isEqualTo(11)
         assertThat(GsonHelper.optInt(json, "not-exist", 0)).isEqualTo(0)
         assertThat(GsonHelper.optInt(json, "not-exist", 3)).isEqualTo(3)
@@ -75,8 +72,7 @@ class GsonHelperTest {
 
     @Test
     fun optLong() {
-        val parser = JsonParser()
-        val json = parser.parse(FOO_DEMO).asJsonObject
+        val json = JsonParser.parseString(FOO_DEMO).asJsonObject
         assertThat(GsonHelper.optLong(json, "time_stamp", 0L)).isEqualTo(1512881633817L)
         assertThat(GsonHelper.optLong(json, "not-exist", 0L)).isEqualTo(0L)
         assertThat(GsonHelper.optLong(json, "not-exist", 7L)).isEqualTo(7)
@@ -84,8 +80,7 @@ class GsonHelperTest {
 
     @Test
     fun optFloat() {
-        val parser = JsonParser()
-        val json = parser.parse(FOO_DEMO).asJsonObject
+        val json = JsonParser.parseString(FOO_DEMO).asJsonObject
         assertThat(GsonHelper.optFloat(json, "radius", 0f)).isEqualTo(4.5f)
         assertThat(GsonHelper.optFloat(json, "not-exist", 0f)).isEqualTo(0f)
         assertThat(GsonHelper.optFloat(json, "not-exist", 3.5f)).isEqualTo(3.5f)
@@ -93,8 +88,7 @@ class GsonHelperTest {
 
     @Test
     fun optDouble() {
-        val parser = JsonParser()
-        val json = parser.parse(FOO_DEMO).asJsonObject
+        val json = JsonParser.parseString(FOO_DEMO).asJsonObject
         assertThat(GsonHelper.optDouble(json, "distance", 0.1)).isEqualTo(12345.67)
         assertThat(GsonHelper.optDouble(json, "not-exist", 0.0)).isEqualTo(0.0)
         assertThat(GsonHelper.optDouble(json, "not-exist", 3.7)).isEqualTo(3.7)

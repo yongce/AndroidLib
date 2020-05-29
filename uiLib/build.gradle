@@ -12,7 +12,9 @@ android {
     }
 
     resourcePrefix 'ycdev'
-    viewBinding.enabled = true
+    buildFeatures {
+        viewBinding = true
+    }
 
     lintOptions {
         disable 'UnusedResources'
