@@ -20,6 +20,7 @@ dependencies {
     api deps.androidx.annotation
 
     implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutinesAndroid
     implementation deps.androidx.core
     implementation deps.androidx.fragment
     implementation deps.gson
