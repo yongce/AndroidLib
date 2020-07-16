@@ -38,8 +38,8 @@ jobs:
         script: ./gradlew connectedCheck mergeAndroidReports
 
     - name: Archive the test reports
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-            name: androidTest-results
-            path: build/androidTest-results
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: androidTest-results
+        path: build/androidTest-results
