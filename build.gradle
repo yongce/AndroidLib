@@ -63,3 +63,5 @@ spotless {
         ktlint(versions.ktlint)
     }
 }
+
+apply plugin: 'android-reporting'

@@ -15,6 +15,7 @@ import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_NONE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_WIFI
 import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType
 import me.ycdev.android.lib.common.utils.SystemSwitchUtils
+import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
@@ -54,7 +55,9 @@ class NetworkUtilsTest {
                 if (oldNetworkType == NETWORK_TYPE_WIFI) {
                     // enable WiFi
                     SystemSwitchUtils.setWifiEnabled(context, true)
-                    waitForWiFiConnected(context, true)
+                    if (!waitForWiFiConnected(context, true)) {
+                        fail("waitForWiFiConnected(true) timeout")
+                    }
                     networkType = NetworkUtils.getNetworkType(context)
                     assertWithMessage("wifi enabled")
                         .that(networkType).isEqualTo(NETWORK_TYPE_WIFI)
@@ -123,11 +126,11 @@ class NetworkUtilsTest {
         // TODO
     }
 
-    private fun waitForWiFiConnected(cxt: Context, connected: Boolean) {
+    private fun waitForWiFiConnected(cxt: Context, connected: Boolean): Boolean {
         val timeStart = SystemClock.elapsedRealtime()
         while (true) {
             if (SystemClock.elapsedRealtime() - timeStart >= 1000 * 15) {
-                break // timeout
+                return false // timeout
             }
 
             if (connected && NetworkUtils.getNetworkType(cxt) == NETWORK_TYPE_WIFI) {
@@ -137,5 +140,6 @@ class NetworkUtilsTest {
             }
             SystemClock.sleep(100)
         }
+        return true
     }
 }
