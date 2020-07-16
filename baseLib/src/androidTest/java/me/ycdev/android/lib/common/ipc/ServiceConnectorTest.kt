@@ -300,11 +300,13 @@ class ServiceConnectorTest {
         val connector = RemoteServiceConnector(context)
         assertThat(connector.service).isNull()
 
+        val latch = CountDownLatch(1)
         val listener = object : ConnectStateListener {
             override fun onStateChanged(newState: Int) {
                 if (newState == ServiceConnector.STATE_CONNECTED) {
                     assertThat(connector.service).isNotNull()
-                } else {
+                    latch.countDown()
+                } else if (newState == ServiceConnector.STATE_DISCONNECTED) {
                     assertThat(connector.service).isNull()
                 }
             }
@@ -313,6 +315,7 @@ class ServiceConnectorTest {
 
         connector.waitForConnected()
         assertThat(connector.service).isNotNull()
+        latch.await()
 
         connector.disconnect()
         assertThat(connector.service).isNull()
