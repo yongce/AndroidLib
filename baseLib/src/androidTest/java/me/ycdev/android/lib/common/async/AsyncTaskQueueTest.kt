@@ -165,7 +165,14 @@ class AsyncTaskQueueTest {
             taskQueue.addTask(countTask, 200)
         }
 
-        latch.await(500, TimeUnit.MILLISECONDS)
+        // make sure the previous tasks will be executed
+        val guardLatch = CountDownLatch(1)
+        val guardTask = Runnable {
+            guardLatch.countDown()
+        }
+        taskQueue.addTask(guardTask, 200)
+        guardLatch.await()
+
         assertThat(latch.count).isEqualTo(count - 1)
         assertThat(countTask.executedCount).isEqualTo(1)
     }
