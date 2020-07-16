@@ -108,6 +108,7 @@ object NetworkUtils {
      * [NETWORK_TYPE_4G] or [NETWORK_TYPE_NONE]
      */
     @NetworkType
+    @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
     fun getMobileNetworkType(cxt: Context): Int {
         // Code from android-5.1.1_r4:
         // frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/policy/NetworkControllerImpl.java
@@ -148,7 +149,12 @@ object NetworkUtils {
      * @return One of values [NETWORK_TYPE_WIFI], [NETWORK_TYPE_2G],
      * [NETWORK_TYPE_3G], [NETWORK_TYPE_4G] or [NETWORK_TYPE_NONE]
      */
-    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
+    @RequiresPermission(
+        allOf = [
+            android.Manifest.permission.ACCESS_NETWORK_STATE,
+            android.Manifest.permission.READ_PHONE_STATE
+        ]
+    )
     @NetworkType
     fun getMixedNetworkType(cxt: Context): Int {
         var type = getNetworkType(cxt)

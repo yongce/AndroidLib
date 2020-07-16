@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.arch.demo"
         minSdkVersion versions.minSdk
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
