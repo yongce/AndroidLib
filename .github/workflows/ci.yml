@@ -35,7 +35,7 @@ jobs:
         target: ${{ matrix.target }}
         arch: x86_64
         profile: Nexus 6
-        script: ./gradlew connectedCheck mergeAndroidReports
+        script: ./gradlew connectedCheck mergeAndroidReports --continue
 
     - name: Archive the test reports
       uses: actions/upload-artifact@v2
