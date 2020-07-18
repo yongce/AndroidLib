@@ -113,7 +113,7 @@ object LibLogger {
                     msgFull = String.format(Locale.US, msgFull, *args)
                 }
                 if (tr == null) {
-                    Log.println(level, tag, msgFull)
+                    Log.println(level, tag, msgFull!!)
                 } else {
                     Log.println(level, tag, msgFull + "\n" + Log.getStackTraceString(tr))
                 }

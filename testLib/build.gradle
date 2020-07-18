@@ -27,7 +27,6 @@ dependencies {
     // Dependencies for local unit tests
     testImplementation deps.test.junit
     testImplementation deps.test.truth
-    testImplementation deps.test.mockitoCore
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.test.runner

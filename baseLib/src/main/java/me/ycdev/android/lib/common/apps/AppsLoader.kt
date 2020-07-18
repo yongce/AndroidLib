@@ -14,6 +14,7 @@ import me.ycdev.android.lib.common.utils.MiscUtils
 import me.ycdev.android.lib.common.utils.PackageUtils
 import me.ycdev.android.lib.common.utils.StringUtils
 
+@Suppress("unused")
 class AppsLoader private constructor(cxt: Context) {
     private val appContext: Context = cxt.applicationContext
     private val pm: PackageManager = cxt.packageManager
@@ -89,7 +90,12 @@ class AppsLoader private constructor(cxt: Context) {
         item.isUpdatedSysApp = aiFlag and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
 
         item.versionName = pkgInfo.versionName
-        item.versionCode = pkgInfo.versionCode
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            item.versionCode = pkgInfo.longVersionCode
+        } else {
+            @Suppress("DEPRECATION")
+            item.versionCode = pkgInfo.versionCode.toLong()
+        }
 
         item.apkPath = pkgInfo.applicationInfo.sourceDir
         item.isDisabled = !PackageUtils.isPkgEnabled(appContext, pkgInfo.packageName)

@@ -1,65 +1,50 @@
 package me.ycdev.android.lib.common.net
 
-import android.net.ConnectivityManager
-import android.telephony.TelephonyManager
+import android.net.NetworkCapabilities
 import com.google.common.truth.Truth.assertThat
+import io.mockk.every
+import io.mockk.mockk
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_COMPANION_PROXY
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_MOBILE
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_NONE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_WIFI
-import me.ycdev.android.lib.common.net.NetworkUtils.WEAR_OS_COMPANION_PROXY
 import org.junit.Test
 
 class NetworkUtilsTestBasic {
     @Test
     fun getNetworkType_common() {
-        // phone Wi-Fi
-        assertThat(NetworkUtils.getNetworkType(ConnectivityManager.TYPE_WIFI, 0))
-            .isEqualTo(NETWORK_TYPE_WIFI)
-        // faked subTypes
-        for (i in 1..19) {
-            assertThat(NetworkUtils.getNetworkType(ConnectivityManager.TYPE_WIFI, i))
-                .isEqualTo(NETWORK_TYPE_WIFI)
-        }
+        val capabilities = mockk<NetworkCapabilities>()
 
-        // phone 4G
-        assertThat(
-            NetworkUtils.getNetworkType(
-                ConnectivityManager.TYPE_MOBILE,
-                TelephonyManager.NETWORK_TYPE_LTE
-            )
-        ).isEqualTo(NETWORK_TYPE_MOBILE)
-        // phone 3G
-        assertThat(
-            NetworkUtils.getNetworkType(
-                ConnectivityManager.TYPE_MOBILE,
-                TelephonyManager.NETWORK_TYPE_UMTS
-            )
-        ).isEqualTo(NETWORK_TYPE_MOBILE)
-        assertThat(
-            NetworkUtils.getNetworkType(
-                ConnectivityManager.TYPE_MOBILE,
-                TelephonyManager.NETWORK_TYPE_HSPAP
-            )
-        ).isEqualTo(NETWORK_TYPE_MOBILE)
-        // real or faked subTypes
-        for (i in 1..19) {
-            assertThat(
-                NetworkUtils.getNetworkType(ConnectivityManager.TYPE_MOBILE, i)
-            ).isEqualTo(NETWORK_TYPE_MOBILE)
-        }
-    }
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE) } returns false
 
-    @Test
-    fun getNetworkType_wearOs() {
-        // companion proxy: phone Wi-Fi or mobile
-        assertThat(
-            NetworkUtils.getNetworkType(WEAR_OS_COMPANION_PROXY, 0)
-        ).isEqualTo(NETWORK_TYPE_COMPANION_PROXY)
-        // faked subTypes
-        for (i in 1..19) {
-            assertThat(
-                NetworkUtils.getNetworkType(WEAR_OS_COMPANION_PROXY, i)
-            ).isEqualTo(NETWORK_TYPE_COMPANION_PROXY)
-        }
+        // no network
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_NONE)
+
+        // Wi-Fi
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) } returns true
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_WIFI)
+        // reset
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) } returns false
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_NONE)
+
+        // mobile
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) } returns true
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_MOBILE)
+        // reset
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) } returns false
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_NONE)
+
+        // bluetooth proxy (Wear OS)
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) } returns true
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_COMPANION_PROXY)
+        // reset
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) } returns false
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_NONE)
     }
 }

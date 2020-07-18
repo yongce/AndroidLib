@@ -32,9 +32,7 @@ dependencies {
     testImplementation deps.test.runner
     testImplementation deps.test.rules
     testImplementation deps.test.truth
-    testImplementation deps.test.mockitoCore
-    testImplementation deps.test.powermockMockito
-    testImplementation deps.test.powermockJunit
+    testImplementation deps.test.mockk
     testImplementation deps.test.robolectric
 
     // Android Testing Support Library's runner and rules

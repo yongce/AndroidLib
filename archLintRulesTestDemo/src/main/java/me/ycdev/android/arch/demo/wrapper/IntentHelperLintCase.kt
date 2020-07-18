@@ -41,7 +41,7 @@ object IntentHelperLintCase {
         return intent.getBooleanExtra(key, defValue) // lint violation
     }
 
-    fun getBundleExtraBad(intent: Intent, key: String): Bundle {
+    fun getBundleExtraBad(intent: Intent, key: String): Bundle? {
         return intent.getBundleExtra(key) // lint violation
     }
 }

@@ -1,7 +1,10 @@
 package me.ycdev.android.lib.common.utils
 
 import android.content.Context
+import android.os.Build
 import android.os.Environment
+import android.os.storage.StorageManager
+import androidx.annotation.WorkerThread
 import java.io.File
 
 @Suppress("unused")
@@ -25,6 +28,7 @@ object StorageUtils {
     fun isExternalStorageAvailable(): Boolean =
             Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
 
+    @Suppress("DEPRECATION")
     fun getExternalStoragePath(): String = Environment.getExternalStorageDirectory().absolutePath
 
     /**
@@ -32,8 +36,15 @@ object StorageUtils {
      * Returns 0 if this path does not exist.
      * @see File.getUsableSpace
      */
-    fun getUsableSpace(path: File): Long {
-        return path.usableSpace
+    @WorkerThread
+    fun getUsableSpace(path: File, context: Context): Long {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val storageMgr = context.getSystemService(StorageManager::class.java) ?: return 0
+            val uuid = storageMgr.getUuidForPath(path)
+            return storageMgr.getAllocatableBytes(uuid)
+        } else {
+            return path.usableSpace
+        }
     }
 
     /**

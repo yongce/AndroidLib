@@ -2,7 +2,9 @@ package me.ycdev.android.lib.common.net
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import androidx.annotation.IntDef
@@ -26,6 +28,7 @@ object NetworkUtils {
     const val NETWORK_TYPE_2G = 10
     const val NETWORK_TYPE_3G = 11
     const val NETWORK_TYPE_4G = 12
+    const val NETWORK_TYPE_5G = 13
     const val NETWORK_TYPE_COMPANION_PROXY = 20
 
     @Retention(AnnotationRetention.SOURCE)
@@ -36,40 +39,48 @@ object NetworkUtils {
         NETWORK_TYPE_2G,
         NETWORK_TYPE_3G,
         NETWORK_TYPE_4G,
+        NETWORK_TYPE_5G,
         NETWORK_TYPE_COMPANION_PROXY
     )
     annotation class NetworkType
 
-    @Suppress("DEPRECATION")
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     fun dumpActiveNetworkInfo(cxt: Context): String {
-        val info = getActiveNetworkInfo(cxt) ?: return "No active network"
-
-        val sb = StringBuilder()
-        sb.append("type=").append(info.type)
-            .append(", subType=").append(info.subtype)
-            .append(", infoDump=").append(info)
-        return sb.toString()
+        val capabilities = getActiveNetworkCapabilities(cxt) ?: return "No active network"
+        return capabilities.toString()
     }
 
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
-    fun getActiveNetworkInfo(cxt: Context): NetworkInfo? {
-        val cm = cxt.getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager?
+    fun getActiveNetwork(cxt: Context): Network? {
+        val cm = cxt.getSystemService(ConnectivityManager::class.java)
         if (cm == null) {
             LibLogger.w(TAG, "failed to get connectivity service")
             return null
         }
 
-        var netInfo: NetworkInfo? = null
         try {
-            netInfo = cm.activeNetworkInfo
+            return cm.activeNetwork
         } catch (e: Exception) {
-            LibLogger.w(TAG, "failed to get active network info", e)
+            LibLogger.w(TAG, "failed to get active network", e)
+        }
+        return null
+    }
+
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
+    fun getActiveNetworkCapabilities(cxt: Context): NetworkCapabilities? {
+        val cm = cxt.getSystemService(ConnectivityManager::class.java)
+        if (cm == null) {
+            LibLogger.w(TAG, "failed to get connectivity service")
+            return null
         }
 
-        return netInfo
+        try {
+            val network = cm.activeNetwork ?: return null
+            return cm.getNetworkCapabilities(network)
+        } catch (e: Exception) {
+            LibLogger.w(TAG, "failed to get active network", e)
+        }
+        return null
     }
 
     /**
@@ -79,24 +90,20 @@ object NetworkUtils {
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     @NetworkType
     fun getNetworkType(cxt: Context): Int {
-        val netInfo = getActiveNetworkInfo(cxt) ?: return NETWORK_TYPE_NONE
-
-        @Suppress("DEPRECATION")
-        return getNetworkType(netInfo.type, netInfo.subtype)
+        val capabilities = getActiveNetworkCapabilities(cxt) ?: return NETWORK_TYPE_NONE
+        return getNetworkType(capabilities)
     }
 
-    @Suppress("DEPRECATION", "UNUSED_PARAMETER")
     @NetworkType
     @VisibleForTesting
-    internal fun getNetworkType(type: Int, subType: Int): Int {
-        if (type == ConnectivityManager.TYPE_WIFI ||
-            type == ConnectivityManager.TYPE_WIMAX ||
-            type == ConnectivityManager.TYPE_ETHERNET
+    internal fun getNetworkType(capabilities: NetworkCapabilities): Int {
+        if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
         ) {
             return NETWORK_TYPE_WIFI
-        } else if (type == ConnectivityManager.TYPE_MOBILE || type == ConnectivityManager.TYPE_MOBILE_MMS) {
+        } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
             return NETWORK_TYPE_MOBILE
-        } else if (type == WEAR_OS_COMPANION_PROXY) {
+        } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)) {
             // Wear OS
             return NETWORK_TYPE_COMPANION_PROXY
         }
@@ -105,15 +112,18 @@ object NetworkUtils {
 
     /**
      * @return One of values [NETWORK_TYPE_2G], [NETWORK_TYPE_3G],
-     * [NETWORK_TYPE_4G] or [NETWORK_TYPE_NONE]
+     * [NETWORK_TYPE_4G], [NETWORK_TYPE_5G] or [NETWORK_TYPE_NONE]
      */
     @NetworkType
     @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
     fun getMobileNetworkType(cxt: Context): Int {
-        // Code from android-5.1.1_r4:
-        // frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/policy/NetworkControllerImpl.java
-        // in NetworkControllerImpl#mapIconSets()
-        val tm = cxt.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
+        // #1 Code from android-5.1.1_r4:
+        //    frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/policy/NetworkControllerImpl.java
+        //    in NetworkControllerImpl#mapIconSets()
+        // #2 Code from master (Android R):
+        //    frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileSignalController.java
+        //    in MobileSignalController#mapIconSets()
+        val tm = cxt.getSystemService(TelephonyManager::class.java)
         if (tm == null) {
             LibLogger.w(TAG, "failed to get telephony service")
             return NETWORK_TYPE_NONE
@@ -121,33 +131,47 @@ object NetworkUtils {
 
         val tmType: Int
         try {
-            tmType = tm.networkType
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                tmType = tm.dataNetworkType
+            } else {
+                tmType = tm.networkType
+            }
         } catch (e: Exception) {
             LibLogger.w(TAG, "failed to get telephony network type", e)
             return NETWORK_TYPE_NONE
         }
 
-        when (tmType) {
-            TelephonyManager.NETWORK_TYPE_UNKNOWN -> return NETWORK_TYPE_NONE
+        return when (tmType) {
+            TelephonyManager.NETWORK_TYPE_UNKNOWN -> NETWORK_TYPE_NONE
+            TelephonyManager.NETWORK_TYPE_LTE -> NETWORK_TYPE_4G
+            TelephonyManager.NETWORK_TYPE_NR -> NETWORK_TYPE_5G
 
-            TelephonyManager.NETWORK_TYPE_LTE -> return NETWORK_TYPE_4G
+            TelephonyManager.NETWORK_TYPE_EVDO_0,
+            TelephonyManager.NETWORK_TYPE_EVDO_A,
+            TelephonyManager.NETWORK_TYPE_EVDO_B,
+            TelephonyManager.NETWORK_TYPE_EHRPD,
+            TelephonyManager.NETWORK_TYPE_TD_SCDMA,
+            TelephonyManager.NETWORK_TYPE_UMTS -> NETWORK_TYPE_3G
 
-            TelephonyManager.NETWORK_TYPE_EVDO_0, TelephonyManager.NETWORK_TYPE_EVDO_A, TelephonyManager.NETWORK_TYPE_EVDO_B, TelephonyManager.NETWORK_TYPE_EHRPD, TelephonyManager.NETWORK_TYPE_UMTS ->
-                //            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
-                return NETWORK_TYPE_3G
+            TelephonyManager.NETWORK_TYPE_HSDPA,
+            TelephonyManager.NETWORK_TYPE_HSUPA,
+            TelephonyManager.NETWORK_TYPE_HSPA,
+            TelephonyManager.NETWORK_TYPE_HSPAP -> NETWORK_TYPE_3G // H
 
-            TelephonyManager.NETWORK_TYPE_HSDPA, TelephonyManager.NETWORK_TYPE_HSUPA, TelephonyManager.NETWORK_TYPE_HSPA, TelephonyManager.NETWORK_TYPE_HSPAP -> return NETWORK_TYPE_3G // H
+            TelephonyManager.NETWORK_TYPE_GPRS,
+            TelephonyManager.NETWORK_TYPE_EDGE,
+            TelephonyManager.NETWORK_TYPE_CDMA,
+            TelephonyManager.NETWORK_TYPE_GSM,
+            TelephonyManager.NETWORK_TYPE_1xRTT -> NETWORK_TYPE_2G
 
-            TelephonyManager.NETWORK_TYPE_GPRS, TelephonyManager.NETWORK_TYPE_EDGE, TelephonyManager.NETWORK_TYPE_CDMA, TelephonyManager.NETWORK_TYPE_1xRTT ->
-                //            case TelephonyManager.NETWORK_TYPE_GSM:
-                return NETWORK_TYPE_2G
+            else -> NETWORK_TYPE_2G
         }
-        return NETWORK_TYPE_2G
     }
 
     /**
      * @return One of values [NETWORK_TYPE_WIFI], [NETWORK_TYPE_2G],
-     * [NETWORK_TYPE_3G], [NETWORK_TYPE_4G] or [NETWORK_TYPE_NONE]
+     * [NETWORK_TYPE_3G], [NETWORK_TYPE_4G], [NETWORK_TYPE_5G] or [NETWORK_TYPE_NONE]
      */
     @RequiresPermission(
         allOf = [
@@ -169,8 +193,8 @@ object NetworkUtils {
      */
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     fun isNetworkAvailable(cxt: Context): Boolean {
-        val network = getActiveNetworkInfo(cxt)
-        return network != null && network.isConnected
+        val capabilities = getActiveNetworkCapabilities(cxt) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
     /**

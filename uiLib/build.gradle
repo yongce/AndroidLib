@@ -28,6 +28,7 @@ dependencies {
     implementation deps.androidx.appcompat
     implementation deps.androidx.material
     implementation deps.androidx.recyclerview
+    implementation deps.lifecycle.runtimeKtx
 }
 
 project.ext {

@@ -3,7 +3,6 @@ package me.ycdev.android.lib.commonui.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,12 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.ycdev.android.lib.common.utils.IntentUtils
 import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_ACTIVITY
 import me.ycdev.android.lib.common.utils.IntentUtils.INTENT_TYPE_BROADCAST
@@ -33,7 +36,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
     protected open val contentViewLayout: Int
         @LayoutRes get() = R.layout.ycdev_grid_entries
 
-    protected abstract val intents: List<Entry>
+    protected abstract fun loadIntents(): List<Entry>
 
     open class Entry(
         open val title: CharSequence,
@@ -101,21 +104,19 @@ abstract class GridEntriesActivity : AppCompatActivity() {
     protected open fun loadItems() {
         if (needLoadIntentsAsync) {
             loadingView.visibility = View.VISIBLE
-
-            object : AsyncTask<Void, Void, List<Entry>>() {
-                override fun doInBackground(vararg params: Void): List<Entry> {
-                    return intents
+            lifecycleScope.launch {
+                val intents: List<Entry>
+                withContext(Dispatchers.Default) {
+                    intents = loadIntents()
                 }
 
-                override fun onPostExecute(result: List<Entry>) {
-                    loadingView.visibility = View.GONE
-                    entriesAdapter.data = intents
-                    entriesAdapter.notifyDataSetChanged()
-                }
-            }.execute()
+                loadingView.visibility = View.GONE
+                entriesAdapter.data = intents
+                entriesAdapter.notifyDataSetChanged()
+            }
         } else {
             loadingView.visibility = View.GONE
-            entriesAdapter.data = intents
+            entriesAdapter.data = loadIntents()
         }
     }
 

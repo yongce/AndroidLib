@@ -5,7 +5,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.intellij.psi.PsiMethod
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
-import org.jetbrains.uast.getContainingClass
+import org.jetbrains.uast.getContainingUClass
 
 abstract class WrapperDetectorBase : Detector(), Detector.UastScanner {
     protected abstract val applicableMethods: List<String>
@@ -17,7 +17,7 @@ abstract class WrapperDetectorBase : Detector(), Detector.UastScanner {
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
         val evaluator = context.evaluator
-        val surroundingClass = node.getContainingClass()
+        val surroundingClass = node.getContainingUClass()?.javaPsi
         if (surroundingClass == null) {
             println(
                 "Fatal error in WrapperDetectorBase! Failed to get surrounding" +

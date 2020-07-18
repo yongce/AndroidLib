@@ -33,7 +33,7 @@ ext {
 
     versions = [
             // compile
-            'compileSdk'       : 29,
+            'compileSdk'       : 30,
 
             // Android official support
             'kotlin'           : '1.3.72',

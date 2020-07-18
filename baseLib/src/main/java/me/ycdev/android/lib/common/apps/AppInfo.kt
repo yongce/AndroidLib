@@ -11,7 +11,7 @@ data class AppInfo(val pkgName: String) {
     var appName: String? = null
     var appIcon: Drawable? = null
     var versionName: String? = null
-    var versionCode: Int = 0
+    var versionCode: Long = 0
     var apkPath: String? = null
     var installTime: Long = 0
     var updateTime: Long = 0
