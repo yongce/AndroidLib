@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [23, 29, 30]
-        target: [default, google_apis]
+        target: [google_apis]
 
     steps:
     - name: checkout
