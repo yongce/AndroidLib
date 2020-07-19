@@ -87,11 +87,14 @@ class AsyncTaskQueue(private val name: String) {
         }
     }
 
-    @JvmOverloads
-    fun addTask(task: Runnable, delay: Long = 0L) {
+    fun addTask(delay: Long, task: Runnable) {
         if (DEV_LOG) Timber.tag(TAG).d("addTask: %s, delay: %d", task, delay)
         val params = TaskParams(task, delay)
         mainHandler.obtainMessage(MSG_MAIN_NEW_TASK, params).sendToTarget()
+    }
+
+    fun addTask(task: Runnable) {
+        addTask(0L, task)
     }
 
     fun removeTask(task: Runnable) {

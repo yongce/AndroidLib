@@ -9,6 +9,7 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import me.ycdev.android.lib.common.utils.MainHandler
 import me.ycdev.android.lib.common.utils.ThreadUtils
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -112,7 +113,7 @@ class AsyncTaskQueueTest {
         val latch = CountDownLatch(count)
         val countTask = CountTask(Runnable { latch.countDown() })
         for (i in 0 until count) {
-            taskQueue.addTask(countTask, 200)
+            taskQueue.addTask(200, countTask)
         }
 
         latch.await()
@@ -126,7 +127,7 @@ class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN)
 
         val countTask = CountTask(null)
-        taskQueue.addTask(countTask, 200)
+        taskQueue.addTask(200, countTask)
         taskQueue.removeTask(countTask)
 
         SystemClock.sleep(500)
@@ -148,15 +149,18 @@ class AsyncTaskQueueTest {
         val countTask = CountTask(null)
         val count = 100
         for (i in 0 until count) {
-            taskQueue.addTask(countTask, 100)
+            taskQueue.addTask(100, countTask)
         }
         taskQueue.removeTask(countTask)
 
-        // now, let the task go
-        guardLatch.countDown()
+        // make sure all messages in main looper had been processed
+        MainHandler.post {
+            // now, let the guard task go
+            guardLatch.countDown()
+        }
 
         // add one more task
-        taskQueue.addTask(countTask, 100)
+        taskQueue.addTask(100, countTask)
 
         // make sure the previous tasks will be executed
         waitForTasksDone(taskQueue, 100)
@@ -176,7 +180,7 @@ class AsyncTaskQueueTest {
         val countTask = CountTask(Runnable { latch.countDown() })
         for (i in 0 until count) {
             taskQueue.removeTask(countTask)
-            taskQueue.addTask(countTask, 200)
+            taskQueue.addTask(200, countTask)
         }
 
         // make sure the previous tasks will be executed
@@ -191,7 +195,7 @@ class AsyncTaskQueueTest {
         val guardTask = Runnable {
             guardLatch.countDown()
         }
-        taskQueue.addTask(guardTask, delay)
+        taskQueue.addTask(delay, guardTask)
         guardLatch.await()
     }
 
@@ -199,18 +203,19 @@ class AsyncTaskQueueTest {
     @LargeTest
     @Throws(InterruptedException::class)
     fun setWorkerThreadAutoQuitDelay_normal() {
-        val autoQuitDelay = (20 * 1000).toLong()
+        val autoQuitDelay = (10 * 1000).toLong()
         val taskQueue = AsyncTaskQueue(TAG)
         taskQueue.setWorkerThreadAutoQuitDelay(autoQuitDelay)
 
         val latch = CountDownLatch(1)
-        taskQueue.addTask(Runnable { latch.countDown() }, 100)
+        taskQueue.addTask(100, Runnable { latch.countDown() })
         latch.await()
 
         // check if task thread already quited
         assertThat(taskQueue.taskHandler).isNotNull()
-        SystemClock.sleep(autoQuitDelay + 100)
-        assertThat(taskQueue.taskHandler).isNull()
+        while (taskQueue.taskHandler != null) {
+            SystemClock.sleep(100)
+        }
     }
 
     @Test
@@ -221,7 +226,7 @@ class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(0)
 
         val latch = CountDownLatch(1)
-        taskQueue.addTask(Runnable { latch.countDown() }, 100)
+        taskQueue.addTask(100, Runnable { latch.countDown() })
         latch.await()
 
         // check if task thread already quited
@@ -312,7 +317,7 @@ class AsyncTaskQueueTest {
                     assertThat(latch.count).isEqualTo(taskCount - i)
                     latch.countDown()
                 }
-                taskQueue.addTask(task, taskDelay)
+                taskQueue.addTask(taskDelay, task)
             }
         }
     }
