@@ -139,15 +139,29 @@ class AsyncTaskQueueTest {
         val taskQueue = AsyncTaskQueue(TAG)
         taskQueue.setWorkerThreadAutoQuitDelay(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN)
 
+        // make sure the task handler will be blocked
+        val guardLatch = CountDownLatch(1)
+        val guardTask = Runnable { guardLatch.await() }
+        taskQueue.addTask(guardTask)
+
+        // add many tasks and then remove them
         val countTask = CountTask(null)
         val count = 100
         for (i in 0 until count) {
-            taskQueue.addTask(countTask, 200)
+            taskQueue.addTask(countTask, 100)
         }
         taskQueue.removeTask(countTask)
 
-        SystemClock.sleep(500)
-        assertThat(countTask.executedCount).isEqualTo(0)
+        // now, let the task go
+        guardLatch.countDown()
+
+        // add one more task
+        taskQueue.addTask(countTask, 100)
+
+        // make sure the previous tasks will be executed
+        waitForTasksDone(taskQueue, 100)
+
+        assertThat(countTask.executedCount).isEqualTo(1)
     }
 
     @Test
@@ -166,15 +180,19 @@ class AsyncTaskQueueTest {
         }
 
         // make sure the previous tasks will be executed
+        waitForTasksDone(taskQueue, 200)
+
+        assertThat(latch.count).isEqualTo(count - 1)
+        assertThat(countTask.executedCount).isEqualTo(1)
+    }
+
+    private fun waitForTasksDone(taskQueue: AsyncTaskQueue, delay: Long) {
         val guardLatch = CountDownLatch(1)
         val guardTask = Runnable {
             guardLatch.countDown()
         }
-        taskQueue.addTask(guardTask, 200)
+        taskQueue.addTask(guardTask, delay)
         guardLatch.await()
-
-        assertThat(latch.count).isEqualTo(count - 1)
-        assertThat(countTask.executedCount).isEqualTo(1)
     }
 
     @Test
