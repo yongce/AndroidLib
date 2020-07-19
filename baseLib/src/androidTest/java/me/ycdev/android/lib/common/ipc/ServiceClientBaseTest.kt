@@ -40,7 +40,6 @@ class ServiceClientBaseTest {
                 }
             })
 
-            assertThat(latch.count).isEqualTo(1)
             // Waiting for service connected and operation executed
             latch.await()
         }
@@ -56,7 +55,6 @@ class ServiceClientBaseTest {
                 }
             })
 
-            assertThat(latch.count).isEqualTo(1)
             // Waiting for service connected and operation executed
             latch.await()
         }
