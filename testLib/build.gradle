@@ -19,6 +19,8 @@ android {
 dependencies {
     compileOnly deps.test.junit
     compileOnly deps.test.robolectric
+    compileOnly deps.test.espressoCore
+    compileOnly deps.androidx.core
 
     implementation deps.kotlin.stdlib
     implementation deps.androidx.annotation
