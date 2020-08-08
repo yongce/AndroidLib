@@ -2,13 +2,14 @@ package me.ycdev.android.lib.common.activity
 
 import android.content.ComponentName
 
-data class ActivityInfo(
+data class ActivityRunningState(
     val componentName: ComponentName,
-    val taskId: Int,
+    val hashCode: Int,
+    var taskId: Int,
     var state: State = State.None
 ) {
-    fun makeCopy(): ActivityInfo {
-        val cloned = ActivityInfo(componentName, taskId)
+    fun makeCopy(): ActivityRunningState {
+        val cloned = ActivityRunningState(componentName, hashCode, taskId)
         cloned.state = state
         return cloned
     }

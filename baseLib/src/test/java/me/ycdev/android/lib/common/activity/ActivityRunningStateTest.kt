@@ -7,15 +7,16 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ActivityInfoTest {
+class ActivityRunningStateTest {
     private val testComponent = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz")
 
     @Test
     fun makeCopy() {
-        val origin = ActivityInfo(testComponent, 10, ActivityInfo.State.Started)
+        val origin = ActivityRunningState(testComponent, 0xa0001, 10, ActivityRunningState.State.Started)
         val copied = origin.makeCopy()
         assertThat(copied.componentName).isEqualTo(testComponent)
+        assertThat(copied.hashCode).isEqualTo(0xa0001)
         assertThat(copied.taskId).isEqualTo(10)
-        assertThat(copied.state).isEqualTo(ActivityInfo.State.Started)
+        assertThat(copied.state).isEqualTo(ActivityRunningState.State.Started)
     }
 }

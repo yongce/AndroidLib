@@ -10,6 +10,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ActivityTaskTest {
+    private val taskId1 = 10
+    private val taskAffinity1 = "me.ycdev.test.pkg"
+    private val taskId2 = 5
+
     private val testComponent1 = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz1")
     private val testComponent2 = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz2")
     private val testComponent3 = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz3")
@@ -17,20 +21,20 @@ class ActivityTaskTest {
     @get:Rule
     val exceptionRule: ExpectedException = ExpectedException.none()
 
-    private fun addAndCheckActivities(task: ActivityTask, vararg activities: ActivityInfo) {
+    private fun addAndCheckActivities(task: ActivityTask, vararg activities: ActivityRunningState) {
         activities.forEach {
             task.addActivity(it)
         }
         checkActivities(task, *activities)
     }
 
-    private fun checkActivities(task: ActivityTask, vararg activities: ActivityInfo) {
+    private fun checkActivities(task: ActivityTask, vararg activities: ActivityRunningState) {
         val lastActivity = activities.last()
         assertThat(task.topActivity()).isEqualTo(lastActivity)
-        assertThat(task.lastActivity(lastActivity.componentName)).isEqualTo(lastActivity)
+        assertThat(task.lastActivity(lastActivity.componentName, lastActivity.hashCode)).isEqualTo(lastActivity)
 
         // pop last one
-        assertThat(task.popActivity(lastActivity.componentName)).isEqualTo(lastActivity)
+        assertThat(task.popActivity(lastActivity.componentName, lastActivity.hashCode)).isEqualTo(lastActivity)
 
         // check the remaining stack
         val stack = task.getActivityStack()
@@ -43,30 +47,28 @@ class ActivityTaskTest {
 
     @Test
     fun addActivity_order() {
-        val taskId = 10
-        val task = ActivityTask(taskId)
-        val activity1 = ActivityInfo(testComponent1, taskId, ActivityInfo.State.Stopped)
-        val activity2 = ActivityInfo(testComponent2, taskId, ActivityInfo.State.Paused)
-        val activity3 = ActivityInfo(testComponent3, taskId, ActivityInfo.State.Resumed)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+        val activity2 = ActivityRunningState(testComponent2, 0xa002, taskId1, ActivityRunningState.State.Paused)
+        val activity3 = ActivityRunningState(testComponent3, 0xa003, taskId1, ActivityRunningState.State.Resumed)
 
         addAndCheckActivities(task, activity1, activity2, activity3)
     }
 
     @Test
     fun addActivity_same() {
-        val taskId = 10
-        val task = ActivityTask(taskId)
-        val activity1 = ActivityInfo(testComponent1, taskId, ActivityInfo.State.Stopped)
-        val activity2 = ActivityInfo(testComponent1, taskId, ActivityInfo.State.Paused)
-        val activity3 = ActivityInfo(testComponent1, taskId, ActivityInfo.State.Resumed)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+        val activity2 = ActivityRunningState(testComponent1, 0xa002, taskId1, ActivityRunningState.State.Paused)
+        val activity3 = ActivityRunningState(testComponent1, 0xa003, taskId1, ActivityRunningState.State.Resumed)
 
         addAndCheckActivities(task, activity1, activity2, activity3)
     }
 
     @Test
     fun addActivity_notMatched() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 5, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId2, ActivityRunningState.State.Stopped)
 
         exceptionRule.expectMessage("Activity taskId[5] != AppTask[10]")
         task.addActivity(activity1)
@@ -74,50 +76,50 @@ class ActivityTaskTest {
 
     @Test
     fun addActivity_noCopy() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
         task.addActivity(activity1)
 
-        activity1.state = ActivityInfo.State.Resumed
-        assertThat(task.topActivity().state).isEqualTo(ActivityInfo.State.Resumed)
+        activity1.state = ActivityRunningState.State.Resumed
+        assertThat(task.topActivity().state).isEqualTo(ActivityRunningState.State.Resumed)
     }
 
     @Test
     fun popActivity_notMatched() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
         task.addActivity(activity1)
 
-        exceptionRule.expectMessage("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}")
-        task.popActivity(testComponent2)
+        exceptionRule.expectMessage("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}@a002")
+        task.popActivity(testComponent2, 0xa002)
     }
 
     @Test
     fun lastActivity_notMatched() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
         task.addActivity(activity1)
 
-        exceptionRule.expectMessage("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}")
-        task.lastActivity(testComponent2)
+        exceptionRule.expectMessage("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}@a002")
+        task.lastActivity(testComponent2, 0xa002)
     }
 
     @Test
     fun lastActivity_noCopy() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
         task.addActivity(activity1)
 
-        task.lastActivity(testComponent1).state = ActivityInfo.State.Resumed
-        assertThat(activity1.state).isEqualTo(ActivityInfo.State.Resumed)
+        task.lastActivity(testComponent1, 0xa001).state = ActivityRunningState.State.Resumed
+        assertThat(activity1.state).isEqualTo(ActivityRunningState.State.Resumed)
     }
 
     @Test
     fun topActivity_empty() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
         task.addActivity(activity1)
-        task.popActivity(testComponent1)
+        task.popActivity(testComponent1, 0xa001)
 
         exceptionRule.expectMessage("The task is empty. Cannot get the top Activity.")
         task.topActivity()
@@ -125,54 +127,52 @@ class ActivityTaskTest {
 
     @Test
     fun topActivity_noCopy() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
         task.addActivity(activity1)
 
-        task.topActivity().state = ActivityInfo.State.Resumed
-        assertThat(activity1.state).isEqualTo(ActivityInfo.State.Resumed)
+        task.topActivity().state = ActivityRunningState.State.Resumed
+        assertThat(activity1.state).isEqualTo(ActivityRunningState.State.Resumed)
     }
 
     @Test
     fun getActivityStack_noCopy() {
-        val taskId = 10
-        val task = ActivityTask(taskId)
-        val activity1 = ActivityInfo(testComponent1, taskId, ActivityInfo.State.Stopped)
-        val activity2 = ActivityInfo(testComponent2, taskId, ActivityInfo.State.Paused)
-        val activity3 = ActivityInfo(testComponent3, taskId, ActivityInfo.State.Resumed)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+        val activity2 = ActivityRunningState(testComponent2, 0xa002, taskId1, ActivityRunningState.State.Paused)
+        val activity3 = ActivityRunningState(testComponent3, 0xa003, taskId1, ActivityRunningState.State.Resumed)
 
         task.addActivity(activity1)
         task.addActivity(activity2)
         task.addActivity(activity3)
 
         task.getActivityStack().forEach {
-            it.state = ActivityInfo.State.Destroyed
+            it.state = ActivityRunningState.State.Destroyed
         }
 
-        assertThat(activity1.state).isEqualTo(ActivityInfo.State.Destroyed)
-        assertThat(activity2.state).isEqualTo(ActivityInfo.State.Destroyed)
-        assertThat(activity2.state).isEqualTo(ActivityInfo.State.Destroyed)
+        assertThat(activity1.state).isEqualTo(ActivityRunningState.State.Destroyed)
+        assertThat(activity2.state).isEqualTo(ActivityRunningState.State.Destroyed)
+        assertThat(activity2.state).isEqualTo(ActivityRunningState.State.Destroyed)
     }
 
     @Test
     fun isEmpty() {
-        val task = ActivityTask(10)
-        val activity1 = ActivityInfo(testComponent1, 10, ActivityInfo.State.Stopped)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
 
         assertThat(task.isEmpty()).isTrue()
         task.addActivity(activity1)
         assertThat(task.isEmpty()).isFalse()
-        task.popActivity(testComponent1)
+        task.popActivity(testComponent1, 0xa001)
         assertThat(task.isEmpty()).isTrue()
     }
 
     @Test
     fun makeCopy() {
-        val taskId = 10
-        val task = ActivityTask(taskId)
-        val activity1 = ActivityInfo(testComponent1, taskId, ActivityInfo.State.Stopped)
-        val activity2 = ActivityInfo(testComponent2, taskId, ActivityInfo.State.Paused)
-        val activity3 = ActivityInfo(testComponent3, taskId, ActivityInfo.State.Resumed)
+        val task = ActivityTask(taskId1, taskAffinity1)
+        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+        val activity2 = ActivityRunningState(testComponent2, 0xa002, taskId1, ActivityRunningState.State.Paused)
+        val activity3 = ActivityRunningState(testComponent3, 0xa003, taskId1, ActivityRunningState.State.Resumed)
 
         task.addActivity(activity1)
         task.addActivity(activity2)
@@ -182,10 +182,10 @@ class ActivityTaskTest {
         checkActivities(copiedTask, activity1, activity2, activity3)
 
         copiedTask.getActivityStack().forEach {
-            it.state = ActivityInfo.State.Destroyed
+            it.state = ActivityRunningState.State.Destroyed
         }
-        assertThat(activity1.state).isEqualTo(ActivityInfo.State.Stopped)
-        assertThat(activity2.state).isEqualTo(ActivityInfo.State.Paused)
-        assertThat(activity3.state).isEqualTo(ActivityInfo.State.Resumed)
+        assertThat(activity1.state).isEqualTo(ActivityRunningState.State.Stopped)
+        assertThat(activity2.state).isEqualTo(ActivityRunningState.State.Paused)
+        assertThat(activity3.state).isEqualTo(ActivityRunningState.State.Resumed)
     }
 }
