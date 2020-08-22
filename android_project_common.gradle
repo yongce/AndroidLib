@@ -1,7 +1,7 @@
 /*
  * File: 'android_project_common.gradle'
  * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
- * Version: 2020.07.19
+ * Version: 2020.08.22
  * All android projects can copy and include this file.
  */
 
@@ -22,6 +22,8 @@ allprojects {
                     details.useVersion versions.lifecycle
                 } else if (details.requested.group == 'androidx.room') {
                     details.useVersion versions.room
+                } else if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion versions.kotlin
                 }
             }
         }
@@ -36,15 +38,15 @@ ext {
             'compileSdk'       : 30,
 
             // Android official support
-            'kotlin'           : '1.3.72',
+            'kotlin'           : '1.4.0',
             'kotlinCoroutine'  : "1.3.7",
             'multidexLib'      : "2.0.1",
-            'androidxCore'     : '1.3.0',
-            'fragment'         : '1.2.4',
+            'androidxCore'     : '1.3.1',
+            'fragment'         : '1.2.5',
             'preference'       : "1.1.0",
             'palette'          : "1.0.0",
             'recyclerView'     : "1.1.0",
-            'constraintLayout' : "1.1.3",
+            'constraintLayout' : "2.0.0",
             'vectorDrawable'   : "1.1.0",
             'lintLib'          : '27.0.0',
             'archCore'         : "2.1.0",
@@ -62,17 +64,17 @@ ext {
             'uiautomator'      : "2.2.0",
             'truth'            : '1.0.1',
             'hamcrest'         : '2.2',
-            'mockito'          : "2.19.0",
+            'mockito'          : "2.25.0",
             'powermock'        : '1.6.6',
             'robolectric'      : '4.3.1',
-            'mockk'            : "1.9.3",
+            'mockk'            : "1.10.0",
 
             // google
             'gms'              : '18.0.0',
             'wearableSupport'  : "2.3.0",
 
             // infrastructure
-            'butterknife'      : "10.2.1",
+            'butterknife'      : "10.2.3",
             'timber'           : "4.7.1",
             'guava'            : "29.0-android",
 
@@ -86,13 +88,13 @@ ext {
             'protobuf'         : "3.1.0",
 
             // network & image
-            'okhttp'           : '4.7.2',
+            'okhttp'           : '4.8.1',
             'retrofit'         : '2.9.0',
             'glide'            : '4.11.0',
             'glideTrans'       : "4.0.0",
 
             // rx
-            'rxjava'           : "2.2.6",
+            'rxjava'           : "2.2.12",
             'rxandroid'        : "2.1.1",
 
             // ycdev
@@ -104,7 +106,8 @@ ext {
     deps = [
             // Android official support
             'kotlin': [
-                    'stdlib'           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+                    'stdlib'           : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
+                    'reflect'           : "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}",
                     'coroutinesCore'   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinCoroutine}",
                     'coroutinesAndroid' : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinCoroutine}"
             ],
@@ -119,8 +122,8 @@ ext {
                     'collection'       : "androidx.collection:collection:1.1.0",
                     'collectionKtx'    : "androidx.collection:collection-ktx:1.1.0",
                     // UI
-                    'appcompat'        : "androidx.appcompat:appcompat:1.1.0",
-                    'material'         : "com.google.android.material:material:1.1.0",
+                    'appcompat'        : "androidx.appcompat:appcompat:1.2.0",
+                    'material'         : "com.google.android.material:material:1.2.0",
                     'preference'       : "androidx.preference:preference:${versions.preference}",
                     'preferenceKtx'    : "androidx.preference:preference-ktx:${versions.preference}",
                     'constraintLayout' : "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",

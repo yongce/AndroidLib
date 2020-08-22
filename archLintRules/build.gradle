@@ -3,6 +3,9 @@ apply plugin: 'kotlin'
 dependencies {
     compileOnly "com.android.tools.lint:lint-api:${versions.lintLib}"
     compileOnly "com.android.tools.lint:lint-checks:${versions.lintLib}"
+    // Workaround to fix the issue:
+    // "Found more than one jar in the 'lintPublish' configuration. Only one file is supported"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
 
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "com.android.tools.lint:lint:${versions.lintLib}"
