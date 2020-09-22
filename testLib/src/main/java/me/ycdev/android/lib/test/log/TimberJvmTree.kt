@@ -25,4 +25,16 @@ class TimberJvmTree : Timber.Tree() {
         println(log)
         t?.printStackTrace(System.out)
     }
+
+    companion object {
+        fun plantIfNeeded() {
+            // only plant TimberJvmTree once
+            Timber.forest().forEach {
+                if (it is TimberJvmTree) {
+                    return
+                }
+            }
+            Timber.plant(TimberJvmTree())
+        }
+    }
 }

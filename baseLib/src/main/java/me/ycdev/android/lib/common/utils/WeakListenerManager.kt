@@ -1,5 +1,7 @@
 package me.ycdev.android.lib.common.utils
 
+import androidx.annotation.VisibleForTesting
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.ArrayList
 
@@ -11,9 +13,9 @@ open class WeakListenerManager<IListener : Any> {
         fun notify(listener: IListener)
     }
 
-    private class ListenerInfo<IListener : Any> internal constructor(listener: IListener) {
-        internal var className: String = listener::class.java.name
-        internal var holder: WeakReference<IListener> = WeakReference(listener)
+    private class ListenerInfo<IListener : Any>(listener: IListener) {
+        var className: String = listener::class.java.name
+        var holder: WeakReference<IListener> = WeakReference(listener)
     }
 
     /**
@@ -76,21 +78,25 @@ open class WeakListenerManager<IListener : Any> {
 
     fun notifyListeners(action: (IListener) -> Unit) {
         synchronized(listeners) {
-            var i = 0
-            while (i < listeners.size) {
-                val listenerInfo = listeners[i]
+            // The listener may unregister itself!
+            val listenersCopied: List<ListenerInfo<IListener>> = ArrayList(listeners)
+            for ((i, listenerInfo) in listenersCopied.withIndex()) {
                 val l = listenerInfo.holder.get()
                 if (l == null) {
-                    LibLogger.e(TAG, "listener leak found: " + listenerInfo.className)
-                    listeners.removeAt(i)
+                    Timber.tag(TAG).w("listener leak found: %s", listenerInfo.className)
+                    listeners.remove(listenerInfo)
                 } else {
-                    LibLogger.d(TAG, "notify: " + listenerInfo.className)
+                    Timber.tag(TAG).d("notify #%d: %s", i, listenerInfo.className)
                     action(l)
-                    i++
                 }
             }
-            LibLogger.d(TAG, "notify done, cur size: " + listeners.size)
+            Timber.tag(TAG).d("notify done, cur size: %d in %s", listeners.size, this)
         }
+    }
+
+    @VisibleForTesting
+    internal fun listenersCount(): Int {
+        return listeners.size
     }
 
     companion object {
