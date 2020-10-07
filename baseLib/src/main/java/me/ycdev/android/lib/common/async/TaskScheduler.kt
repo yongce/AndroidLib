@@ -6,137 +6,144 @@ import android.os.Looper
 import android.os.Message
 import android.os.SystemClock
 import androidx.annotation.IntDef
-import androidx.annotation.MainThread
+import androidx.annotation.NonNull
 import androidx.annotation.VisibleForTesting
-import java.util.ArrayList
-import java.util.concurrent.atomic.AtomicInteger
+import me.ycdev.android.lib.common.annotation.HandlerWork
 import me.ycdev.android.lib.common.utils.DateTimeUtils
 import me.ycdev.android.lib.common.utils.Preconditions
-import me.ycdev.android.lib.common.utils.ThreadUtils.isMainThread
 import timber.log.Timber
+import java.util.ArrayList
+import java.util.concurrent.atomic.AtomicInteger
 
-class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) {
-    private val mOwnerTag: String
-    private var mCheckInterval = DEFAULT_CHECK_INTERVAL
-    private var mLogEnabled = false
+class TaskScheduler(@NonNull schedulerLooper: Looper, @NonNull ownerTag: String) {
+    private val ownerTag: String = taskSchedulerIdGenerator.incrementAndGet().toString() + "-" + ownerTag
+    private var checkInterval = DEFAULT_CHECK_INTERVAL
+    private var logEnabled = false
 
-    private val mMainHandler = MainHandler()
-    private val mTasks = ArrayList<TaskInfo>()
+    private val schedulerHandler = SchedulerHandler(schedulerLooper)
+    private val tasks = ArrayList<TaskInfo>()
 
     // for test only
     @VisibleForTesting
-    internal var mCheckCount: Int = 0
+    internal var checkCount: Int = 0
 
     init {
-        Preconditions.checkNotNull(mTaskExecutor)
+        Preconditions.checkNotNull(schedulerLooper)
         Preconditions.checkNotNull(ownerTag)
-        mOwnerTag = sTaskSchedulerId.getAndIncrement().toString() + "-" + ownerTag
     }
 
     fun setCheckInterval(interval: Long) {
         if (interval < 1000) {
             throw IllegalArgumentException("Interval less than 1 second is not allowed.")
         }
-        mCheckInterval = interval
+        checkInterval = interval
     }
 
     fun enableDebugLogs(enable: Boolean) {
-        mLogEnabled = enable
+        logEnabled = enable
     }
 
-    @JvmOverloads
-    fun scheduleAt(
-        task: Runnable,
+    fun schedule(executor: ITaskExecutor, delayedMs: Long, task: Runnable) {
+        schedule(executor, delayedMs, SCHEDULE_POLICY_NO_CHECK, task)
+    }
+
+    fun schedule(
+        executor: ITaskExecutor,
         delayedMs: Long,
-        @SchedulePolicy policy: Int = SCHEDULE_POLICY_NO_CHECK
+        @SchedulePolicy policy: Int,
+        task: Runnable,
     ) {
         checkSchedulePolicy(policy)
-        val taskInfo = TaskInfo(task, delayedMs)
-        if (mLogEnabled) {
+        val taskInfo = TaskInfo(executor, task, delayedMs)
+        if (logEnabled) {
             Timber.tag(TAG).d(
                 "[%s] schedule one-off task: %s, policy: %s",
-                mOwnerTag, taskInfo, schedulePolicyToString(policy)
+                ownerTag, taskInfo, schedulePolicyToString(policy)
             )
         }
         scheduleTask(taskInfo, policy)
     }
 
-    @JvmOverloads
+    fun schedulePeriod(executor: ITaskExecutor, delayedMs: Long, periodMs: Long, task: Runnable) {
+        schedulePeriod(executor, delayedMs, periodMs, SCHEDULE_POLICY_NO_CHECK, task)
+    }
+
     fun schedulePeriod(
-        task: Runnable,
+        executor: ITaskExecutor,
         delayedMs: Long,
         periodMs: Long,
-        @SchedulePolicy policy: Int = SCHEDULE_POLICY_NO_CHECK
+        @SchedulePolicy policy: Int,
+        task: Runnable,
     ) {
         checkSchedulePolicy(policy)
-        val taskInfo = TaskInfo(task, delayedMs, periodMs)
-        if (mLogEnabled) {
+        val taskInfo = TaskInfo(executor, task, delayedMs, periodMs)
+        if (logEnabled) {
             Timber.tag(TAG).d(
                 "[%s] schedule period task: %s, policy: %s",
-                mOwnerTag, taskInfo, schedulePolicyToString(policy)
+                ownerTag, taskInfo, schedulePolicyToString(policy)
             )
         }
         scheduleTask(taskInfo, policy)
     }
 
     private fun scheduleTask(taskInfo: TaskInfo, @SchedulePolicy policy: Int) {
-        if (isMainThread) {
+        if (Looper.myLooper() == schedulerHandler.looper) {
             addTask(taskInfo, policy)
         } else {
-            mMainHandler.obtainMessage(MSG_ADD_TASK, policy, 0, taskInfo).sendToTarget()
+            schedulerHandler.obtainMessage(MSG_ADD_TASK, policy, 0, taskInfo).sendToTarget()
         }
     }
 
     fun cancel(task: Runnable) {
-        if (mLogEnabled) {
-            Timber.tag(TAG).d("[%s] cancel task: %s", mOwnerTag, task)
+        if (logEnabled) {
+            Timber.tag(TAG).d("[%s] cancel task: %s", ownerTag, task)
         }
-        if (isMainThread) {
+        if (Looper.myLooper() == schedulerHandler.looper) {
             removeTask(task)
         } else {
-            mMainHandler.obtainMessage(MSG_REMOVE_TASK, task).sendToTarget()
+            schedulerHandler.obtainMessage(MSG_REMOVE_TASK, task).sendToTarget()
         }
     }
 
     fun clear() {
-        if (mLogEnabled) {
-            Timber.tag(TAG).d("[%s] clear tasks", mOwnerTag)
+        if (logEnabled) {
+            Timber.tag(TAG).d("[%s] clear tasks", ownerTag)
         }
-        if (isMainThread) {
+        if (Looper.myLooper() == schedulerHandler.looper) {
             clearTasks()
         } else {
-            mMainHandler.sendEmptyMessage(MSG_CLEAR_TASKS)
+            schedulerHandler.sendEmptyMessage(MSG_CLEAR_TASKS)
         }
     }
 
     fun trigger() {
-        if (mLogEnabled) {
-            Timber.tag(TAG).d("[%s] trigger checking", mOwnerTag)
+        if (logEnabled) {
+            Timber.tag(TAG).d("[%s] trigger checking", ownerTag)
         }
-        if (isMainThread) {
+        if (Looper.myLooper() == schedulerHandler.looper) {
             checkTasks()
         } else {
-            mMainHandler.sendEmptyMessage(MSG_CHECK_TASKS)
+            schedulerHandler.sendEmptyMessage(MSG_CHECK_TASKS)
         }
     }
 
-    @MainThread
+    @HandlerWork("schedulerHandler")
     private fun addTask(task: TaskInfo, @SchedulePolicy policy: Int) {
         var taskAdded = false
         if (policy == SCHEDULE_POLICY_NO_CHECK) {
-            mTasks.add(task)
+            tasks.add(task)
             taskAdded = true
         } else {
             val index = findTaskIndex(task.task)
             if (index == -1) {
-                mTasks.add(task)
+                tasks.add(task)
                 taskAdded = true
             } else {
-                if (mLogEnabled) {
-                    Timber.tag(TAG).d("[%s] duplicate task found when add %s", mOwnerTag, task)
+                if (logEnabled) {
+                    Timber.tag(TAG).d("[%s] duplicate task found when add %s", ownerTag, task)
                 }
                 if (policy == SCHEDULE_POLICY_REPLACE) {
-                    mTasks[index] = task
+                    tasks[index] = task
                     taskAdded = true
                 } // else: nothing to do for ignore
             }
@@ -144,19 +151,19 @@ class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) 
 
         if (taskAdded) {
             scheduleCheckTask(task.delay)
-            if (mLogEnabled) {
+            if (logEnabled) {
                 Timber.tag(TAG).d(
                     "[%s] addTask: %s, policy: %s",
-                    mOwnerTag, task, schedulePolicyToString(policy)
+                    ownerTag, task, schedulePolicyToString(policy)
                 )
             }
         }
     }
 
-    @MainThread
+    @HandlerWork("schedulerHandler")
     private fun findTaskIndex(task: Runnable): Int {
-        for (i in mTasks.indices) {
-            val info = mTasks[i]
+        for (i in tasks.indices) {
+            val info = tasks[i]
             if (info.task == task) {
                 return i
             }
@@ -164,46 +171,46 @@ class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) 
         return -1
     }
 
-    @MainThread
+    @HandlerWork("schedulerHandler")
     private fun removeTask(task: Runnable) {
         var i = 0
-        while (i < mTasks.size) {
-            val info = mTasks[i]
+        while (i < tasks.size) {
+            val info = tasks[i]
             if (info.task == task) {
-                if (mLogEnabled) {
-                    Timber.tag(TAG).d("[%s] task removed: %s", mOwnerTag, info)
+                if (logEnabled) {
+                    Timber.tag(TAG).d("[%s] task removed: %s", ownerTag, info)
                 }
-                mTasks.removeAt(i)
+                tasks.removeAt(i)
             } else {
                 i++
             }
         } /* empty */
     }
 
-    @MainThread
+    @HandlerWork("schedulerHandler")
     private fun checkTasks() {
-        mCheckCount++ // for test only
-        if (mTasks.isEmpty()) {
-            if (mLogEnabled) {
-                Timber.tag(TAG).d("[%s] Tasks empty, cancel check.", mOwnerTag)
+        checkCount++ // for test only
+        if (tasks.isEmpty()) {
+            if (logEnabled) {
+                Timber.tag(TAG).d("[%s] Tasks empty, cancel check.", ownerTag)
             }
-            mMainHandler.removeMessages(MSG_CHECK_TASKS)
+            schedulerHandler.removeMessages(MSG_CHECK_TASKS)
             return
         }
 
-        if (mLogEnabled) {
-            Timber.tag(TAG).v("[%s] check tasks, taskCount: %d", mOwnerTag, mTasks.size)
+        if (logEnabled) {
+            Timber.tag(TAG).v("[%s] check tasks, taskCount: %d", ownerTag, tasks.size)
         }
-        val it = mTasks.iterator()
-        val pendingTasks = ArrayList<Runnable>()
-        var nextEventDelay = mCheckInterval
+        val it = tasks.iterator()
+        val pendingTasks = ArrayList<TaskInfo>()
+        var nextEventDelay = checkInterval
         while (it.hasNext()) {
             var info: TaskInfo? = it.next()
             if (SystemClock.elapsedRealtime() >= info!!.triggerAt) {
-                if (mLogEnabled) {
-                    Timber.tag(TAG).d("[%s] task to execute: %s", mOwnerTag, info)
+                if (logEnabled) {
+                    Timber.tag(TAG).d("[%s] task to execute: %s", ownerTag, info)
                 }
-                pendingTasks.add(info.task)
+                pendingTasks.add(info)
                 if (info.period > 0) {
                     info.triggerAt = SystemClock.elapsedRealtime() + info.period
                 } else {
@@ -220,38 +227,36 @@ class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) 
             }
         }
 
-        if (mLogEnabled) {
+        if (logEnabled) {
             Timber.tag(TAG).v(
-                "[%s] next check at %s", mOwnerTag,
+                "[%s] next check at %s", ownerTag,
                 DateTimeUtils.getReadableTimeStamp(System.currentTimeMillis() + nextEventDelay)
             )
         }
-        mMainHandler.removeMessages(MSG_CHECK_TASKS)
-        mMainHandler.sendEmptyMessageDelayed(MSG_CHECK_TASKS, nextEventDelay)
+        schedulerHandler.removeMessages(MSG_CHECK_TASKS)
+        schedulerHandler.sendEmptyMessageDelayed(MSG_CHECK_TASKS, nextEventDelay)
 
-        if (pendingTasks.size > 0) {
-            mTaskExecutor.postTasks(pendingTasks)
+        for (info in pendingTasks) {
+            info.executor.postTask(info.task)
         }
     }
 
-    @MainThread
+    @HandlerWork("schedulerHandler")
     private fun clearTasks() {
-        mTasks.clear()
-        mTaskExecutor.clearTasks()
+        tasks.clear()
     }
 
-    @MainThread
+    @HandlerWork("schedulerHandler")
     private fun scheduleCheckTask(delay: Long) {
         var delayTmp = delay
-        if (delayTmp > mCheckInterval) {
-            delayTmp = mCheckInterval
+        if (delayTmp > checkInterval) {
+            delayTmp = checkInterval
         }
-        mMainHandler.sendEmptyMessageDelayed(MSG_CHECK_TASKS, delayTmp)
+        schedulerHandler.sendEmptyMessageDelayed(MSG_CHECK_TASKS, delayTmp)
     }
 
     @SuppressLint("HandlerLeak")
-    private inner class MainHandler internal constructor() : Handler(Looper.getMainLooper()) {
-
+    private inner class SchedulerHandler(@NonNull looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_ADD_TASK -> {
@@ -281,7 +286,7 @@ class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) 
     annotation class SchedulePolicy
 
     companion object {
-        private val TAG = "TaskScheduler"
+        private const val TAG = "TaskScheduler"
 
         const val SCHEDULE_POLICY_NO_CHECK = 1
         const val SCHEDULE_POLICY_IGNORE = 2
@@ -293,15 +298,15 @@ class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) 
         private const val MSG_CLEAR_TASKS = 4
 
         @VisibleForTesting
-        internal val DEFAULT_CHECK_INTERVAL: Long = 10000 // 10 seconds
+        internal const val DEFAULT_CHECK_INTERVAL: Long = 10_000 // 10 seconds
 
-        private val sTaskSchedulerId = AtomicInteger(1)
+        private val taskSchedulerIdGenerator = AtomicInteger(0)
 
         private fun schedulePolicyToString(@SchedulePolicy policy: Int): String {
-            when (policy) {
-                SCHEDULE_POLICY_NO_CHECK -> return "NO_CHECK"
-                SCHEDULE_POLICY_IGNORE -> return "IGNORE"
-                SCHEDULE_POLICY_REPLACE -> return "REPLACE"
+            return when (policy) {
+                SCHEDULE_POLICY_NO_CHECK -> "NO_CHECK"
+                SCHEDULE_POLICY_IGNORE -> "IGNORE"
+                SCHEDULE_POLICY_REPLACE -> "REPLACE"
                 else -> throw RuntimeException("Unknown policy: $policy")
             }
         }
@@ -317,37 +322,3 @@ class TaskScheduler(private val mTaskExecutor: ITaskExecutor, ownerTag: String) 
     }
 }
 
-internal class TaskInfo {
-
-    private var taskId: Int = 0
-    var task: Runnable
-    var delay: Long = 0
-    var period: Long = -1
-    var triggerAt: Long = 0
-
-    constructor(task: Runnable, delay: Long) {
-        this.taskId = sTaskId.getAndIncrement()
-        this.task = task
-        this.delay = delay
-        this.triggerAt = SystemClock.elapsedRealtime() + delay
-    }
-
-    constructor(task: Runnable, delay: Long, period: Long) {
-        this.taskId = sTaskId.getAndIncrement()
-        this.task = task
-        this.delay = delay
-        this.period = period
-        this.triggerAt = SystemClock.elapsedRealtime() + delay
-    }
-
-    override fun toString(): String {
-        val timestamp = System.currentTimeMillis() - (SystemClock.elapsedRealtime() - triggerAt)
-        return ("TaskInfo[id=" + taskId + ", delay=" + delay +
-                ", triggerAt=" + DateTimeUtils.getReadableTimeStamp(timestamp) +
-                ", period=" + period + "]")
-    }
-
-    companion object {
-        private val sTaskId = AtomicInteger(1)
-    }
-}

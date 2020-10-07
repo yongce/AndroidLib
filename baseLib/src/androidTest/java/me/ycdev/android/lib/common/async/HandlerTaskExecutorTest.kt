@@ -10,31 +10,21 @@ import java.util.concurrent.TimeUnit
 import org.junit.Test
 
 @LargeTest
-class HandlerExecutorTest {
+class HandlerTaskExecutorTest {
     @Test
     @Throws(InterruptedException::class)
     fun checkLooper() {
         println("test thread id=" + Thread.currentThread().id)
-        val executor = HandlerExecutor(Looper.getMainLooper())
+        val executor = HandlerTaskExecutor.withMainLooper()
         val latch = CountDownLatch(4)
-        executor.postTasks(createTasks(latch, 4, 150))
+        createTasks(latch, 4, 150).forEach {
+            executor.postTask(it)
+        }
         latch.await(1, TimeUnit.SECONDS)
         assertThat(latch.count).isEqualTo(0L)
     }
 
-    @Test
-    @Throws(InterruptedException::class)
-    fun clearTasks() {
-        val executor = HandlerExecutor(Looper.getMainLooper())
-        val latch = CountDownLatch(5)
-        executor.postTasks(createTasks(latch, 5, 100))
-        SystemClock.sleep(250)
-        executor.clearTasks()
-        latch.await(1, TimeUnit.SECONDS)
-        assertThat(latch.count).isGreaterThan(1L)
-        assertThat(latch.count).isLessThan(5L)
-    }
-
+    @Suppress("SameParameterValue")
     private fun createTasks(latch: CountDownLatch, count: Int, sleepMs: Long): List<Runnable> {
         val tasks = ArrayList<Runnable>(count)
         for (i in 0 until count) {
