@@ -42,7 +42,7 @@ ext {
             'projectScmDevConnection': 'ssh://git@github.com/yongce/AndroidLib.git',
             'projectInceptionYear': '2013',
             'groupId': 'me.ycdev.android',
-            'version': '1.8.4',
+            'version': '1.8.5',
             'developerId': 'yongce',
             'developerName': 'Yongce Tu',
             'developerEmail': 'yongce.tu@gmail.com',
