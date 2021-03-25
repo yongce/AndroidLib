@@ -1,13 +1,13 @@
 package me.ycdev.android.lib.common.packets
 
 import androidx.annotation.VisibleForTesting
+import timber.log.Timber
 import java.lang.Math.min
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.ArrayList
 import java.util.Arrays
 import kotlin.experimental.xor
-import timber.log.Timber
 
 /**
  * Supported package formats:

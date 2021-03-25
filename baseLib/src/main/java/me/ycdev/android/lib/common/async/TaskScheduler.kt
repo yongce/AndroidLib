@@ -321,4 +321,3 @@ class TaskScheduler(@NonNull schedulerLooper: Looper, @NonNull ownerTag: String)
         }
     }
 }
-

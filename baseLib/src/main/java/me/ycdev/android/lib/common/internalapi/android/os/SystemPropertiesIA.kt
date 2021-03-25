@@ -1,9 +1,9 @@
 package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.annotation.SuppressLint
+import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-import timber.log.Timber
 
 @SuppressLint("PrivateApi")
 object SystemPropertiesIA {

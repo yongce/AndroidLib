@@ -2,14 +2,14 @@ package me.ycdev.android.lib.common.packets
 
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import me.ycdev.android.lib.common.packets.PacketsWorker.ParserState
 import me.ycdev.android.lib.common.packets.PacketsWorker.Version
 import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 import me.ycdev.android.lib.test.log.TimberJvmTree
 import org.junit.Test
 import timber.log.Timber
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
     @Test

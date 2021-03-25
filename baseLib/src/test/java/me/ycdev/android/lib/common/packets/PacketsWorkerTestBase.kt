@@ -1,11 +1,11 @@
 package me.ycdev.android.lib.common.packets
 
-import java.util.Random
-import java.util.concurrent.ArrayBlockingQueue
 import me.ycdev.android.lib.common.packets.PacketsWorker.ParserCallback
 import me.ycdev.android.lib.test.log.TimberJvmTree
 import org.junit.Before
 import timber.log.Timber
+import java.util.Random
+import java.util.concurrent.ArrayBlockingQueue
 
 open class PacketsWorkerTestBase {
     protected val parserCallback = CallbackImpl()

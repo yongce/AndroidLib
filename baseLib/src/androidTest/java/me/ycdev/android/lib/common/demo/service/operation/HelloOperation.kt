@@ -2,9 +2,9 @@ package me.ycdev.android.lib.common.demo.service.operation
 
 import android.os.RemoteException
 import androidx.annotation.NonNull
-import java.util.concurrent.CountDownLatch
 import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.ipc.IpcOperation
+import java.util.concurrent.CountDownLatch
 
 class HelloOperation(private val mGift: String) : IpcOperation<IDemoService> {
     private var mLatch: CountDownLatch? = null

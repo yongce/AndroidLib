@@ -8,8 +8,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.demo.service.LocalServiceClient
 import me.ycdev.android.lib.common.demo.service.RemoteServiceClient
@@ -17,6 +15,8 @@ import me.ycdev.android.lib.common.demo.service.operation.HelloOperation
 import me.ycdev.android.lib.common.utils.ThreadManager
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest

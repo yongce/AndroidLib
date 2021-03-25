@@ -6,9 +6,9 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
-import java.util.HashSet
 import me.ycdev.android.arch.lint.base.InheritDetectorBase
 import org.jetbrains.uast.UElement
+import java.util.HashSet
 
 class MyBaseActivityDetector : InheritDetectorBase() {
     override val applicableClasses: List<String> = arrayListOf("android.app.Activity")

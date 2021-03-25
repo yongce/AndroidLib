@@ -1,14 +1,14 @@
 package me.ycdev.android.lib.common.utils
 
 import com.google.common.truth.Truth
-import java.lang.ref.ReferenceQueue
-import java.lang.ref.SoftReference
-import java.lang.ref.WeakReference
 import me.ycdev.android.lib.common.type.BooleanHolder
 import me.ycdev.android.lib.test.rules.TimberJvmRule
 import org.junit.ClassRule
 import org.junit.Test
 import timber.log.Timber
+import java.lang.ref.ReferenceQueue
+import java.lang.ref.SoftReference
+import java.lang.ref.WeakReference
 
 class GcHelperTest {
 

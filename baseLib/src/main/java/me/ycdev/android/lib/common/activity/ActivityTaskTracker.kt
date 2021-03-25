@@ -5,8 +5,8 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
-import java.util.concurrent.atomic.AtomicInteger
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * This class can be used to track Activity/task state changes.

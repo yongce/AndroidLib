@@ -1,9 +1,9 @@
 package me.ycdev.android.lib.common.apps
 
 import android.graphics.drawable.Drawable
+import me.ycdev.android.lib.common.utils.DateTimeUtils
 import java.text.Collator
 import java.util.Comparator
-import me.ycdev.android.lib.common.utils.DateTimeUtils
 
 data class AppInfo(val pkgName: String) {
     var appUid: Int = 0

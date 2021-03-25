@@ -7,13 +7,13 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.MediumTest
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import me.ycdev.android.lib.common.utils.MainHandler
 import me.ycdev.android.lib.common.utils.ThreadUtils
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
