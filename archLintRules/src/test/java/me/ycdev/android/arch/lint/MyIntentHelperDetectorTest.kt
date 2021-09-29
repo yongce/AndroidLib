@@ -137,6 +137,8 @@ class MyIntentHelperDetectorTest {
                     "}\n"
         )
         val testFiles = arrayOf<TestFile>(
+            TestFileStubs.nonNull,
+            TestFileStubs.nullable,
             TestFileStubs.libLogger,
             TestFileStubs.intentHelper,
             testFile

@@ -9,7 +9,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.LintGoodActivity"
-            android:label="@string/title_activity_lint_good" >
+            android:label="@string/title_activity_lint_good"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

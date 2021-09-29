@@ -1,9 +1,11 @@
 package me.ycdev.android.arch.lint
 
 import com.android.tools.lint.client.api.IssueRegistry
+import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.Issue
 import java.util.Arrays
 
+@Suppress("UnstableApiUsage")
 class MyIssueRegistry : IssueRegistry() {
     override val issues: List<Issue>
         get() {
@@ -16,5 +18,6 @@ class MyIssueRegistry : IssueRegistry() {
             )
         }
 
+    override val vendor: Vendor = Vendor("ycdev", "android-lib", "https://github.com/yongce/AndroidLib")
     override val api: Int = com.android.tools.lint.detector.api.CURRENT_API
 }

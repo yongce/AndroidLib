@@ -161,7 +161,7 @@ class MyBroadcastHelperDetectorTest {
                     "    }\n" +
                     "}\n"
         )
-        lint().files(TestFileStubs.broadcastHelper, testFile)
+        lint().files(TestFileStubs.nonNull, TestFileStubs.broadcastHelper, testFile)
             .issues(MyBroadcastHelperDetector.ISSUE)
             .run()
             .expect(

@@ -119,6 +119,7 @@ class MyToastHelperDetectorTest {
         )
         val testFiles = arrayOf<TestFile>(
             TestFileStubs.stringRes,
+            TestFileStubs.nonNull,
             TestFileStubs.toastHelper,
             testFile
         )

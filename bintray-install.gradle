@@ -1,40 +1,66 @@
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 group = bintrayMaven.groupId
 version = bintrayMaven.version
 
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            url bintrayMaven.projectUrl
-            inceptionYear bintrayMaven.projectInceptionYear
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
 
-            packaging 'aar'
-            groupId bintrayMaven.groupId
-            artifactId project.archivesBaseName
-            version bintrayMaven.version
-
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
+                // You can then customize attributes of the publication as shown below.
+                groupId = bintrayMaven.groupId
+                artifactId = project.archivesBaseName
+                version = bintrayMaven.version
             }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
 
-            scm {
-                url bintrayMaven.projectUrl
-                connection bintrayMaven.projectScmConnection
-                developerConnection bintrayMaven.projectScmDevConnection
-            }
-
-            developers {
-                developer {
-                    id bintrayMaven.developerId
-                    name bintrayMaven.developerName
-                    email bintrayMaven.developerEmail
-                }
+                groupId = bintrayMaven.groupId
+                artifactId = project.archivesBaseName + "-debug"
+                version = bintrayMaven.version
             }
         }
     }
 }
+
+//install {
+//    repositories.mavenInstaller {
+//        pom.project {
+//            url bintrayMaven.projectUrl
+//            inceptionYear bintrayMaven.projectInceptionYear
+//
+//            packaging 'aar'
+//            groupId bintrayMaven.groupId
+//            artifactId project.archivesBaseName
+//            version bintrayMaven.version
+//
+//            licenses {
+//                license {
+//                    name 'The Apache Software License, Version 2.0'
+//                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    distribution 'repo'
+//                }
+//            }
+//
+//            scm {
+//                url bintrayMaven.projectUrl
+//                connection bintrayMaven.projectScmConnection
+//                developerConnection bintrayMaven.projectScmDevConnection
+//            }
+//
+//            developers {
+//                developer {
+//                    id bintrayMaven.developerId
+//                    name bintrayMaven.developerName
+//                    email bintrayMaven.developerEmail
+//                }
+//            }
+//        }
+//    }
+//}
