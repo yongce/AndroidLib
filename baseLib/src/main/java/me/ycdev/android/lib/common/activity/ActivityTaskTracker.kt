@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
@@ -12,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * This class can be used to track Activity/task state changes.
  * We can use it in instrumentation test cases to check Activity/task related design/logic.
  */
+@SuppressLint("StaticFieldLeak")
 object ActivityTaskTracker {
     private const val TAG = "ActivityTaskTracker"
 
@@ -27,6 +29,7 @@ object ActivityTaskTracker {
     private var totalActivitiesCount = AtomicInteger(0)
 
     private var focusedTaskId: Int = -1
+    @SuppressLint("StaticFieldLeak")
     private var resumedActivity: Activity? = null
 
     private var debugLog: Boolean = false

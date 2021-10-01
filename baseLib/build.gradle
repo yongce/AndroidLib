@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
-project.archivesBaseName = 'common-base'
+project.archivesBaseName = 'android-common-base'
 
 android {
     defaultConfig {
@@ -47,7 +47,6 @@ project.ext {
     moduleDesc = 'Common basic module in AndroidLib project'
 }
 
-if (bintrayUploadEnabled) {
-    apply from: rootProject.file('bintray-install.gradle')
-    apply from: rootProject.file('bintray-upload.gradle')
+if (publishEnabled) {
+    apply from: rootProject.file('publish-module.gradle')
 }

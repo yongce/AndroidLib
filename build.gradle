@@ -7,42 +7,41 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
-
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
 
-// Add plugin for 'spotless'
 plugins {
-    id "com.diffplug.spotless" version "5.11.0"
+    id("com.diffplug.spotless") version "5.11.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("org.jetbrains.dokka") version "1.5.30"
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 ext {
     versions.ndkVersion = "21.3.6528147"
 
-    bintrayUploadEnabled = true
-    bintrayMaven = [
-            'projectRepo': 'android',
+    publishEnabled = true
+    mavenMeta = [
+            'name': 'AndroidLib',
+            'description': 'Android libraries',
             'projectUrl': 'https://github.com/yongce/AndroidLib',
             'projectScmConnection': 'https://github.com/yongce/AndroidLib.git',
             'projectScmDevConnection': 'ssh://git@github.com/yongce/AndroidLib.git',
             'projectInceptionYear': '2013',
-            'groupId': 'me.ycdev.android',
-            'version': '1.8.5',
+            'groupId': 'io.github.yongce',
+            'version': '2.0.0',
             'developerId': 'yongce',
             'developerName': 'Yongce Tu',
             'developerEmail': 'yongce.tu@gmail.com',
@@ -64,4 +63,5 @@ spotless {
     }
 }
 
+apply from: "${rootDir}/publish-root.gradle"
 apply plugin: 'android-reporting'

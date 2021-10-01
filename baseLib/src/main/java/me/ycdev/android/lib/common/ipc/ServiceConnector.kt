@@ -309,7 +309,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         private const val MSG_CONNECT_TIMEOUT_CHECK = 3
 
         private const val CONNECT_TIMEOUT_CHECK_INTERVAL: Long = 5000 // 5s
-        private const val FORCE_REBIND_TIME: Long = 30 * 1000 // 30 seconds
+        private const val FORCE_REBIND_TIME: Long = 30 * 1000L // 30 seconds
 
         fun strConnectState(state: Int): String {
             return when (state) {

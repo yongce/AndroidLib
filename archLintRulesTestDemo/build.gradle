@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "me.ycdev.android.arch.demo"
         minSdkVersion versions.minSdk
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -97,7 +97,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:${versions.rxandroid}"
 
     implementation "com.google.zxing:core:${versions.zxing}"
-    implementation "com.google.android:flexbox:2.0.1"
+    implementation "com.google.android.flexbox:flexbox:3.0.0"
     implementation "com.airbnb.android:lottie:3.4.4"
 
     testImplementation "androidx.test:core:${versions.testCore}"

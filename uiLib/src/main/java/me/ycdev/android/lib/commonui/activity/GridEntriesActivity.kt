@@ -100,7 +100,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
         return margin
     }
 
-    @SuppressLint("StaticFieldLeak")
+    @SuppressLint("StaticFieldLeak", "NotifyDataSetChanged")
     protected open fun loadItems() {
         if (needLoadIntentsAsync) {
             loadingView.visibility = View.VISIBLE

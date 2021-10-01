@@ -6,7 +6,7 @@ apply from: '../build_common.gradle'
 android {
     defaultConfig {
         minSdkVersion versions.minSdk
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         applicationId "me.ycdev.android.lib.commonjni.demo"
         versionCode 1

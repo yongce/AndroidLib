@@ -1,7 +1,7 @@
 /*
  * File: 'android_project_common.gradle'
  * Location: https://raw.githubusercontent.com/yongce/AndroidLib/master/android_project_common.gradle
- * Version: 2020.08.22
+ * Version: 2021.10.1
  * All android projects can copy and include this file.
  */
 
@@ -35,7 +35,7 @@ ext {
 
     versions = [
             // compile
-            'compileSdk'       : 30,
+            'compileSdk'       : 31,
 
             // Android official support
             'kotlin'           : '1.5.31',
@@ -91,7 +91,7 @@ ext {
             'okhttp'           : '4.9.0',
             'retrofit'         : '2.9.0',
             'glide'            : '4.11.0',
-            'glideTrans'       : "4.0.0",
+            'glideTrans'       : "4.3.0",
 
             // rx
             'rxjava'           : "2.2.12",
@@ -276,7 +276,7 @@ ext {
             'glideTrans'               : "jp.wasabeef:glide-transformations:${versions.glideTrans}",
 
             // UI
-            'flexbox'                  : "com.google.android:flexbox:2.0.1",
+            'flexbox'                  : "com.google.android.flexbox:flexbox:3.0.0",
             'lottie'                   : "com.airbnb.android:lottie:3.4.4",
 
             // rx
@@ -287,10 +287,10 @@ ext {
 
             // ycdev
             'ycdev': [
-                    'androidBase'      : "me.ycdev.android:common-base:${versions.androidLib}",
-                    'androidArch'      : "me.ycdev.android:common-arch:${versions.androidLib}",
-                    'androidUi'        : "me.ycdev.android:common-ui:${versions.androidLib}",
-                    'androidTest'      : "me.ycdev.android:common-test:${versions.androidLib}"
+                    'androidBase'      : "io.github.yongce:android-common-base:${versions.androidLib}",
+                    'androidArch'      : "io.github.yongce:android-common-arch:${versions.androidLib}",
+                    'androidUi'        : "io.github.yongce:android-common-ui:${versions.androidLib}",
+                    'androidTest'      : "io.github.yongce:android-common-test:${versions.androidLib}"
             ],
 
             // others
