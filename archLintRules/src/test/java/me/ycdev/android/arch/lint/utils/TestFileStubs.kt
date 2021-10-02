@@ -283,337 +283,327 @@ object TestFileStubs {
         )
 
     val intentHelper: TestFile
-        get() = TestFiles.java(
-            "package me.ycdev.android.lib.common.wrapper;\n" +
-                    "\n" +
-                    "import android.content.Intent;\n" +
-                    "import android.os.Bundle;\n" +
-                    "import android.os.Parcelable;\n" +
-                    "import android.support.annotation.NonNull;\n" +
-                    "import android.support.annotation.Nullable;\n" +
-                    "\n" +
-                    "import java.io.Serializable;\n" +
-                    "import java.util.ArrayList;\n" +
-                    "\n" +
-                    "import me.ycdev.android.lib.common.utils.LibLogger;\n" +
-                    "\n" +
-                    "/**\n" +
-                    " * A wrapper class to avoid security issues when parsing Intent extras.\n" +
-                    " * <p>See details of the issue: http://code.google.com/p/android/issues/detail?id=177223.</p>\n" +
-                    " */\n" +
-                    "@SuppressWarnings(\"unused\")\n" +
-                    "public class IntentHelper {\n" +
-                    "    private static final String TAG = \"IntentUtils\";\n" +
-                    "\n" +
-                    "    private IntentHelper() {\n" +
-                    "        // nothing to do\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    private static void onIntentAttacked(@NonNull Intent intent, Throwable e) {\n" +
-                    "        // prevent OOM for Android 5.0~?\n" +
-                    "        intent.replaceExtras((Bundle) null);\n" +
-                    "        LibLogger.w(TAG, \"attacked?\", e);\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static boolean hasExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return false;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.hasExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return false;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static boolean getBooleanExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            boolean defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getBooleanExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static byte getByteExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            byte defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getByteExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static short getShortExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            short defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getShortExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static int getIntExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            int defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getIntExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static long getLongExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            long defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getLongExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static float getFloatExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            float defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getFloatExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static double getDoubleExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            double defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getDoubleExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    public static char getCharExtra(@Nullable Intent intent, @NonNull String key,\n" +
-                    "            char defValue) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return defValue;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getCharExtra(key, defValue);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return defValue;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static String getStringExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getStringExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static CharSequence getCharSequenceExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getCharSequenceExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static Serializable getSerializableExtra(@Nullable Intent intent,\n" +
-                    "            @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getSerializableExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static <T extends Parcelable> T getParcelableExtra(@Nullable Intent intent,\n" +
-                    "            @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getParcelableExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static boolean[] getBooleanArrayExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getBooleanArrayExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static int[] getIntArrayExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getIntArrayExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static long[] getLongArrayExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getLongArrayExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static String[] getStringArrayExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getStringArrayExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static Parcelable[] getParcelableArrayExtra(@Nullable Intent intent,\n" +
-                    "            @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getParcelableArrayExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static ArrayList<String> getStringArrayListExtra(@Nullable Intent intent,\n" +
-                    "            @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getStringArrayListExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static <T extends Parcelable> ArrayList<T> getParcelableArrayListExtra(\n" +
-                    "            @Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getParcelableArrayListExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @Nullable\n" +
-                    "    public static Bundle getBundleExtra(@Nullable Intent intent, @NonNull String key) {\n" +
-                    "        if (intent == null) {\n" +
-                    "            return null;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        try {\n" +
-                    "            return intent.getBundleExtra(key);\n" +
-                    "        } catch (Exception e) {\n" +
-                    "            onIntentAttacked(intent, e);\n" +
-                    "        }\n" +
-                    "        return null;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "}\n"
+        get() = TestFiles.kotlin(
+            """
+                package me.ycdev.android.lib.common.wrapper
+
+                import android.content.Intent
+                import android.os.Bundle
+                import android.os.Parcelable
+                import me.ycdev.android.lib.common.utils.LibLogger
+                import java.io.Serializable
+                import java.util.ArrayList
+
+                /**
+                 * A wrapper class to avoid security issues when parsing Intent extras.
+                 *
+                 * See details of the issue: http://code.google.com/p/android/issues/detail?id=177223.
+                 */
+                @Suppress("unused")
+                object IntentHelper {
+                    private const val TAG = "IntentUtils"
+
+                    private fun onIntentAttacked(intent: Intent, e: Throwable) {
+                        // prevent OOM for Android 5.0~?
+                        intent.replaceExtras((null as Bundle?)!!)
+                        LibLogger.w(TAG, "attacked?", e)
+                    }
+
+                    fun hasExtra(intent: Intent?, key: String): Boolean {
+                        if (intent == null) {
+                            return false
+                        }
+
+                        try {
+                            return intent.hasExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return false
+                    }
+
+                    fun getBooleanExtra(intent: Intent?, key: String, defValue: Boolean): Boolean {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getBooleanExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getByteExtra(intent: Intent?, key: String, defValue: Byte): Byte {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getByteExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getShortExtra(intent: Intent?, key: String, defValue: Short): Short {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getShortExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getIntExtra(intent: Intent?, key: String, defValue: Int): Int {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getIntExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getLongExtra(intent: Intent?, key: String, defValue: Long): Long {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getLongExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getFloatExtra(intent: Intent?, key: String, defValue: Float): Float {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getFloatExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getDoubleExtra(intent: Intent?, key: String, defValue: Double): Double {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getDoubleExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getCharExtra(intent: Intent?, key: String, defValue: Char): Char {
+                        if (intent == null) {
+                            return defValue
+                        }
+
+                        try {
+                            return intent.getCharExtra(key, defValue)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return defValue
+                    }
+
+                    fun getStringExtra(intent: Intent?, key: String): String? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getStringExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getCharSequenceExtra(intent: Intent?, key: String): CharSequence? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getCharSequenceExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getSerializableExtra(intent: Intent?, key: String): Serializable? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getSerializableExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun <T : Parcelable> getParcelableExtra(intent: Intent?, key: String): T? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getParcelableExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getBooleanArrayExtra(intent: Intent?, key: String): BooleanArray? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getBooleanArrayExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getIntArrayExtra(intent: Intent?, key: String): IntArray? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getIntArrayExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getLongArrayExtra(intent: Intent?, key: String): LongArray? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getLongArrayExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getStringArrayExtra(intent: Intent?, key: String): Array<String>? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getStringArrayExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getParcelableArrayExtra(intent: Intent?, key: String): Array<Parcelable>? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getParcelableArrayExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getStringArrayListExtra(intent: Intent?, key: String): ArrayList<String>? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getStringArrayListExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun <T : Parcelable> getParcelableArrayListExtra(intent: Intent?, key: String): ArrayList<T>? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getParcelableArrayListExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+
+                    fun getBundleExtra(intent: Intent?, key: String): Bundle? {
+                        if (intent == null) {
+                            return null
+                        }
+
+                        try {
+                            return intent.getBundleExtra(key)
+                        } catch (e: Exception) {
+                            onIntentAttacked(intent, e)
+                        }
+
+                        return null
+                    }
+                }
+            """.trimIndent()
         )
 
     val toastHelper: TestFile
