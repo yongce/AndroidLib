@@ -27,7 +27,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: run connectedCheck
-      uses: reactivecircus/android-emulator-runner@v2.11.0
+      uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: ${{ matrix.api-level }}
         ndk: 21.0.6113669
