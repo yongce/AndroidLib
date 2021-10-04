@@ -14,8 +14,8 @@ import android.os.SystemClock
 import androidx.annotation.IntDef
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import me.ycdev.android.lib.common.manager.ListenerManager
 import me.ycdev.android.lib.common.utils.Preconditions
-import me.ycdev.android.lib.common.utils.WeakListenerManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -32,7 +32,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
 ) {
     protected var appContext: Context = cxt.applicationContext
 
-    protected var stateListeners = WeakListenerManager<ConnectStateListener>()
+    protected var stateListeners = ListenerManager<ConnectStateListener>(true)
     private val connectWaitLock = Any()
     private val state = AtomicInteger(STATE_DISCONNECTED)
     private var connectStartTime: Long = 0
@@ -94,7 +94,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
     }
 
     /**
-     * Add a connect state listener, using [WeakListenerManager] to manager listeners.
+     * Add a connect state listener, using [ListenerManager] to manager listeners.
      * Callbacks will be invoked in [.getConnectLooper] thread.
      */
     fun addListener(listener: ConnectStateListener) {

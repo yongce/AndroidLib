@@ -1,8 +1,8 @@
 package me.ycdev.android.lib.common.tracker
 
-import me.ycdev.android.lib.common.utils.WeakListenerManager
+import me.ycdev.android.lib.common.manager.ListenerManager
 
-abstract class WeakTracker<IListener : Any> : WeakListenerManager<IListener>() {
+abstract class WeakTracker<IListener : Any> : ListenerManager<IListener>(true) {
     protected abstract fun startTracker()
     protected abstract fun stopTracker()
 
