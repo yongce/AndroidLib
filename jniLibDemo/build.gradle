@@ -22,7 +22,7 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         disable 'GoogleAppIndexingWarning'
         disable 'MyBaseActivity','MyToastHelper'
     }

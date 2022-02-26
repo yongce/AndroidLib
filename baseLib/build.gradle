@@ -10,7 +10,7 @@ android {
         minSdkVersion versions.minSdk
     }
 
-    lintOptions {
+    lint {
         disable 'PrivateApi'
     }
 }

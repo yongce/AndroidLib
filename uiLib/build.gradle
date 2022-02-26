@@ -15,7 +15,7 @@ android {
         viewBinding = true
     }
 
-    lintOptions {
+    lint {
         disable 'UnusedResources'
     }
 }

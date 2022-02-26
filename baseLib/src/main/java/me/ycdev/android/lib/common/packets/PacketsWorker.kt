@@ -42,7 +42,7 @@ abstract class PacketsWorker(
         fun onDataParsed(data: ByteArray)
     }
 
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     internal enum class ParserState {
         HEADER_MAGIC,
         VERSION,

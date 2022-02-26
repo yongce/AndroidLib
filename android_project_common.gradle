@@ -9,14 +9,7 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             eachDependency { details ->
-                if (details.requested.group == 'com.android.support') {
-                    if (details.requested.name == 'multidex'
-                            || details.requested.name == 'multidex-instrumentation') {
-                        details.useVersion versions.multidexLib
-                    } else {
-                        details.useVersion versions.supportLib
-                    }
-                } else if (details.requested.group == 'androidx.arch.core') {
+                if (details.requested.group == 'androidx.arch.core') {
                     details.useVersion versions.archCore
                 } else if (details.requested.group == 'androidx.lifecycle') {
                     details.useVersion versions.lifecycle
@@ -38,25 +31,25 @@ ext {
             'compileSdk'       : 31,
 
             // Android official support
-            'kotlin'           : '1.5.31',
+            'kotlin'           : '1.6.10',
             'kotlinCoroutine'  : "1.5.2",
             'multidexLib'      : "2.0.1",
             'androidxCore'     : '1.7.0',
-            'fragment'         : '1.3.6',
-            'preference'       : "1.1.1",
+            'fragment'         : '1.4.1',
+            'preference'       : "1.2.0",
             'palette'          : "1.0.0",
             'recyclerView'     : "1.2.1",
-            'constraintLayout' : "2.1.1",
+            'constraintLayout' : "2.1.3",
             'vectorDrawable'   : "1.1.0",
             'lintLib'          : '30.0.2',
             'archCore'         : "2.1.0",
-            'lifecycle'        : "2.4.0",
-            'room'             : '2.3.0',
-            'sqlite'           : "2.1.0",
-            'navigation'       : "2.3.5",
-            'paging'           : "3.0.1",
-            'work'             : "2.7.0",
-            'media2'           : "1.2.0",
+            'lifecycle'        : "2.4.1",
+            'room'             : '2.4.1',
+            'sqlite'           : "2.2.0",
+            'navigation'       : "2.4.1",
+            'paging'           : "3.1.0",
+            'work'             : "2.7.1",
+            'media2'           : "1.2.1",
 
             // test
             'testCore'         : "1.4.0",
@@ -118,12 +111,12 @@ ext {
                     'coreKtx'          : "androidx.core:core-ktx:${versions.androidxCore}",
                     'fragment'         : "androidx.fragment:fragment:${versions.fragment}",
                     'fragmentKtx'      : "androidx.fragment:fragment-ktx:${versions.fragment}",
-                    'localBroadcast'   : "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0",
-                    'collection'       : "androidx.collection:collection:1.1.0",
-                    'collectionKtx'    : "androidx.collection:collection-ktx:1.1.0",
+                    'localBroadcast'   : "androidx.localbroadcastmanager:localbroadcastmanager:1.1.0",
+                    'collection'       : "androidx.collection:collection:1.2.0",
+                    'collectionKtx'    : "androidx.collection:collection-ktx:1.2.0",
                     // UI
-                    'appcompat'        : "androidx.appcompat:appcompat:1.3.1",
-                    'material'         : "com.google.android.material:material:1.4.0",
+                    'appcompat'        : "androidx.appcompat:appcompat:1.4.1",
+                    'material'         : "com.google.android.material:material:1.5.0",
                     'preference'       : "androidx.preference:preference:${versions.preference}",
                     'preferenceKtx'    : "androidx.preference:preference-ktx:${versions.preference}",
                     'constraintLayout' : "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
@@ -134,7 +127,7 @@ ext {
                     'recyclerview'     : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
                     'recyclerviewSelection' : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
                     'percent'          : "androidx.percentlayout:percentlayout:1.0.0",
-                    'coordinatorLayout' : "androidx.coordinatorlayout:coordinatorlayout:1.1.0",
+                    'coordinatorLayout' : "androidx.coordinatorlayout:coordinatorlayout:1.2.0",
                     'drawerLayout'     : "androidx.drawerlayout:drawerlayout:1.1.1",
                     'swipeRefreshLayout' : "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0",
                     'viewPager'        : "androidx.viewpager:viewpager:1.0.0",
@@ -147,7 +140,7 @@ ext {
                     'multidex'         : "androidx.multidex:multidex:${versions.multidexLib}",
                     'mediaSession'     : "androidx.media2:media2-session:${versions.media2}",
                     'mediaExoPlayer'   : "androidx.media2:media2-exoplayer:${versions.media2}",
-                    'mediarouter'      : "androidx.mediarouter:mediarouter:1.2.5",
+                    'mediarouter'      : "androidx.mediarouter:mediarouter:1.2.6",
                     'exifinterface'    : "androidx.exifinterface:exifinterface:1.3.3",
                     'wear'             : "androidx.wear:wear:1.0.0",
                     // legacy
