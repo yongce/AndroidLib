@@ -6,6 +6,7 @@ apply from: '../build_common.gradle'
 project.archivesBaseName = 'android-common-jni'
 
 android {
+    namespace 'me.ycdev.android.lib.commonjni'
     defaultConfig {
         minSdkVersion versions.minSdk
 
