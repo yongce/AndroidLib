@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [23, 29, 30]
+        api-level: [23, 29, 30, 31]
         target: [google_apis]
 
     steps:
@@ -40,6 +40,7 @@ jobs:
         target: ${{ matrix.target }}
         arch: x86_64
         profile: Nexus 6
+        cores: 4
         script: ./gradlew connectedCheck mergeAndroidReports --continue
 
     - name: Archive the test reports
