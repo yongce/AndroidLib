@@ -20,7 +20,7 @@ class HandlerTaskExecutorTest {
         createTasks(latch, 4, 150).forEach {
             executor.postTask(it)
         }
-        latch.await(1, TimeUnit.SECONDS)
+        latch.await(10, TimeUnit.SECONDS)
         assertThat(latch.count).isEqualTo(0L)
     }
 
