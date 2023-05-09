@@ -7,7 +7,7 @@ android {
     namespace 'me.ycdev.android.lib.commonjni.demo'
     defaultConfig {
         minSdkVersion versions.minSdk
-        targetSdkVersion 31
+        targetSdkVersion 33
 
         applicationId "me.ycdev.android.lib.commonjni.demo"
         versionCode 1
