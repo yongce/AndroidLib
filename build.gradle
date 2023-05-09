@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id("com.diffplug.spotless") version "5.16.0"
+    id("com.diffplug.spotless") version "6.18.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
 
@@ -44,7 +44,7 @@ ext {
 spotless {
     kotlin {
         target "**/*.kt"
-        ktlint(versions.ktlint).userData(['indent_size' : 'unset'])
+        ktlint(versions.ktlint)
     }
 }
 

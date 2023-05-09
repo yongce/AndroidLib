@@ -21,7 +21,7 @@ abstract class WrapperDetectorBase : Detector(), Detector.UastScanner {
         if (surroundingClass == null) {
             println(
                 "Fatal error in WrapperDetectorBase! Failed to get surrounding" +
-                        " class \'" + node.uastParent + "\'"
+                    " class \'" + node.uastParent + "\'"
             )
             return
         }

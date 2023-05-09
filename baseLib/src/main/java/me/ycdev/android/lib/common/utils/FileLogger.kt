@@ -20,6 +20,7 @@ class FileLogger constructor(
 ) {
 
     private var fileWriter: Writer? = null
+
     // Each log file every day.
     private var currentDay: String? = null
 

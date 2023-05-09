@@ -25,7 +25,7 @@ object PackageUtils {
         try {
             val state = cxt.packageManager.getApplicationEnabledSetting(pkgName)
             return state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT ||
-                    state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         } catch (e: IllegalArgumentException) {
             // the app had been uninstalled already
         }

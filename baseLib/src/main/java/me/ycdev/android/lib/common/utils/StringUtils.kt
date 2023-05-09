@@ -10,7 +10,9 @@ object StringUtils {
         }
         return if (index > 0) {
             str.substring(index)
-        } else str
+        } else {
+            str
+        }
     }
 
     fun parseInt(value: String, defValue: Int): Int {

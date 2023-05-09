@@ -21,7 +21,7 @@ class FileStatusHelperTest {
         )
         Timber.tag(TAG).i(
             "uid: " + fileStatus.uid + ", gid: " + fileStatus.gid +
-                    ", mode: " + Integer.toOctalString(fileStatus.mode)
+                ", mode: " + Integer.toOctalString(fileStatus.mode)
         )
         assertEquals("check uid", targetUid.toLong(), fileStatus.uid.toLong())
         assertEquals("check gid", targetUid.toLong(), fileStatus.gid.toLong())

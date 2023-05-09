@@ -7,12 +7,15 @@ class PermissionRequestParams {
 
     var requestCode: Int = 0
     var permissions: Array<String>? = null
+
     @RationalePolicy
     var rationalePolicy = RATIONALE_POLICY_ON_DEMAND
     var rationaleTitle: String? = null
     var rationaleContent: String? = null
+
     @StringRes
     var positiveBtnResId = android.R.string.ok
+
     @StringRes
     var negativeBtnResId = android.R.string.cancel
     var callback: PermissionCallback? = null

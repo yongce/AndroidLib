@@ -21,14 +21,18 @@ object ActivityTaskTracker {
     internal val lifecycleCallback = MyLifecycleCallback()
 
     private val tasksLock = Object()
+
     @GuardedBy("tasksLock")
     private val allTasks: HashMap<Int, ActivityTask> = hashMapOf()
+
     @GuardedBy("tasksLock")
     private val activityTaskIds: HashMap<Activity, Int> = hashMapOf()
+
     @Volatile
     private var totalActivitiesCount = AtomicInteger(0)
 
     private var focusedTaskId: Int = -1
+
     @SuppressLint("StaticFieldLeak")
     private var resumedActivity: Activity? = null
 
@@ -122,8 +126,8 @@ object ActivityTaskTracker {
             }
             if (activityMeta.taskAffinity != newTask.taskAffinity) {
                 throw RuntimeException("Activity re-parenting error: the Activity's " +
-                        "taskAffinity[${activityMeta.taskAffinity}] is not matched with " +
-                        "the target task's taskAffinity[${newTask.taskAffinity}]")
+                    "taskAffinity[${activityMeta.taskAffinity}] is not matched with " +
+                    "the target task's taskAffinity[${newTask.taskAffinity}]")
             }
 
             // Step 3: do the re-parenting

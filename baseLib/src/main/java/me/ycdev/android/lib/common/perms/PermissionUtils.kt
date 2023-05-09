@@ -134,7 +134,7 @@ object PermissionUtils {
         if (caller !is Activity && caller !is Fragment) {
             throw IllegalArgumentException(
                 "The caller must be an Activity" +
-                        " or a Fragment: " + caller.javaClass.name
+                    " or a Fragment: " + caller.javaClass.name
             )
         }
     }
@@ -145,7 +145,9 @@ object PermissionUtils {
     ): Boolean {
         return if (caller is Activity) {
             ActivityCompat.shouldShowRequestPermissionRationale(caller, permission)
-        } else (caller as? Fragment)?.shouldShowRequestPermissionRationale(permission) ?: false
+        } else {
+            (caller as? Fragment)?.shouldShowRequestPermissionRationale(permission) ?: false
+        }
     }
 
     private fun getActivity(caller: Any): Activity? {

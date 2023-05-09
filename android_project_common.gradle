@@ -73,7 +73,7 @@ ext {
             // debug
             'leakcanary'       : "2.10",
             'stetho'           : '1.6.0',
-            'ktlint'           : "0.41.0",
+            'ktlint'           : "0.48.0",
 
             // serializing
             'gson'             : '2.10.1',

@@ -35,10 +35,10 @@ object TypeUtils {
         }
         throw IllegalArgumentException(
             "Expected a Class, ParameterizedType, or " +
-                    "GenericArrayType, but <" +
-                    type +
-                    "> is of type " +
-                    type.javaClass.name
+                "GenericArrayType, but <" +
+                type +
+                "> is of type " +
+                type.javaClass.name
         )
     }
 }

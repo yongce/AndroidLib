@@ -41,7 +41,9 @@ object PowerManagerIA {
             val binder = ServiceManagerIA.getService(Context.POWER_SERVICE)
             return if (binder != null) {
                 asInterface(binder)
-            } else null
+            } else {
+                null
+            }
         }
 
     init {

@@ -122,7 +122,7 @@ class HttpClient {
         val contentEncoding = httpConn.contentEncoding
         LibLogger.d(
             TAG, "response code: " + httpConn.responseCode +
-                    ", encoding: " + contentEncoding + ", method: " + httpConn.requestMethod
+                ", encoding: " + contentEncoding + ", method: " + httpConn.requestMethod
         )
 
         var httpInputStream: InputStream? = null

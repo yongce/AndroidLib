@@ -53,7 +53,7 @@ abstract class GridEntriesActivity : AppCompatActivity() {
         val perm: String? = null
     ) : Entry(title, desc) {
         constructor(intent: Intent, title: String, desc: String) :
-                this(INTENT_TYPE_ACTIVITY, intent, title, desc)
+            this(INTENT_TYPE_ACTIVITY, intent, title, desc)
 
         override val clickAction: ((Context) -> Unit)? = ::onItemClicked
         override val longClickAction: ((Context) -> Unit)? = ::onItemLongClicked

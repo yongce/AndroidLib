@@ -23,6 +23,7 @@ import timber.log.Timber
  */
 class AsyncTaskQueue(private val name: String) {
     private var autoQuitDelay = WORKER_THREAD_AUTO_QUIT_DELAY_DEFAULT
+
     @get:RestrictTo(RestrictTo.Scope.LIBRARY)
     internal var taskHandler: Handler? = null
         private set

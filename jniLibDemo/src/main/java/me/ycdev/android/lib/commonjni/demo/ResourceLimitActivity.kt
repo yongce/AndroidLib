@@ -51,7 +51,9 @@ class ResourceLimitActivity : AppCompatActivity(), View.OnClickListener {
 
         return if (id == R.id.action_settings) {
             true
-        } else super.onOptionsItemSelected(item)
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onClick(v: View) {

@@ -12,7 +12,9 @@ object EncodingUtils {
     fun encodeWithHex(bytes: ByteArray?, uppercase: Boolean = true): String {
         return if (bytes == null) {
             "null"
-        } else encodeWithHex(bytes, 0, bytes.size, uppercase)
+        } else {
+            encodeWithHex(bytes, 0, bytes.size, uppercase)
+        }
     }
 
     /**

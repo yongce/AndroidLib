@@ -31,6 +31,7 @@ class NetworkUtilsTest {
     fun test_getNetworkType() {
         // for any network
         val context = ApplicationProvider.getApplicationContext<Context>()
+
         @NetworkType var networkType = NetworkUtils.getNetworkType(context)
         assertWithMessage("check all return values")
             .that(networkType)
@@ -87,6 +88,7 @@ class NetworkUtilsTest {
     fun test_getMobileNetworkType() {
         // for any network
         val context = ApplicationProvider.getApplicationContext<Context>()
+
         @NetworkType val networkType = NetworkUtils.getMobileNetworkType(context)
         assertWithMessage("check all return values")
             .that(networkType)
@@ -104,6 +106,7 @@ class NetworkUtilsTest {
     fun test_getMixedNetworkType() {
         // for any network
         val context = ApplicationProvider.getApplicationContext<Context>()
+
         @NetworkType val networkType = NetworkUtils.getMixedNetworkType(context)
         assertWithMessage("check all return values").that(networkType)
             .isAnyOf(

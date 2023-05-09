@@ -90,7 +90,9 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
 
         return if (validatePermission(serviceInfo.permission)) {
             ComponentName(serviceInfo.packageName, serviceInfo.name)
-        } else null
+        } else {
+            null
+        }
     }
 
     /**
