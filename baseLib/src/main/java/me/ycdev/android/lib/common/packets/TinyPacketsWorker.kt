@@ -2,11 +2,8 @@ package me.ycdev.android.lib.common.packets
 
 import androidx.annotation.VisibleForTesting
 import timber.log.Timber
-import java.lang.Math.min
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.ArrayList
-import java.util.Arrays
 import kotlin.experimental.xor
 
 /**
@@ -59,7 +56,7 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
 
         val version = calculateVersion(data.size)
         val metaInfoSize = calculateMetaInfoSize(version)
-        val packetSize = min(maxPacketSize, data.size + metaInfoSize)
+        val packetSize = kotlin.math.min(maxPacketSize, data.size + metaInfoSize)
         val dataNumber = getDataNumber()
         val dataCrc = calculateDataCrc(data)
         val packets = ArrayList<ByteArray>()
@@ -79,10 +76,10 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         while (offset < data.size) {
             val packet: ByteArray
             if (offset + maxPacketSize < data.size) {
-                packet = Arrays.copyOfRange(data, offset, offset + maxPacketSize)
+                packet = data.copyOfRange(offset, offset + maxPacketSize)
                 offset += maxPacketSize
             } else {
-                packet = Arrays.copyOfRange(data, offset, data.size)
+                packet = data.copyOfRange(offset, data.size)
                 offset = data.size
             }
             packets.add(packet)

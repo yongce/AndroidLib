@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.packets
 
+import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import timber.log.Timber
 import java.nio.ByteBuffer
@@ -21,13 +22,9 @@ abstract class PacketsWorker(
         }
     var debugLog = false
 
-    @VisibleForTesting
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     internal var parserState = ParserState.HEADER_MAGIC
-    protected var readBuffer: ByteBuffer
-
-    init {
-        readBuffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE).order(ByteOrder.LITTLE_ENDIAN)
-    }
+    protected var readBuffer: ByteBuffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE).order(ByteOrder.LITTLE_ENDIAN)
 
     fun reset() {
         parserState = ParserState.HEADER_MAGIC

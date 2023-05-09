@@ -3,9 +3,8 @@ package me.ycdev.android.lib.common.async
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
-import androidx.annotation.NonNull
 
-open class HandlerTaskExecutor(@NonNull val taskHandler: Handler) : ITaskExecutor {
+open class HandlerTaskExecutor(val taskHandler: Handler) : ITaskExecutor {
 
     override fun postTask(task: Runnable) {
         taskHandler.post(task)

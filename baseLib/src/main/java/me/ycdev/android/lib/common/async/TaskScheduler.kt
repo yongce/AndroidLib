@@ -6,16 +6,14 @@ import android.os.Looper
 import android.os.Message
 import android.os.SystemClock
 import androidx.annotation.IntDef
-import androidx.annotation.NonNull
 import androidx.annotation.VisibleForTesting
 import me.ycdev.android.lib.common.annotation.HandlerWork
 import me.ycdev.android.lib.common.utils.DateTimeUtils
 import me.ycdev.android.lib.common.utils.Preconditions
 import timber.log.Timber
-import java.util.ArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
-class TaskScheduler(@NonNull schedulerLooper: Looper, @NonNull ownerTag: String) {
+class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
     private val ownerTag: String = taskSchedulerIdGenerator.incrementAndGet().toString() + "-" + ownerTag
     private var checkInterval = DEFAULT_CHECK_INTERVAL
     private var logEnabled = false
@@ -256,7 +254,7 @@ class TaskScheduler(@NonNull schedulerLooper: Looper, @NonNull ownerTag: String)
     }
 
     @SuppressLint("HandlerLeak")
-    private inner class SchedulerHandler(@NonNull looper: Looper) : Handler(looper) {
+    private inner class SchedulerHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_ADD_TASK -> {

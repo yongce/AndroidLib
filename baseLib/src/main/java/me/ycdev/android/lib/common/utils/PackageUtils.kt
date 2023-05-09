@@ -49,7 +49,6 @@ object PackageUtils {
         return appInfo.flags and FLAG_PRIVILEGED != 0
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     fun isPkgStopped(appInfo: ApplicationInfo): Boolean {
         return appInfo.flags and ApplicationInfo.FLAG_STOPPED != 0
     }
