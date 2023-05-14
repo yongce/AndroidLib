@@ -19,24 +19,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [23, 29, 30, 31]
+        api-level: [24, 29, 31, 33]
         target: [google_apis]
 
     steps:
     - name: checkout
-      uses: actions/checkout@v2
-    - name: setup Java 11
+      uses: actions/checkout@v3
+    - name: setup Java 17
       uses: actions/setup-java@v2
       with:
         distribution: 'zulu' # See 'Supported distributions' for available options
-        java-version: '11'
+        java-version: '17'
 
     - name: run connectedCheck
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: ${{ matrix.api-level }}
-        ndk: 21.0.6113669
-        cmake: 3.10.2.4988404
+        ndk: 21.3.6528147
+        cmake: 3.22.1
         target: ${{ matrix.target }}
         arch: x86_64
         profile: Nexus 6

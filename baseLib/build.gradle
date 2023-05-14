@@ -10,6 +10,9 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdk
     }
+    buildFeatures {
+        aidl true
+    }
 
     lint {
         disable 'PrivateApi'
