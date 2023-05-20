@@ -45,6 +45,9 @@ jobs:
         arch: x86_64
         profile: Nexus 6
         cores: 4
+        avd-name: macOS-avd-x86-${{ matrix.api-level }}
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
         script: ./gradlew connectedCheck mergeAndroidReports --continue
 
     - name: Archive the test reports
