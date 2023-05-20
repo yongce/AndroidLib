@@ -93,7 +93,7 @@ class AsyncTaskQueueTest {
 
         val count = 100
         val latch = CountDownLatch(count)
-        val countTask = CountTask(Runnable { latch.countDown() })
+        val countTask = CountTask { latch.countDown() }
         for (i in 0 until count) {
             taskQueue.addTask(countTask)
         }
@@ -111,7 +111,7 @@ class AsyncTaskQueueTest {
 
         val count = 100
         val latch = CountDownLatch(count)
-        val countTask = CountTask(Runnable { latch.countDown() })
+        val countTask = CountTask { latch.countDown() }
         for (i in 0 until count) {
             taskQueue.addTask(200, countTask)
         }
@@ -177,7 +177,7 @@ class AsyncTaskQueueTest {
 
         val count = 100
         val latch = CountDownLatch(count)
-        val countTask = CountTask(Runnable { latch.countDown() })
+        val countTask = CountTask { latch.countDown() }
         for (i in 0 until count) {
             taskQueue.removeTask(countTask)
             taskQueue.addTask(200, countTask)
@@ -208,7 +208,7 @@ class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(autoQuitDelay)
 
         val latch = CountDownLatch(1)
-        taskQueue.addTask(100, Runnable { latch.countDown() })
+        taskQueue.addTask(100) { latch.countDown() }
         latch.await()
 
         // check if task thread already quited
@@ -226,7 +226,7 @@ class AsyncTaskQueueTest {
         taskQueue.setWorkerThreadAutoQuitDelay(0)
 
         val latch = CountDownLatch(1)
-        taskQueue.addTask(100, Runnable { latch.countDown() })
+        taskQueue.addTask(100) { latch.countDown() }
         latch.await()
 
         // check if task thread already quited
@@ -266,9 +266,9 @@ class AsyncTaskQueueTest {
         assertThat(taskTidHolder1[0]).isNotEqualTo(taskTidHolder2[0])
     }
 
-    private class CountTask internal constructor(@param:Nullable private val mTask: Runnable?) :
+    private class CountTask(@param:Nullable private val mTask: Runnable?) :
         Runnable {
-        internal var executedCount: Int = 0
+        var executedCount: Int = 0
             private set
 
         override fun run() {

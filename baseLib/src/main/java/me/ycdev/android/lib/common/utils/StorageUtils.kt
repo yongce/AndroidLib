@@ -28,7 +28,6 @@ object StorageUtils {
     fun isExternalStorageAvailable(): Boolean =
         Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
 
-    @Suppress("DEPRECATION")
     fun getExternalStoragePath(): String = Environment.getExternalStorageDirectory().absolutePath
 
     /**

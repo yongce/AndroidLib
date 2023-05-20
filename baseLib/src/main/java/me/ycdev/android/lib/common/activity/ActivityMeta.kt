@@ -26,6 +26,7 @@ data class ActivityMeta(
                 return meta
             }
 
+            @Suppress("DEPRECATION")
             val info = context.packageManager.getActivityInfo(activity, 0)
             val taskAffinity = info.taskAffinity ?: context.applicationInfo.taskAffinity
             val allowTaskReparenting = (info.flags and ActivityInfo.FLAG_ALLOW_TASK_REPARENTING) > 0

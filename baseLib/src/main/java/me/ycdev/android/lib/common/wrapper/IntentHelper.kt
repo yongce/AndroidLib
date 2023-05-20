@@ -1,11 +1,11 @@
 package me.ycdev.android.lib.common.wrapper
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.Serializable
-import java.util.ArrayList
 
 /**
  * A wrapper class to avoid security issues when parsing Intent extras.
@@ -18,7 +18,7 @@ object IntentHelper {
 
     private fun onIntentAttacked(intent: Intent, e: Throwable) {
         // prevent OOM for Android 5.0~?
-        intent.replaceExtras((null as Bundle?)!!)
+        intent.replaceExtras(null)
         LibLogger.w(TAG, "attacked?", e)
     }
 
@@ -176,13 +176,18 @@ object IntentHelper {
         return null
     }
 
-    fun getSerializableExtra(intent: Intent?, key: String): Serializable? {
+    fun <T : Serializable> getSerializableExtra(intent: Intent?, key: String?, clazz: Class<T>): Serializable? {
         if (intent == null) {
             return null
         }
 
         try {
-            return intent.getSerializableExtra(key)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getSerializableExtra(key, clazz)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getSerializableExtra(key)
+            }
         } catch (e: Exception) {
             onIntentAttacked(intent, e)
         }
@@ -190,13 +195,18 @@ object IntentHelper {
         return null
     }
 
-    fun <T : Parcelable> getParcelableExtra(intent: Intent?, key: String): T? {
+    fun <T : Parcelable> getParcelableExtra(intent: Intent?, key: String?, clazz: Class<T>): T? {
         if (intent == null) {
             return null
         }
 
         try {
-            return intent.getParcelableExtra(key)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(key, clazz)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra(key)
+            }
         } catch (e: Exception) {
             onIntentAttacked(intent, e)
         }
@@ -260,13 +270,18 @@ object IntentHelper {
         return null
     }
 
-    fun getParcelableArrayExtra(intent: Intent?, key: String): Array<Parcelable>? {
+    fun <T : Parcelable> getParcelableArrayExtra(intent: Intent?, key: String?, clazz: Class<T>): Array<out Parcelable>? {
         if (intent == null) {
             return null
         }
 
         try {
-            return intent.getParcelableArrayExtra(key)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableArrayExtra(key, clazz)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableArrayExtra(key)
+            }
         } catch (e: Exception) {
             onIntentAttacked(intent, e)
         }
@@ -288,13 +303,18 @@ object IntentHelper {
         return null
     }
 
-    fun <T : Parcelable> getParcelableArrayListExtra(intent: Intent?, key: String): ArrayList<T>? {
+    fun <T : Parcelable> getParcelableArrayListExtra(intent: Intent?, key: String, clazz: Class<T>): ArrayList<T>? {
         if (intent == null) {
             return null
         }
 
         try {
-            return intent.getParcelableArrayListExtra(key)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableArrayListExtra(key, clazz)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableArrayListExtra(key)
+            }
         } catch (e: Exception) {
             onIntentAttacked(intent, e)
         }

@@ -44,6 +44,6 @@ class LintViolationActivity : AppCompatActivity() { // lint violation
     }
 
     companion object {
-        private val TEST_ACTION = "action.test"
+        private const val TEST_ACTION = "action.test"
     }
 }

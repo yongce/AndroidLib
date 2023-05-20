@@ -321,7 +321,7 @@ class ServiceConnectorTest {
         assertThat(connector.service).isNull()
     }
 
-    private class FakeServiceConnector internal constructor(cxt: Context) :
+    private class FakeServiceConnector(cxt: Context) :
         ServiceConnector<IDemoService>(cxt, "FakeService") {
 
         @NonNull
@@ -334,7 +334,7 @@ class ServiceConnectorTest {
         }
     }
 
-    private class NoPermServiceConnector internal constructor(cxt: Context) :
+    private class NoPermServiceConnector(cxt: Context) :
         RemoteServiceConnector(cxt) {
 
         override fun validatePermission(permission: String?): Boolean {
@@ -342,9 +342,9 @@ class ServiceConnectorTest {
         }
     }
 
-    private class ConnectDelayServiceConnector internal constructor(
+    private class ConnectDelayServiceConnector(
         cxt: Context,
-        internal var mConnectDelay: Long
+        var mConnectDelay: Long
     ) : RemoteServiceConnector(cxt) {
 
         override fun asInterface(service: IBinder): IDemoService {

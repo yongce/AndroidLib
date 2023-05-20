@@ -2,9 +2,8 @@ package me.ycdev.android.lib.common.activity
 
 import android.content.ComponentName
 import com.google.common.truth.Truth.assertThat
-import org.junit.Rule
+import org.junit.Assert
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
@@ -17,9 +16,6 @@ class ActivityTaskTest {
     private val testComponent1 = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz1")
     private val testComponent2 = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz2")
     private val testComponent3 = ComponentName("me.ycdev.test.pkg", "me.ycdev.test.clazz3")
-
-    @get:Rule
-    val exceptionRule: ExpectedException = ExpectedException.none()
 
     private fun addAndCheckActivities(task: ActivityTask, vararg activities: ActivityRunningState) {
         activities.forEach {
@@ -67,11 +63,12 @@ class ActivityTaskTest {
 
     @Test
     fun addActivity_notMatched() {
-        val task = ActivityTask(taskId1, taskAffinity1)
-        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId2, ActivityRunningState.State.Stopped)
-
-        exceptionRule.expectMessage("Activity taskId[5] != AppTask[10]")
-        task.addActivity(activity1)
+        val e = Assert.assertThrows(Exception::class.java) {
+            val task = ActivityTask(taskId1, taskAffinity1)
+            val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId2, ActivityRunningState.State.Stopped)
+            task.addActivity(activity1)
+        }
+        assertThat(e).hasMessageThat().isEqualTo("Activity taskId[5] != AppTask[10]")
     }
 
     @Test
@@ -86,22 +83,24 @@ class ActivityTaskTest {
 
     @Test
     fun popActivity_notMatched() {
-        val task = ActivityTask(taskId1, taskAffinity1)
-        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
-        task.addActivity(activity1)
-
-        exceptionRule.expectMessage("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}@a002")
-        task.popActivity(testComponent2, 0xa002)
+        val e = Assert.assertThrows(Exception::class.java) {
+            val task = ActivityTask(taskId1, taskAffinity1)
+            val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+            task.addActivity(activity1)
+            task.popActivity(testComponent2, 0xa002)
+        }
+        assertThat(e).hasMessageThat().isEqualTo("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}@a002")
     }
 
     @Test
     fun lastActivity_notMatched() {
-        val task = ActivityTask(taskId1, taskAffinity1)
-        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
-        task.addActivity(activity1)
-
-        exceptionRule.expectMessage("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}@a002")
-        task.lastActivity(testComponent2, 0xa002)
+        val e = Assert.assertThrows(Exception::class.java) {
+            val task = ActivityTask(taskId1, taskAffinity1)
+            val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+            task.addActivity(activity1)
+            task.lastActivity(testComponent2, 0xa002)
+        }
+        assertThat(e).hasMessageThat().isEqualTo("Cannot find ComponentInfo{me.ycdev.test.pkg/me.ycdev.test.clazz2}@a002")
     }
 
     @Test
@@ -116,13 +115,14 @@ class ActivityTaskTest {
 
     @Test
     fun topActivity_empty() {
-        val task = ActivityTask(taskId1, taskAffinity1)
-        val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
-        task.addActivity(activity1)
-        task.popActivity(testComponent1, 0xa001)
-
-        exceptionRule.expectMessage("The task is empty. Cannot get the top Activity.")
-        task.topActivity()
+        val e = Assert.assertThrows(Exception::class.java) {
+            val task = ActivityTask(taskId1, taskAffinity1)
+            val activity1 = ActivityRunningState(testComponent1, 0xa001, taskId1, ActivityRunningState.State.Stopped)
+            task.addActivity(activity1)
+            task.popActivity(testComponent1, 0xa001)
+            task.topActivity()
+        }
+        assertThat(e).hasMessageThat().isEqualTo("The task is empty. Cannot get the top Activity.")
     }
 
     @Test

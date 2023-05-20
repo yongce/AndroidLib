@@ -13,8 +13,8 @@ class SQLiteDbMgr private constructor(cxt: Context) {
     private val mOpenHelpers = HashMap<Class<out SQLiteDbCreator>, DbInfo>()
 
     private class DbInfo {
-        internal var db: SQLiteDatabase? = null
-        internal var referenceCount: Int = 0
+        var db: SQLiteDatabase? = null
+        var referenceCount: Int = 0
     }
 
     private fun acquireDatabase(dbInfoClass: Class<out SQLiteDbCreator>): SQLiteDatabase? {

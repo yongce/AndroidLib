@@ -141,7 +141,7 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
     }
 
     fun putInt(table: String?, name: String, value: Int): Boolean {
-        return putString(table, name, Integer.toString(value))
+        return putString(table, name, value.toString())
     }
 
     companion object {

@@ -119,7 +119,7 @@ class MyIntentHelperDetectorTest {
                 "        return IntentHelper.getBooleanExtra(intent, key, defValue) // lint good\n" +
                 "    }\n" +
                 "\n" +
-                "    fun getBundleExtraGood(intent: Intent, key: String): Bundle? {\n" +
+                "    fun getBundleExtraGood(intent: Intent, key: String): Bundle {\n" +
                 "        return IntentHelper.getBundleExtra(intent, key) // lint good\n" +
                 "    }\n" +
                 "\n" +

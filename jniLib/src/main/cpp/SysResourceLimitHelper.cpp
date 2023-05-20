@@ -10,19 +10,21 @@ static jmethodID gLimitInfo_constructorMethodId;
 static jfieldID gLimitInfo_curLimitFieldId;
 static jfieldID gLimitInfo_maxLimitFieldId;
 
-static jobject SysResourceLimitHelper_getOpenFilesLimit(JNIEnv* env, jobject thiz)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+static jobject SysResourceLimitHelper_getOpenFilesLimit(JNIEnv* env, __attribute__((unused)) jobject thiz)
 {
     LOGD("to get open files limit");
-    struct rlimit limitInfo;
+    struct rlimit limitInfo = {0};
     int result = getrlimit(RLIMIT_NOFILE, &limitInfo);
     if (result != 0)
     {
         LOGW("failed to get open files limit");
-        return NULL;
+        return nullptr;
     }
 
-    int curLimit = limitInfo.rlim_cur;
-    int maxLimit = limitInfo.rlim_max;
+    int curLimit = (int)limitInfo.rlim_cur;
+    int maxLimit = (int)limitInfo.rlim_max;
     LOGD("curLimit: %d, maxLimit: %d", curLimit, maxLimit);
 
     jobject limitInfoObj = env->NewObject(gLimitInfo_class, gLimitInfo_constructorMethodId);
@@ -31,11 +33,15 @@ static jobject SysResourceLimitHelper_getOpenFilesLimit(JNIEnv* env, jobject thi
 
     return limitInfoObj;
 }
+#pragma clang diagnostic pop
 
-static jboolean SysResourceLimitHelper_setOpenFilesLimit(JNIEnv* env, jobject thiz, jint newLimit)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+static jboolean SysResourceLimitHelper_setOpenFilesLimit(__attribute__((unused)) JNIEnv* env,
+                                                         __attribute__((unused)) jobject thiz, jint newLimit)
 {
     LOGD("to set open files limit: %d", newLimit);
-    struct rlimit limitInfo;
+    struct rlimit limitInfo = {0};
     int result = getrlimit(RLIMIT_NOFILE, &limitInfo);
     if (result != 0)
     {
@@ -53,6 +59,7 @@ static jboolean SysResourceLimitHelper_setOpenFilesLimit(JNIEnv* env, jobject th
     }
     return JNI_TRUE;
 }
+#pragma clang diagnostic pop
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -72,7 +79,7 @@ static const char* gLimitInfo_className =
 static int setupLimitInfoJNI(JNIEnv* env)
 {
     jclass limitInfo_class = env->FindClass(gLimitInfo_className);
-    if (limitInfo_class == NULL)
+    if (limitInfo_class == nullptr)
     {
         LOGE("can't find the LimitInfo class");
         return -1;
@@ -81,21 +88,21 @@ static int setupLimitInfoJNI(JNIEnv* env)
 
     gLimitInfo_constructorMethodId = env->GetMethodID(gLimitInfo_class,
             "<init>", "()V");
-    if (gLimitInfo_constructorMethodId == NULL)
+    if (gLimitInfo_constructorMethodId == nullptr)
     {
         LOGE("can't get constructor of LimitInfo");
         return -1;
     }
 
     gLimitInfo_curLimitFieldId = env->GetFieldID(gLimitInfo_class, "curLimit", "I");
-    if (gLimitInfo_curLimitFieldId == NULL)
+    if (gLimitInfo_curLimitFieldId == nullptr)
     {
         LOGE("can't get field curLimit of LimitInfo");
         return -1;
     }
 
     gLimitInfo_maxLimitFieldId = env->GetFieldID(gLimitInfo_class, "maxLimit", "I");
-    if (gLimitInfo_maxLimitFieldId == NULL)
+    if (gLimitInfo_maxLimitFieldId == nullptr)
     {
         LOGE("can't get field maxLimit of LimitInfo");
         return -1;
@@ -110,7 +117,7 @@ static int setupLimitInfoJNI(JNIEnv* env)
 int register_SysResourceLimitHelper(JNIEnv* env)
 {
     jclass sysResourceLimitHelper = env->FindClass(gSysResourceLimitHelper_className);
-    if (sysResourceLimitHelper == NULL) {
+    if (sysResourceLimitHelper == nullptr) {
         LOGE("Can't find the SysResourceLimitHelper class");
         return -1;
     }

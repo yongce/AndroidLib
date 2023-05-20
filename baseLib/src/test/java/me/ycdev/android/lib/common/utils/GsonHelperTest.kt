@@ -11,25 +11,25 @@ import org.junit.Test
 class GsonHelperTest {
     private class Foo {
         @SerializedName("name")
-        internal var mName: String? = null
+        var mName: String? = null
 
         @Transient
-        internal var mCache: String? = null
+        var mCache: String? = null
 
         @SerializedName("done")
-        internal var mDone: Boolean = false
+        var mDone: Boolean = false
 
         @SerializedName("count")
-        internal var mCount: Int = 0
+        var mCount: Int = 0
 
         @SerializedName("time_stamp")
-        internal var mTimeStamp: Long = 0
+        var mTimeStamp: Long = 0
 
         @SerializedName("radius")
-        internal var mRadius: Float = 0.toFloat()
+        var mRadius: Float = 0.toFloat()
 
         @SerializedName("distance")
-        internal var mDistance: Double = 0.toDouble()
+        var mDistance: Double = 0.toDouble()
     }
 
     @Test

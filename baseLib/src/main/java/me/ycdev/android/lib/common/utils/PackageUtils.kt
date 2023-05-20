@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package me.ycdev.android.lib.common.utils
 
 import android.annotation.TargetApi

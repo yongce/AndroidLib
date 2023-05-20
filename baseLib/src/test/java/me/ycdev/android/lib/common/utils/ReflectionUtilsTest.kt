@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package me.ycdev.android.lib.common.utils
 
 import androidx.test.filters.SmallTest
@@ -49,7 +51,7 @@ class ReflectionUtilsTest {
         }
     }
 
-    private class TestB : TestA() {
+    private open class TestB : TestA() {
         var b1: String? = null
         var b2: Int = 0
         private val b3: String? = null
@@ -164,7 +166,7 @@ class ReflectionUtilsTest {
 //            assertTrue(b15.invoke(null, 15, "b") == "b15")
         } catch (e: Exception) {
             e.printStackTrace()
-            fail("failed to reflect: " + e.toString())
+            fail("failed to reflect: $e")
         }
     }
 
@@ -256,7 +258,7 @@ class ReflectionUtilsTest {
             assertTrue(b8.get(null) as Long == 8L)
         } catch (e: Exception) {
             e.printStackTrace()
-            fail("failed to reflect: " + e.toString())
+            fail("failed to reflect: $e")
         }
     }
 }

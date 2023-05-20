@@ -131,6 +131,7 @@ class HttpClient {
         } catch (e: IOException) {
             // ignore
         } catch (e: IllegalStateException) {
+            // ignore
         }
 
         if (httpInputStream == null) {
@@ -143,13 +144,12 @@ class HttpClient {
             throw IOException("HttpURLConnection.getInputStream() returned null")
         }
 
-        val input: InputStream
-        if (contentEncoding != null && contentEncoding.contains("gzip")) {
-            input = GZIPInputStream(httpInputStream)
+        val input: InputStream = if (contentEncoding != null && contentEncoding.contains("gzip")) {
+            GZIPInputStream(httpInputStream)
         } else if (contentEncoding != null && contentEncoding.contains("deflate")) {
-            input = InflaterInputStream(httpInputStream)
+            InflaterInputStream(httpInputStream)
         } else {
-            input = httpInputStream
+            httpInputStream
         }
 
         // Read the response content

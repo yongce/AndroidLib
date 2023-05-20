@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package me.ycdev.android.arch.demo.wrapper
 
 import android.content.BroadcastReceiver

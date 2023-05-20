@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * @param connectLooper The looper used to connect/reconnect target Service.
  *               By default, it's the main looper.
  */
+@Suppress("DEPRECATION")
 abstract class ServiceConnector<IServiceInterface> protected constructor(
     cxt: Context,
     protected var serviceName: String,

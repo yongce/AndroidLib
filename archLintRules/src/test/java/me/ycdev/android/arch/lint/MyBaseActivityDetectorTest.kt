@@ -210,7 +210,7 @@ class MyBaseActivityDetectorTest {
                 "public class LintViolationActivity extends AppCompatActivity { // lint violation\n" +
                 "    private static final String TEST_ACTION = \"action.test\";\n" +
                 "\n" +
-                "    private BroadcastReceiver mReceiver = new BroadcastReceiver() {\n" +
+                "    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {\n" +
                 "        @Override\n" +
                 "        public void onReceive(Context context, Intent intent) {\n" +
                 "            // nothing to do\n" +
@@ -306,7 +306,7 @@ class MyBaseActivityDetectorTest {
                 "    }\n" +
                 "\n" +
                 "    companion object {\n" +
-                "        private val TEST_ACTION = \"action.test\"\n" +
+                "        private const val TEST_ACTION = \"action.test\"\n" +
                 "    }\n" +
                 "}\n"
         )

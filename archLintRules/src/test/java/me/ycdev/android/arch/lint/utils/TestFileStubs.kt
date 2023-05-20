@@ -196,7 +196,7 @@ object TestFileStubs {
                 "import android.app.Activity;\n" +
                 "\n" +
                 "/**\n" +
-                " * Base class for Activity which wants to inherit {@link android.app.Activity}.\n" +
+                " * Base class for Activity which wants to inherit android.app.Activity.\n" +
                 " */\n" +
                 "public abstract class BaseActivity extends Activity {\n" +
                 "    // nothing to do right now\n" +
@@ -305,7 +305,7 @@ object TestFileStubs {
 
                     private fun onIntentAttacked(intent: Intent, e: Throwable) {
                         // prevent OOM for Android 5.0~?
-                        intent.replaceExtras((null as Bundle?)!!)
+                        intent.replaceExtras(null)
                         LibLogger.w(TAG, "attacked?", e)
                     }
 

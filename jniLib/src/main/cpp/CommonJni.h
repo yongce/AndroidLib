@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
 #ifndef _YCDEV_COMMON_JNI_H_
 #define _YCDEV_COMMON_JNI_H_
 
@@ -26,7 +28,7 @@
 
 extern "C"
 {
-    jint JNI_OnLoad(JavaVM* jvm, void* reserved);
+    jint JNI_OnLoad(JavaVM* jvm, __attribute__((unused)) void* reserved);
 }
 
 namespace ycdev_commonjni {
@@ -37,3 +39,5 @@ namespace ycdev_commonjni {
 } // namespace ycdev_commonjni
 
 #endif // _YCDEV_COMMON_JNI_H_
+
+#pragma clang diagnostic pop

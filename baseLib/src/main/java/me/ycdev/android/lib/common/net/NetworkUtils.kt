@@ -132,10 +132,10 @@ object NetworkUtils {
         val tmType: Int
         try {
             @Suppress("DEPRECATION")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                tmType = tm.dataNetworkType
+            tmType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                tm.dataNetworkType
             } else {
-                tmType = tm.networkType
+                tm.networkType
             }
         } catch (e: Exception) {
             LibLogger.w(TAG, "failed to get telephony network type", e)

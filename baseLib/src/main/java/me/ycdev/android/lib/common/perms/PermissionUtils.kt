@@ -166,6 +166,7 @@ object PermissionUtils {
         if (caller is Activity) {
             ActivityCompat.requestPermissions(caller, perms, requestCode)
         } else if (caller is Fragment) {
+            @Suppress("DEPRECATION")
             caller.requestPermissions(perms, requestCode)
         }
     }

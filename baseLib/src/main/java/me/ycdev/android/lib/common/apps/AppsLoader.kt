@@ -14,7 +14,7 @@ import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 
-@Suppress("unused")
+@Suppress("unused", "DEPRECATION")
 class AppsLoader private constructor(cxt: Context) {
     private val appContext: Context = cxt.applicationContext
     private val pm: PackageManager = cxt.packageManager

@@ -1,6 +1,8 @@
 #define LOG_TAG "CommonJni"
 #include "CommonJni.h"
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
 /*******************************************************************************
 **
 ** Function:        JNI_OnLoad
@@ -12,10 +14,10 @@
 ** Returns:         JNI version.
 **
 *******************************************************************************/
-jint JNI_OnLoad(JavaVM* jvm, void* reserved)
+jint JNI_OnLoad(JavaVM* jvm, __attribute__((unused)) void* reserved)
 {
     LOGD("JNI_OnLoad...");
-    JNIEnv *env = NULL;
+    JNIEnv *env = nullptr;
 
     // Check JNI version
     if (jvm->GetEnv ((void **) &env, JNI_VERSION_1_6))
@@ -39,3 +41,4 @@ jint JNI_OnLoad(JavaVM* jvm, void* reserved)
     LOGD("JNI_OnLoad done");
     return JNI_VERSION_1_6;
 }
+#pragma clang diagnostic pop

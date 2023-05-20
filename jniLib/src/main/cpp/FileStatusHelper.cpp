@@ -11,11 +11,13 @@ static jfieldID gFileStatus_uidFieldId;
 static jfieldID gFileStatus_gidFieldId;
 static jfieldID gFileStatus_modeFieldId;
 
-static jobject FileStatusHelper_getFileStatus(JNIEnv* env, jobject thiz, jstring filePath)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+static jobject FileStatusHelper_getFileStatus(JNIEnv* env, __attribute__((unused)) jobject thiz, jstring filePath)
 {
     const char* nativeFilePath = env->GetStringUTFChars(filePath, JNI_FALSE);
     LOGD("to get file stat [%s]", nativeFilePath);
-    struct stat statInfo;
+    struct stat statInfo = {0};
     int result = stat(nativeFilePath, &statInfo);
     int statErrno = errno;
     env->ReleaseStringUTFChars(filePath, nativeFilePath);
@@ -23,17 +25,18 @@ static jobject FileStatusHelper_getFileStatus(JNIEnv* env, jobject thiz, jstring
     if (result != 0)
     {
         LOGW("failed to get file stat [%s]", strerror(statErrno));
-        return NULL;
+        return nullptr;
     }
 
     LOGD("uid [%d], gid[%d], mode [%o]", statInfo.st_uid, statInfo.st_gid, statInfo.st_mode);
     jobject fileStatusObj = env->NewObject(gFileStatus_class, gFileStatus_constructorMethodId);
-    env->SetIntField(fileStatusObj, gFileStatus_uidFieldId, statInfo.st_uid);
-    env->SetIntField(fileStatusObj, gFileStatus_gidFieldId, statInfo.st_gid);
-    env->SetIntField(fileStatusObj, gFileStatus_modeFieldId, statInfo.st_mode);
+    env->SetIntField(fileStatusObj, gFileStatus_uidFieldId, (int)statInfo.st_uid);
+    env->SetIntField(fileStatusObj, gFileStatus_gidFieldId, (int)statInfo.st_gid);
+    env->SetIntField(fileStatusObj, gFileStatus_modeFieldId, (int)statInfo.st_mode);
 
     return fileStatusObj;
 }
+#pragma clang diagnostic pop
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +54,7 @@ static const char* gFileStatus_className =
 static int setupFileStatusJNI(JNIEnv* env)
 {
     jclass fileStatus_class = env->FindClass(gFileStatus_className);
-    if (fileStatus_class == NULL)
+    if (fileStatus_class == nullptr)
     {
         LOGE("can't find the FileStatus class");
         return -1;
@@ -60,28 +63,28 @@ static int setupFileStatusJNI(JNIEnv* env)
 
     gFileStatus_constructorMethodId = env->GetMethodID(gFileStatus_class,
                                                        "<init>", "()V");
-    if (gFileStatus_constructorMethodId == NULL)
+    if (gFileStatus_constructorMethodId == nullptr)
     {
         LOGE("can't get constructor of FileStatus");
         return -1;
     }
 
     gFileStatus_uidFieldId = env->GetFieldID(gFileStatus_class, "uid", "I");
-    if (gFileStatus_uidFieldId == NULL)
+    if (gFileStatus_uidFieldId == nullptr)
     {
         LOGE("can't get field uid of FileStatus");
         return -1;
     }
 
     gFileStatus_gidFieldId = env->GetFieldID(gFileStatus_class, "gid", "I");
-    if (gFileStatus_gidFieldId == NULL)
+    if (gFileStatus_gidFieldId == nullptr)
     {
         LOGE("can't get field gid of FileStatus");
         return -1;
     }
 
     gFileStatus_modeFieldId = env->GetFieldID(gFileStatus_class, "mode", "I");
-    if (gFileStatus_modeFieldId == NULL)
+    if (gFileStatus_modeFieldId == nullptr)
     {
         LOGE("can't get field mode of FileStatus");
         return -1;
@@ -96,7 +99,7 @@ static int setupFileStatusJNI(JNIEnv* env)
 int register_FileStatusHelper (JNIEnv* env)
 {
     jclass fileStatusHelper = env->FindClass(gFileStatusHelper_className);
-    if (fileStatusHelper == NULL) {
+    if (fileStatusHelper == nullptr) {
         LOGE("Can't find the FileStatusHelper class");
         return -1;
     }

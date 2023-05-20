@@ -77,14 +77,14 @@ class AsyncTaskQueue(private val name: String) {
     }
 
     fun setWorkerThreadAutoQuitDelay(delay: Long) {
-        if (delay < WORKER_THREAD_AUTO_QUIT_DELAY_MIN) {
+        autoQuitDelay = if (delay < WORKER_THREAD_AUTO_QUIT_DELAY_MIN) {
             Timber.tag(TAG).w(
                 "Ignore the requested delay [%d]. Set it to the minimum value [%d].",
                 delay, WORKER_THREAD_AUTO_QUIT_DELAY_MIN
             )
-            autoQuitDelay = WORKER_THREAD_AUTO_QUIT_DELAY_MIN
+            WORKER_THREAD_AUTO_QUIT_DELAY_MIN
         } else {
-            autoQuitDelay = delay
+            delay
         }
     }
 
@@ -121,9 +121,9 @@ class AsyncTaskQueue(private val name: String) {
         taskHandler!!.removeMessages(MSG_WORKER_THREAD_QUIT)
     }
 
-    private class TaskParams internal constructor(
-        internal var task: Runnable,
-        internal var delay: Long
+    private class TaskParams(
+        var task: Runnable,
+        var delay: Long
     )
 
     companion object {

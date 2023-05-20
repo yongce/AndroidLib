@@ -3,14 +3,13 @@ package me.ycdev.android.arch.lint
 import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.Issue
-import java.util.Arrays
 
-@Suppress("UnstableApiUsage")
+@Suppress("unused")
 class MyIssueRegistry : IssueRegistry() {
     override val issues: List<Issue>
         get() {
             println("!!!!!!!!!!!!! ArchLib lint rules works")
-            return Arrays.asList(
+            return listOf(
                 MyToastHelperDetector.ISSUE,
                 MyBroadcastHelperDetector.ISSUE,
                 MyBaseActivityDetector.ISSUE,

@@ -7,7 +7,7 @@ import android.os.Process
 import android.text.TextUtils
 import java.io.IOException
 
-@Suppress("unused", "MemberVisibilityCanBePrivate")
+@Suppress("unused")
 object ApplicationUtils {
     private const val TAG = "ApplicationUtils"
 

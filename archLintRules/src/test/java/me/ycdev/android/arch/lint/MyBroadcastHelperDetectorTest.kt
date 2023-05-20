@@ -120,7 +120,7 @@ class MyBroadcastHelperDetectorTest {
                 "        Foo().sendBroadcast()\n" +
                 "    }\n" +
                 "\n" +
-                "    fun registerGood(cxt: Context, receiver: BroadcastReceiver, filter: IntentFilter): Intent? {\n" +
+                "    fun registerGood(cxt: Context, receiver: BroadcastReceiver, filter: IntentFilter): Intent {\n" +
                 "        return BroadcastHelper.registerForInternal(cxt, receiver, filter) // lint good\n" +
                 "    }\n" +
                 "\n" +
@@ -140,7 +140,7 @@ class MyBroadcastHelperDetectorTest {
                 "        cxt: Context,\n" +
                 "        receiver: BroadcastReceiver,\n" +
                 "        filter: IntentFilter\n" +
-                "    ): Intent? {\n" +
+                "    ): Intent {\n" +
                 "        return cxt.registerReceiver(receiver, filter) // lint violation\n" +
                 "    }\n" +
                 "\n" +
@@ -148,7 +148,7 @@ class MyBroadcastHelperDetectorTest {
                 "        cxt: Context,\n" +
                 "        receiver: BroadcastReceiver,\n" +
                 "        filter: IntentFilter\n" +
-                "    ): Intent? {\n" +
+                "    ): Intent {\n" +
                 "        return cxt.registerReceiver(receiver, filter, null, null) // lint violation\n" +
                 "    }\n" +
                 "\n" +
@@ -203,7 +203,7 @@ class MyBroadcastHelperDetectorTest {
                 "public class LintViolationActivity extends AppCompatActivity { // lint violation\n" +
                 "    private static final String TEST_ACTION = \"action.test\";\n" +
                 "\n" +
-                "    private BroadcastReceiver mReceiver = new BroadcastReceiver() {\n" +
+                "    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {\n" +
                 "        @Override\n" +
                 "        public void onReceive(Context context, Intent intent) {\n" +
                 "            // nothing to do\n" +
@@ -303,7 +303,7 @@ class MyBroadcastHelperDetectorTest {
                 "    }\n" +
                 "\n" +
                 "    companion object {\n" +
-                "        private val TEST_ACTION = \"action.test\"\n" +
+                "        private const val TEST_ACTION = \"action.test\"\n" +
                 "    }\n" +
                 "}\n"
         )

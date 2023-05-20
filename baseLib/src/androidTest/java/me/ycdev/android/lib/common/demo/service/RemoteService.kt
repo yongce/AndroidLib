@@ -20,7 +20,7 @@ class RemoteService : Service() {
     }
 
     @Nullable
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent): IBinder {
         return BinderServer()
     }
 

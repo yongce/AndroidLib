@@ -1,6 +1,5 @@
 package me.ycdev.android.lib.common.provider
 
-import android.content.Context
 import android.database.ContentObserver
 import android.os.Handler
 import android.os.Looper
@@ -21,7 +20,7 @@ class InfoProviderClientTest {
     @Before
     fun setup() {
         mInfoClient = InfoProviderClient(
-            ApplicationProvider.getApplicationContext<Context>(),
+            ApplicationProvider.getApplicationContext(),
             "me.ycdev.android.lib.common.provider.InfoProvider"
         )
 

@@ -93,7 +93,7 @@ object LibLogger {
         /**
          * Log enabled by default
          */
-        internal var isLogEnabled = true
+        var isLogEnabled = true
             set(enabled) {
                 field = enabled
                 if (!enabled && fileLogger != null) {
