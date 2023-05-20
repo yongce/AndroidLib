@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import androidx.annotation.IntDef
@@ -131,12 +130,7 @@ object NetworkUtils {
 
         val tmType: Int
         try {
-            @Suppress("DEPRECATION")
-            tmType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                tm.dataNetworkType
-            } else {
-                tm.networkType
-            }
+            tmType = tm.dataNetworkType
         } catch (e: Exception) {
             LibLogger.w(TAG, "failed to get telephony network type", e)
             return NETWORK_TYPE_NONE

@@ -1,6 +1,5 @@
 package me.ycdev.android.lib.common.apps
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -11,8 +10,6 @@ import me.ycdev.android.lib.common.utils.MiscUtils
 import me.ycdev.android.lib.common.utils.PackageUtils
 import me.ycdev.android.lib.common.utils.StringUtils
 import java.io.File
-import java.util.ArrayList
-import java.util.HashMap
 
 @Suppress("unused", "DEPRECATION")
 class AppsLoader private constructor(cxt: Context) {
@@ -20,7 +17,6 @@ class AppsLoader private constructor(cxt: Context) {
     private val pm: PackageManager = cxt.packageManager
     private val myselfPkgName: String = cxt.packageName
 
-    @TargetApi(Build.VERSION_CODES.N)
     fun loadInstalledApps(
         filter: AppsLoadFilter,
         config: AppsLoadConfig,
@@ -132,9 +128,7 @@ class AppsLoader private constructor(cxt: Context) {
         }
 
         item.targetSdkVersion = pkgInfo.applicationInfo.targetSdkVersion
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            item.minSdkVersion = pkgInfo.applicationInfo.minSdkVersion
-        }
+        item.minSdkVersion = pkgInfo.applicationInfo.minSdkVersion
 
         return item
     }

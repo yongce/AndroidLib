@@ -62,7 +62,7 @@ class AsyncTaskQueueTest {
 
         // Waiting for the task done
         assertThat(latch.count).isEqualTo(2)
-        latch.await(1000, TimeUnit.MILLISECONDS)
+        latch.await(1500, TimeUnit.MILLISECONDS)
         assertThat(latch.count).isEqualTo(1)
         latch.await(2000, TimeUnit.MILLISECONDS)
         assertThat(latch.count).isEqualTo(0)

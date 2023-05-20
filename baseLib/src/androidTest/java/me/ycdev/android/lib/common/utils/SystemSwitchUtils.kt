@@ -13,11 +13,4 @@ object SystemSwitchUtils {
         val wifiState = wifiMgr.wifiState
         return wifiState == WifiManager.WIFI_STATE_ENABLED || wifiState == WifiManager.WIFI_STATE_ENABLING
     }
-
-    fun setWifiEnabled(cxt: Context, enable: Boolean) {
-        val wifiMgr = cxt.applicationContext.getSystemService(
-            Context.WIFI_SERVICE
-        ) as WifiManager
-        wifiMgr.isWifiEnabled = enable
-    }
 }

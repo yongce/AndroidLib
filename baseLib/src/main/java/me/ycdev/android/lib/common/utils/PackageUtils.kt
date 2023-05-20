@@ -2,14 +2,12 @@
 
 package me.ycdev.android.lib.common.utils
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
-import android.os.Build
 import android.view.inputmethod.InputMethodManager
 import java.util.ArrayList
 
@@ -87,7 +85,6 @@ object PackageUtils {
         return pkgNames
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     fun getAllReceivers(
         cxt: Context,
         pkgName: String,
@@ -121,7 +118,6 @@ object PackageUtils {
         return emptyArray()
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     fun getAllServices(cxt: Context, pkgName: String, onlyExported: Boolean): Array<ServiceInfo> {
         try {
             val pm = cxt.packageManager
@@ -151,7 +147,6 @@ object PackageUtils {
         return emptyArray()
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     fun getAllActivities(
         cxt: Context,
         pkgName: String,
