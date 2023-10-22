@@ -1,3 +1,4 @@
+project("jniLib")
 cmake_minimum_required(VERSION 3.4.1)
 
 file(GLOB inc "src/main/cpp/*.h")

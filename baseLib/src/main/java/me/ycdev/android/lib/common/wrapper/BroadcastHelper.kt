@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 
 /**
  * A wrapper class to avoid security issues when sending/receiving broadcast.
@@ -25,7 +26,7 @@ object BroadcastHelper {
         filter: IntentFilter
     ): Intent? {
         val perm = cxt.packageName + PERM_INTERNAL_BROADCAST_SUFFIX
-        return cxt.registerReceiver(receiver, filter, perm, null)
+        return ContextCompat.registerReceiver(cxt, receiver, filter, perm, null, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     /**
@@ -36,7 +37,7 @@ object BroadcastHelper {
         receiver: BroadcastReceiver,
         filter: IntentFilter
     ): Intent? {
-        return cxt.registerReceiver(receiver, filter)
+        return ContextCompat.registerReceiver(cxt, receiver, filter, ContextCompat.RECEIVER_EXPORTED)
     }
 
     /**
