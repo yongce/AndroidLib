@@ -4,10 +4,10 @@ import android.os.Looper
 import android.os.SystemClock
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertThat
-import org.junit.Test
 import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import org.junit.Test
 
 @LargeTest
 class HandlerTaskExecutorTest {
@@ -25,15 +25,21 @@ class HandlerTaskExecutorTest {
     }
 
     @Suppress("SameParameterValue")
-    private fun createTasks(latch: CountDownLatch, count: Int, sleepMs: Long): List<Runnable> {
+    private fun createTasks(
+        latch: CountDownLatch,
+        count: Int,
+        sleepMs: Long
+    ): List<Runnable> {
         val tasks = ArrayList<Runnable>(count)
         for (i in 0 until count) {
-            tasks.add(Runnable {
-                println("main thread id=" + Thread.currentThread().id)
-                assertThat(Looper.myLooper()).isSameInstanceAs(Looper.getMainLooper())
-                SystemClock.sleep(sleepMs)
-                latch.countDown()
-            })
+            tasks.add(
+                Runnable {
+                    println("main thread id=" + Thread.currentThread().id)
+                    assertThat(Looper.myLooper()).isSameInstanceAs(Looper.getMainLooper())
+                    SystemClock.sleep(sleepMs)
+                    latch.countDown()
+                }
+            )
         }
         return tasks
     }

@@ -44,7 +44,11 @@ ext {
 spotless {
     kotlin {
         target "**/*.kt"
-        ktlint(versions.ktlint)
+        ktlint(versions.ktlint).editorConfigOverride([
+                'ktlint_code_style'              : 'android_studio',
+                'ktlint_standard_max-line-length': 'disabled',
+                'ktlint_standard_property-naming': 'disabled',
+        ])
     }
 }
 

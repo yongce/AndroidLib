@@ -23,7 +23,9 @@ object TypeUtils {
         }
         if (type is GenericArrayType) {
             val componentType: Type = type.genericComponentType
-            return java.lang.reflect.Array.newInstance(getRawType(componentType), 0).javaClass
+            return java.lang.reflect.Array
+                .newInstance(getRawType(componentType), 0)
+                .javaClass
         }
         if (type is TypeVariable<*>) {
             // We could use the variable's bounds, but that won't work if there are multiple. Having a raw

@@ -8,7 +8,6 @@ import androidx.annotation.Nullable
 import timber.log.Timber
 
 class LocalService : Service() {
-
     override fun onCreate() {
         super.onCreate()
         Timber.tag(TAG).d("onCreate")
@@ -20,15 +19,11 @@ class LocalService : Service() {
     }
 
     @Nullable
-    override fun onBind(intent: Intent): IBinder {
-        return BinderServer()
-    }
+    override fun onBind(intent: Intent): IBinder = BinderServer()
 
     private inner class BinderServer : IDemoService.Stub() {
         @Throws(RemoteException::class)
-        override fun who(): String {
-            return "LocalService"
-        }
+        override fun who(): String = "LocalService"
 
         @Throws(RemoteException::class)
         override fun sayHello(gift: String) {

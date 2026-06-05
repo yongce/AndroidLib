@@ -14,10 +14,10 @@ import android.os.SystemClock
 import androidx.annotation.IntDef
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import java.util.concurrent.atomic.AtomicInteger
 import me.ycdev.android.lib.common.manager.ListenerManager
 import me.ycdev.android.lib.common.utils.Preconditions
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @constructor
@@ -78,7 +78,8 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
             if (!validatePermission(info.serviceInfo.permission)) {
                 Timber.tag(TAG).w(
                     "Skip not-matched permission candidate: %s, perm: %s",
-                    info.serviceInfo.name, info.serviceInfo.permission
+                    info.serviceInfo.name,
+                    info.serviceInfo.permission
                 )
                 continue
             }
@@ -148,7 +149,8 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         }
         val candidateService = selectTargetService(servicesList)
         if (candidateService == null) {
-            Timber.tag(TAG)
+            Timber
+                .tag(TAG)
                 .w("[%s] no expected service component found, cannot connect", serviceName)
             updateConnectState(STATE_DISCONNECTED)
             return
@@ -156,38 +158,46 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         // must set explicit component before bind/start service
         intent.component = candidateService
 
-        serviceConnection = object : ServiceConnection {
-            private var mConnectLost = false
+        serviceConnection =
+            object : ServiceConnection {
+                private var mConnectLost = false
 
-            override fun onServiceConnected(cn: ComponentName, service: IBinder) {
-                Timber.tag(TAG).i(
-                    "[%s] service connected, cn: %s, mConnectLost: %s",
-                    serviceName, cn, mConnectLost
-                )
-                if (!mConnectLost) {
-                    // update 'mService' first, and then update the connect state and notify
-                    this@ServiceConnector.service = asInterface(service)
-                    connectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK)
-                    updateConnectState(STATE_CONNECTED)
-                } // else: waiting for reconnecting using new ServiceConnection object
-            }
-
-            override fun onServiceDisconnected(cn: ComponentName) {
-                Timber.tag(TAG).i(
-                    "[%s] service disconnected, cn: %s, mConnectLost: %s",
-                    serviceName, cn, mConnectLost
-                )
-                if (mConnectLost) {
-                    return
+                override fun onServiceConnected(
+                    cn: ComponentName,
+                    service: IBinder
+                ) {
+                    Timber.tag(TAG).i(
+                        "[%s] service connected, cn: %s, mConnectLost: %s",
+                        serviceName,
+                        cn,
+                        mConnectLost
+                    )
+                    if (!mConnectLost) {
+                        // update 'mService' first, and then update the connect state and notify
+                        this@ServiceConnector.service = asInterface(service)
+                        connectHandler.removeMessages(MSG_CONNECT_TIMEOUT_CHECK)
+                        updateConnectState(STATE_CONNECTED)
+                    } // else: waiting for reconnecting using new ServiceConnection object
                 }
 
-                // Unbind the service and bind it again later
-                mConnectLost = true
-                disconnect()
+                override fun onServiceDisconnected(cn: ComponentName) {
+                    Timber.tag(TAG).i(
+                        "[%s] service disconnected, cn: %s, mConnectLost: %s",
+                        serviceName,
+                        cn,
+                        mConnectLost
+                    )
+                    if (mConnectLost) {
+                        return
+                    }
 
-                connectHandler.sendEmptyMessageDelayed(MSG_RECONNECT, 1000)
+                    // Unbind the service and bind it again later
+                    mConnectLost = true
+                    disconnect()
+
+                    connectHandler.sendEmptyMessageDelayed(MSG_RECONNECT, 1000)
+                }
             }
-        }
 
         Timber.tag(TAG).i("[%s] connecting service...", serviceName)
         if (!appContext.bindService(intent, serviceConnection!!, Context.BIND_AUTO_CREATE)) {
@@ -202,7 +212,9 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         }
     }
 
-    private fun updateConnectState(@ConnectState newState: Int) {
+    private fun updateConnectState(
+        @ConnectState newState: Int
+    ) {
         if (newState != STATE_CONNECTING) {
             state.set(newState)
         }
@@ -231,7 +243,11 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
                 val connectState = state.get()
                 Timber.tag(TAG).d(
                     "[%s] checking, service: %s, state: %d, time: %d/%d",
-                    serviceName, service, connectState, timeElapsed, timeoutMillis
+                    serviceName,
+                    service,
+                    connectState,
+                    timeElapsed,
+                    timeoutMillis
                 )
                 if (connectState == STATE_CONNECTED || connectState == STATE_DISCONNECTED) {
                     break
@@ -257,44 +273,46 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         }
     }
 
-    private val connectHandler = object : Handler(connectLooper) {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                MSG_RECONNECT -> {
-                    Timber.tag(TAG).d("[%s] delayed reconnect fires...", serviceName)
-                    connect()
-                }
+    private val connectHandler =
+        object : Handler(connectLooper) {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    MSG_RECONNECT -> {
+                        Timber.tag(TAG).d("[%s] delayed reconnect fires...", serviceName)
+                        connect()
+                    }
 
-                MSG_NOTIFY_LISTENERS -> {
-                    @ConnectState val newState = msg.arg1
-                    Timber.tag(TAG).d("State changed: %s", strConnectState(newState))
-                    stateListeners.notifyListeners { listener -> listener.onStateChanged(newState) }
-                }
+                    MSG_NOTIFY_LISTENERS -> {
+                        @ConnectState val newState = msg.arg1
+                        Timber.tag(TAG).d("State changed: %s", strConnectState(newState))
+                        stateListeners.notifyListeners { listener -> listener.onStateChanged(newState) }
+                    }
 
-                MSG_CONNECT_TIMEOUT_CHECK -> {
-                    Timber.tag(TAG).d("checking connect timeout")
-                    val curState = state.get()
-                    if (SystemClock.elapsedRealtime() - connectStartTime >= FORCE_REBIND_TIME) {
-                        Timber.tag(TAG).d(
-                            "[%s] connect timeout, state: %s",
-                            serviceName, curState
-                        )
-                        if (curState == STATE_CONNECTING) {
-                            // force to rebind the service
-                            connectServiceIfNeeded(true)
-                        }
-                    } else {
-                        if (curState == STATE_CONNECTING) {
-                            this.sendEmptyMessageDelayed(
-                                MSG_CONNECT_TIMEOUT_CHECK,
-                                CONNECT_TIMEOUT_CHECK_INTERVAL
+                    MSG_CONNECT_TIMEOUT_CHECK -> {
+                        Timber.tag(TAG).d("checking connect timeout")
+                        val curState = state.get()
+                        if (SystemClock.elapsedRealtime() - connectStartTime >= FORCE_REBIND_TIME) {
+                            Timber.tag(TAG).d(
+                                "[%s] connect timeout, state: %s",
+                                serviceName,
+                                curState
                             )
+                            if (curState == STATE_CONNECTING) {
+                                // force to rebind the service
+                                connectServiceIfNeeded(true)
+                            }
+                        } else {
+                            if (curState == STATE_CONNECTING) {
+                                this.sendEmptyMessageDelayed(
+                                    MSG_CONNECT_TIMEOUT_CHECK,
+                                    CONNECT_TIMEOUT_CHECK_INTERVAL
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     @Retention(AnnotationRetention.SOURCE)
     @IntDef(STATE_DISCONNECTED, STATE_CONNECTING, STATE_CONNECTED)
@@ -314,13 +332,11 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         private const val CONNECT_TIMEOUT_CHECK_INTERVAL: Long = 5000 // 5s
         private const val FORCE_REBIND_TIME: Long = 30 * 1000L // 30 seconds
 
-        fun strConnectState(state: Int): String {
-            return when (state) {
-                STATE_DISCONNECTED -> "disconnected"
-                STATE_CONNECTING -> "connecting"
-                STATE_CONNECTED -> "connected"
-                else -> "unknown"
-            }
+        fun strConnectState(state: Int): String = when (state) {
+            STATE_DISCONNECTED -> "disconnected"
+            STATE_CONNECTING -> "connecting"
+            STATE_CONNECTED -> "connected"
+            else -> "unknown"
         }
     }
 }

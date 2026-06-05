@@ -1,6 +1,5 @@
 package me.ycdev.android.lib.common.utils
 
-import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -8,36 +7,33 @@ import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 
 @Suppress("unused")
 object DigestUtils {
     @Throws(NoSuchAlgorithmException::class, UnsupportedEncodingException::class)
-    fun md5(text: String): String {
-        return hash(text, "MD5")
-    }
+    fun md5(text: String): String = hash(text, "MD5")
 
     @Throws(NoSuchAlgorithmException::class)
-    fun md5(data: ByteArray): String {
-        return hash(data, "MD5")
-    }
+    fun md5(data: ByteArray): String = hash(data, "MD5")
 
     @Throws(NoSuchAlgorithmException::class, UnsupportedEncodingException::class)
-    fun sha1(text: String): String {
-        return hash(text, "SHA-1")
-    }
+    fun sha1(text: String): String = hash(text, "SHA-1")
 
     @Throws(NoSuchAlgorithmException::class)
-    fun sha1(data: ByteArray): String {
-        return hash(data, "SHA-1")
-    }
+    fun sha1(data: ByteArray): String = hash(data, "SHA-1")
 
     @Throws(NoSuchAlgorithmException::class, UnsupportedEncodingException::class)
-    fun hash(text: String, algorithm: String): String {
-        return hash(text.toByteArray(charset("UTF-8")), algorithm)
-    }
+    fun hash(
+        text: String,
+        algorithm: String
+    ): String = hash(text.toByteArray(charset("UTF-8")), algorithm)
 
     @Throws(NoSuchAlgorithmException::class)
-    fun hash(data: ByteArray, algorithm: String): String {
+    fun hash(
+        data: ByteArray,
+        algorithm: String
+    ): String {
         val digest = MessageDigest.getInstance(algorithm)
         digest.update(data)
         val messageDigest = digest.digest()

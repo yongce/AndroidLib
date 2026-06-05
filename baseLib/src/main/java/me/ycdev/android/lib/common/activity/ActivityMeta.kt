@@ -19,7 +19,10 @@ data class ActivityMeta(
         /**
          * @throws PackageManager.NameNotFoundException if component not found in the system
          */
-        fun get(context: Context, activity: ComponentName): ActivityMeta {
+        fun get(
+            context: Context,
+            activity: ComponentName
+        ): ActivityMeta {
             val key = activity.flattenToShortString()
             var meta = cache[key]
             if (meta != null) {

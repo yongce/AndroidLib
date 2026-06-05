@@ -7,15 +7,25 @@ import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.getContainingUClass
 
-abstract class WrapperDetectorBase : Detector(), Detector.UastScanner {
+abstract class WrapperDetectorBase :
+    Detector(),
+    Detector.UastScanner {
     protected abstract val applicableMethods: List<String>
     protected abstract val wrapperClassName: String
     protected abstract val targetClassNames: Array<String>
-    protected abstract fun reportViolation(context: JavaContext, element: UElement)
+
+    protected abstract fun reportViolation(
+        context: JavaContext,
+        element: UElement
+    )
 
     override fun getApplicableMethodNames(): List<String> = applicableMethods
 
-    override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
+    override fun visitMethodCall(
+        context: JavaContext,
+        node: UCallExpression,
+        method: PsiMethod
+    ) {
         val evaluator = context.evaluator
         val surroundingClass = node.getContainingUClass()?.javaPsi
         if (surroundingClass == null) {

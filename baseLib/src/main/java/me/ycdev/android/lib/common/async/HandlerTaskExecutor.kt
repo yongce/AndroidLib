@@ -4,16 +4,15 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 
-open class HandlerTaskExecutor(val taskHandler: Handler) : ITaskExecutor {
-
+open class HandlerTaskExecutor(
+    val taskHandler: Handler
+) : ITaskExecutor {
     override fun postTask(task: Runnable) {
         taskHandler.post(task)
     }
 
     companion object {
-        fun withMainLooper(): HandlerTaskExecutor {
-            return HandlerTaskExecutor(Handler(Looper.getMainLooper()))
-        }
+        fun withMainLooper(): HandlerTaskExecutor = HandlerTaskExecutor(Handler(Looper.getMainLooper()))
 
         fun withHandlerThread(name: String): HandlerTaskExecutor {
             val thread = HandlerThread(name)

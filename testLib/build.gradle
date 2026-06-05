@@ -5,7 +5,7 @@ apply from: '../build_common.gradle'
 project.ext.archivesBaseName = 'android-common-test'
 
 android {
-    namespace 'me.ycdev.android.lib.test'
+    namespace = 'me.ycdev.android.lib.test'
     defaultConfig {
         minSdk = versions.minSdk
     }

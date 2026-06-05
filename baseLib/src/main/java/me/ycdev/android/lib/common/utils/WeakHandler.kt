@@ -6,7 +6,10 @@ import android.os.Message
 import java.lang.ref.WeakReference
 
 @Suppress("unused")
-class WeakHandler(looper: Looper, msgHandler: Callback) : Handler(looper) {
+class WeakHandler(
+    looper: Looper,
+    msgHandler: Callback
+) : Handler(looper) {
     private val targetHandler: WeakReference<Callback> = WeakReference(msgHandler)
 
     constructor(msgHandler: Callback) : this(Looper.myLooper()!!, msgHandler)

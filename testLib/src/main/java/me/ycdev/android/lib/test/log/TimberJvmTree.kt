@@ -1,7 +1,7 @@
 package me.ycdev.android.lib.test.log
 
-import timber.log.Timber
 import java.util.ArrayList
+import timber.log.Timber
 
 @Suppress("unused")
 class TimberJvmTree : Timber.Tree() {
@@ -11,15 +11,18 @@ class TimberJvmTree : Timber.Tree() {
         logs?.clear()
     }
 
-    fun hasLogs(): Boolean {
-        return logs?.isNotEmpty() ?: false
-    }
+    fun hasLogs(): Boolean = logs?.isNotEmpty() ?: false
 
     fun keepLogs() {
         logs = ArrayList()
     }
 
-    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+    override fun log(
+        priority: Int,
+        tag: String?,
+        message: String,
+        t: Throwable?
+    ) {
         val log = AndroidLogHelper.getPriorityName(priority) + "/" + tag + ": " + message
         logs?.add(log)
         println(log)

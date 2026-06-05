@@ -28,7 +28,6 @@ import me.ycdev.android.lib.commonui.recyclerview.MarginItemDecoration
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 abstract class GridEntriesActivity : AppCompatActivity() {
-
     protected lateinit var entriesAdapter: SystemEntriesAdapter
     protected lateinit var gridView: RecyclerView
     protected lateinit var loadingView: ProgressBar
@@ -126,26 +125,30 @@ abstract class GridEntriesActivity : AppCompatActivity() {
      */
     protected open val needLoadIntentsAsync: Boolean = false
 
-    protected open class SystemEntriesAdapter(val context: Context) :
-        RecyclerView.Adapter<SystemEntriesAdapter.ViewHolder>() {
-
+    protected open class SystemEntriesAdapter(
+        val context: Context
+    ) : RecyclerView.Adapter<SystemEntriesAdapter.ViewHolder>() {
         var data: List<Entry>? = null
 
-        private fun getItem(position: Int): Entry {
-            return data!![position]
-        }
+        private fun getItem(position: Int): Entry = data!![position]
 
-        override fun getItemCount(): Int {
-            return data?.size ?: 0
-        }
+        override fun getItemCount(): Int = data?.size ?: 0
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val itemView = LayoutInflater.from(context)
-                .inflate(R.layout.ycdev_grid_entries_item, parent, false)
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): ViewHolder {
+            val itemView =
+                LayoutInflater
+                    .from(context)
+                    .inflate(R.layout.ycdev_grid_entries_item, parent, false)
             return ViewHolder(itemView)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        override fun onBindViewHolder(
+            holder: ViewHolder,
+            position: Int
+        ) {
             val item = getItem(position)
             holder.binding.title.text = item.title
 
@@ -156,7 +159,9 @@ abstract class GridEntriesActivity : AppCompatActivity() {
             }
         }
 
-        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(
+            itemView: View
+        ) : RecyclerView.ViewHolder(itemView) {
             val binding: YcdevGridEntriesItemBinding = YcdevGridEntriesItemBinding.bind(itemView)
         }
     }

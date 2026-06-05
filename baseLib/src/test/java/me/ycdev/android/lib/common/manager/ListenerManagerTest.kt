@@ -12,10 +12,11 @@ class ListenerManagerTest {
 
     @Test
     fun basic() {
-        val managersList = arrayListOf<ListenerManager<DemoListener>>(
-            ListenerManager(true),
-            ListenerManager(false)
-        )
+        val managersList =
+            arrayListOf<ListenerManager<DemoListener>>(
+                ListenerManager(true),
+                ListenerManager(false)
+            )
         for (manager in managersList) {
             val listener1 = DemoListener(manager)
             val listener2 = DemoListener(manager)
@@ -39,10 +40,11 @@ class ListenerManagerTest {
 
     @Test
     fun listenerLeak() {
-        val managersList = arrayListOf<ListenerManager<DemoListener>>(
-            ListenerManager(true),
-            ListenerManager(false)
-        )
+        val managersList =
+            arrayListOf<ListenerManager<DemoListener>>(
+                ListenerManager(true),
+                ListenerManager(false)
+            )
         for (manager in managersList) {
             val listener1 = DemoListener(manager)
 
@@ -73,10 +75,11 @@ class ListenerManagerTest {
 
     @Test
     fun listenerRemovedWhenNotify() {
-        val managersList = arrayListOf<ListenerManager<DemoListener>>(
-            ListenerManager(true),
-            ListenerManager(false)
-        )
+        val managersList =
+            arrayListOf<ListenerManager<DemoListener>>(
+                ListenerManager(true),
+                ListenerManager(false)
+            )
         for (manager in managersList) {
             val listener1 = DemoListener(manager, true)
             val listener2 = DemoListener(manager)

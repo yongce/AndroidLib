@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.IBinder
 import androidx.annotation.RestrictTo
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
 import me.ycdev.android.lib.common.internalapi.android.os.ServiceManagerIA
 import me.ycdev.android.lib.common.internalapi.android.os.UserHandleIA
 import timber.log.Timber
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
 
 @Suppress("unused")
 @SuppressLint("PrivateApi")
@@ -27,13 +27,15 @@ object ActivityManagerIA {
     init {
         try {
             val stubClass = Class.forName(
-                "android.app.ActivityManagerNative", false,
+                "android.app.ActivityManagerNative",
+                false,
                 Thread.currentThread().contextClassLoader
             )
             mtd_asInterface = stubClass.getMethod("asInterface", IBinder::class.java)
 
             class_IActivityManager = Class.forName(
-                "android.app.IActivityManager", false,
+                "android.app.IActivityManager",
+                false,
                 Thread.currentThread().contextClassLoader
             )
         } catch (e: ClassNotFoundException) {
@@ -86,7 +88,8 @@ object ActivityManagerIA {
                 // Android 4.2: void forceStopPackage(String packageName, int userId);
                 mtd_forceStopPackage = class_IActivityManager!!.getMethod(
                     "forceStopPackage",
-                    String::class.java, Int::class.javaPrimitiveType
+                    String::class.java,
+                    Int::class.javaPrimitiveType
                 )
                 version_forceStopPackage = API_VERSION_2
             }

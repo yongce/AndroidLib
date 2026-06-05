@@ -38,9 +38,7 @@ object IoUtils {
 
     @Deprecated("Not needed anymore", ReplaceWith("Use InputStream#readBytes()"))
     @Throws(IOException::class)
-    fun readAllBytes(input: InputStream): ByteArray {
-        return input.readBytes()
-    }
+    fun readAllBytes(input: InputStream): ByteArray = input.readBytes()
 
     /**
      * Read all lines of the stream as a String.
@@ -48,9 +46,7 @@ object IoUtils {
      * @return May be empty String, but never null.
      */
     @Throws(IOException::class)
-    fun readAllLines(input: InputStream): String {
-        return input.bufferedReader().use { it.readText() }
-    }
+    fun readAllLines(input: InputStream): String = input.bufferedReader().use { it.readText() }
 
     /**
      * Read all lines of the text file as a String.
@@ -70,7 +66,10 @@ object IoUtils {
      * @param lineNumber Start from 1
      */
     @Throws(IOException::class)
-    fun readOneLine(input: InputStream, lineNumber: Int): String? {
+    fun readOneLine(
+        input: InputStream,
+        lineNumber: Int
+    ): String? {
         val reader = input.bufferedReader()
         var line: String? = null
 
@@ -88,7 +87,10 @@ object IoUtils {
      * @param lineNumber Start from 1
      */
     @Throws(IOException::class)
-    fun readOneLine(filePath: String, lineNumber: Int): String? {
+    fun readOneLine(
+        filePath: String,
+        lineNumber: Int
+    ): String? {
         val fis = FileInputStream(filePath)
         try {
             return readOneLine(fis, lineNumber)
@@ -110,7 +112,10 @@ object IoUtils {
     }
 
     @Throws(IOException::class)
-    fun saveAsFile(content: String, filePath: String) {
+    fun saveAsFile(
+        content: String,
+        filePath: String
+    ) {
         val fw = FileWriter(filePath)
         try {
             fw.write(content)
@@ -125,7 +130,10 @@ object IoUtils {
      * Note: This method will not close the input stream.
      */
     @Throws(IOException::class)
-    fun saveAsFile(input: InputStream, filePath: String) {
+    fun saveAsFile(
+        input: InputStream,
+        filePath: String
+    ) {
         val fos = FileOutputStream(filePath)
         try {
             input.copyTo(fos)
@@ -140,12 +148,18 @@ object IoUtils {
      */
     @Deprecated("Not needed anymore", ReplaceWith(("Use InputStream#copyTo()")))
     @Throws(IOException::class)
-    fun copyStream(input: InputStream, os: OutputStream) {
+    fun copyStream(
+        input: InputStream,
+        os: OutputStream
+    ) {
         input.copyTo(os)
     }
 
     @Throws(IOException::class)
-    fun copyFile(srcFilePath: String, destFilePath: String) {
+    fun copyFile(
+        srcFilePath: String,
+        destFilePath: String
+    ) {
         val fis = FileInputStream(srcFilePath)
         try {
             saveAsFile(fis, destFilePath)

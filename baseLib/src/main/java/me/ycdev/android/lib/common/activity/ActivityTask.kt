@@ -3,7 +3,10 @@ package me.ycdev.android.lib.common.activity
 import android.content.ComponentName
 import java.util.Stack
 
-class ActivityTask(val taskId: Int, val taskAffinity: String) {
+class ActivityTask(
+    val taskId: Int,
+    val taskAffinity: String
+) {
     private val activities = arrayListOf<ActivityRunningState>()
 
     internal fun addActivity(activity: ActivityRunningState) {
@@ -13,7 +16,10 @@ class ActivityTask(val taskId: Int, val taskAffinity: String) {
         activities.add(activity)
     }
 
-    internal fun popActivity(componentName: ComponentName, hashCode: Int): ActivityRunningState {
+    internal fun popActivity(
+        componentName: ComponentName,
+        hashCode: Int
+    ): ActivityRunningState {
         val it = activities.asReversed().iterator()
         while (it.hasNext()) {
             val activity = it.next()
@@ -26,7 +32,10 @@ class ActivityTask(val taskId: Int, val taskAffinity: String) {
         throw RuntimeException("Cannot find $componentName@$hashHex")
     }
 
-    fun lastActivity(componentName: ComponentName, hashCode: Int): ActivityRunningState {
+    fun lastActivity(
+        componentName: ComponentName,
+        hashCode: Int
+    ): ActivityRunningState {
         activities.asReversed().forEach {
             if (it.componentName == componentName && it.hashCode == hashCode) {
                 return it
@@ -64,7 +73,5 @@ class ActivityTask(val taskId: Int, val taskAffinity: String) {
         return task
     }
 
-    override fun toString(): String {
-        return "AppTask[taskId=$taskId, taskAffinity=$taskAffinity, activities=$activities]"
-    }
+    override fun toString(): String = "AppTask[taskId=$taskId, taskAffinity=$taskAffinity, activities=$activities]"
 }

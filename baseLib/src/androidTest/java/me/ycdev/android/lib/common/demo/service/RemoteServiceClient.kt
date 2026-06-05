@@ -5,7 +5,9 @@ import androidx.annotation.NonNull
 import me.ycdev.android.lib.common.ipc.ServiceClientBase
 import me.ycdev.android.lib.common.utils.ThreadManager
 
-class RemoteServiceClient(@NonNull context: Context) : ServiceClientBase<IDemoService>(
+class RemoteServiceClient(
+    @NonNull context: Context
+) : ServiceClientBase<IDemoService>(
     context,
     SERVICE_NAME,
     ThreadManager.instance.remoteServiceRequestIpcLooper(),

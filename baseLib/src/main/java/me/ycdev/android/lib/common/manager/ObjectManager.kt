@@ -1,11 +1,17 @@
 package me.ycdev.android.lib.common.manager
 
-import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.ArrayList
+import timber.log.Timber
 
-open class ObjectManager<IObject : Any>(open val weakReference: Boolean) {
-    private class ObjectInfo<IObject>(obj: IObject, val tag: String, weakReference: Boolean) {
+open class ObjectManager<IObject : Any>(
+    open val weakReference: Boolean
+) {
+    private class ObjectInfo<IObject>(
+        obj: IObject,
+        val tag: String,
+        weakReference: Boolean
+    ) {
         private var obj: IObject? = null
         private var holder: WeakReference<IObject>? = null
 
@@ -17,9 +23,7 @@ open class ObjectManager<IObject : Any>(open val weakReference: Boolean) {
             }
         }
 
-        fun getObject(): IObject? {
-            return obj ?: holder!!.get()
-        }
+        fun getObject(): IObject? = obj ?: holder!!.get()
     }
 
     private val allObjects: MutableList<ObjectInfo<IObject>> = ArrayList()
@@ -59,7 +63,10 @@ open class ObjectManager<IObject : Any>(open val weakReference: Boolean) {
     /**
      * @param tag Identity the object, for debug only
      */
-    fun addObject(obj: IObject, tag: String) {
+    fun addObject(
+        obj: IObject,
+        tag: String
+    ) {
         synchronized(allObjects) {
             if (allObjects.size == 0) {
                 onFirstObjectAdd()

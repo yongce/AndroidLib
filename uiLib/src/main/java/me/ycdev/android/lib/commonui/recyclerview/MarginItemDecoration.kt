@@ -25,8 +25,6 @@ class MarginItemDecoration(
     }
 
     companion object {
-        fun create(margin: Int): MarginItemDecoration {
-            return MarginItemDecoration(margin, margin, margin, margin)
-        }
+        fun create(margin: Int): MarginItemDecoration = MarginItemDecoration(margin, margin, margin, margin)
     }
 }

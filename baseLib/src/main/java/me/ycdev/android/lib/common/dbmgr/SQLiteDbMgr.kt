@@ -2,13 +2,14 @@ package me.ycdev.android.lib.common.dbmgr
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import java.util.HashMap
 import me.ycdev.android.lib.common.pattern.SingletonHolderP1
 import timber.log.Timber
-import java.util.HashMap
 
 @Suppress("unused")
-class SQLiteDbMgr private constructor(cxt: Context) {
-
+class SQLiteDbMgr private constructor(
+    cxt: Context
+) {
     private val mAppContext: Context = cxt.applicationContext
     private val mOpenHelpers = HashMap<Class<out SQLiteDbCreator>, DbInfo>()
 
@@ -62,9 +63,7 @@ class SQLiteDbMgr private constructor(cxt: Context) {
         fun acquireDatabase(
             cxt: Context,
             dbInfoClass: Class<out SQLiteDbCreator>
-        ): SQLiteDatabase? {
-            return getInstance(cxt).acquireDatabase(dbInfoClass)
-        }
+        ): SQLiteDatabase? = getInstance(cxt).acquireDatabase(dbInfoClass)
 
         fun releaseDatabase(
             cxt: Context,

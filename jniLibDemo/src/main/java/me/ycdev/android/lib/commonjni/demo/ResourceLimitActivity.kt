@@ -10,7 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import me.ycdev.android.lib.commonjni.SysResourceLimitHelper
 
-class ResourceLimitActivity : AppCompatActivity(), View.OnClickListener {
+class ResourceLimitActivity :
+    AppCompatActivity(),
+    View.OnClickListener {
     private lateinit var ofLimitStatusView: TextView
     private lateinit var increaseOflimitBtn: Button
     private lateinit var decreaseOflimitBtn: Button

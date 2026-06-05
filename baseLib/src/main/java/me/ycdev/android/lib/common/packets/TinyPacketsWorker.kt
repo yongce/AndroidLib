@@ -1,10 +1,10 @@
 package me.ycdev.android.lib.common.packets
 
 import androidx.annotation.VisibleForTesting
-import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.experimental.xor
+import timber.log.Timber
 
 /**
  * Supported package formats:
@@ -27,7 +27,9 @@ import kotlin.experimental.xor
  *     + <data DATA_CRC, 1 byte> + <data size, 4 bytes> + <data, N bytes>
  * ```
  */
-class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback) {
+class TinyPacketsWorker(
+    callback: ParserCallback
+) : PacketsWorker(TAG, callback) {
     // for packet
     @VisibleForTesting
     internal var dataNumberHolder: Byte = 0
@@ -93,7 +95,8 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         if (debugLog) {
             Timber.tag(TAG).d(
                 "parsePackets, size=%d, totalBytes=%d",
-                data.size, totalParsedBytes
+                data.size,
+                totalParsedBytes
             )
         }
 
@@ -146,7 +149,8 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
                 if (bytesDiscarded > 0) {
                     Timber.tag(TAG).e(
                         "%d bytes discarded. header found? %s",
-                        bytesDiscarded, headerMagicFound
+                        bytesDiscarded,
+                        headerMagicFound
                     )
                 }
 
@@ -161,13 +165,14 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
                 parserState = ParserState.VERSION
             } else if (parserState == ParserState.VERSION) {
                 curVersion = readBuffer.get()
-                parserState = if (isValidVersion(curVersion)) {
-                    ParserState.NUMBER
-                } else {
-                    Timber.tag(TAG).e("Unknown version (%d)", curVersion)
-                    // new version (unknown) or data corrupted
-                    ParserState.HEADER_MAGIC
-                }
+                parserState =
+                    if (isValidVersion(curVersion)) {
+                        ParserState.NUMBER
+                    } else {
+                        Timber.tag(TAG).e("Unknown version (%d)", curVersion)
+                        // new version (unknown) or data corrupted
+                        ParserState.HEADER_MAGIC
+                    }
             } else if (parserState == ParserState.NUMBER) {
                 curNumber = readBuffer.get()
                 parserState = ParserState.DATA_CRC
@@ -181,16 +186,17 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
                 }
 
                 curDataSize = readDataSize(readBuffer, curVersion)
-                parserState = if (curDataSize == 0) {
-                    // empty data is legal
-                    Timber.tag(TAG).i("Empty data received, ignore")
-                    ParserState.HEADER_MAGIC
-                } else {
-                    if (curDataSize > DATA_SIZE_WARNING) {
-                        Timber.tag(TAG).w("big data found (size=%d), maybe corrupted", curDataSize)
+                parserState =
+                    if (curDataSize == 0) {
+                        // empty data is legal
+                        Timber.tag(TAG).i("Empty data received, ignore")
+                        ParserState.HEADER_MAGIC
+                    } else {
+                        if (curDataSize > DATA_SIZE_WARNING) {
+                            Timber.tag(TAG).w("big data found (size=%d), maybe corrupted", curDataSize)
+                        }
+                        ParserState.DATA
                     }
-                    ParserState.DATA
-                }
             } else if (parserState == ParserState.DATA) {
                 if (readBuffer.remaining() >= curDataSize) {
                     val parsedData = ByteArray(curDataSize)
@@ -199,7 +205,8 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
                     if (debugLog) {
                         Timber.tag(TAG).d(
                             "data parsed (number=%d, dataSize=%d)",
-                            curNumber, parsedData.size
+                            curNumber,
+                            parsedData.size
                         )
                     }
                     if (crc == curDataCrc) {
@@ -230,19 +237,15 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         internal val HEADER_MAGIC = byteArrayOf(0x8B.toByte(), 0x4F, 0x99.toByte(), 0x3B)
 
         @VisibleForTesting
-        internal fun calculateVersion(dataSize: Int): Byte {
-            return when (dataSize) {
-                in 0..0xFF -> Version.V1
-                in 0x100..0xFFFF -> Version.V2
-                else -> Version.V3
-            }
+        internal fun calculateVersion(dataSize: Int): Byte = when (dataSize) {
+            in 0..0xFF -> Version.V1
+            in 0x100..0xFFFF -> Version.V2
+            else -> Version.V3
         }
 
-        private fun isValidVersion(version: Byte): Boolean {
-            return when (version) {
-                Version.V1, Version.V2, Version.V3 -> true
-                else -> false
-            }
+        private fun isValidVersion(version: Byte): Boolean = when (version) {
+            Version.V1, Version.V2, Version.V3 -> true
+            else -> false
         }
 
         @VisibleForTesting
@@ -253,13 +256,11 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         }
 
         @VisibleForTesting
-        internal fun getDataSizeBytes(version: Byte): Int {
-            return when (version) {
-                Version.V1 -> 1
-                Version.V2 -> 2
-                Version.V3 -> 4
-                else -> throw PacketsException("Unknown data version ($version)")
-            }
+        internal fun getDataSizeBytes(version: Byte): Int = when (version) {
+            Version.V1 -> 1
+            Version.V2 -> 2
+            Version.V3 -> 4
+            else -> throw PacketsException("Unknown data version ($version)")
         }
 
         @VisibleForTesting
@@ -270,7 +271,11 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         }
 
         @VisibleForTesting
-        internal fun fillDataSize(buffer: ByteBuffer, version: Byte, dataSize: Int) {
+        internal fun fillDataSize(
+            buffer: ByteBuffer,
+            version: Byte,
+            dataSize: Int
+        ) {
             when (version) {
                 Version.V1 -> buffer.put(dataSize.toByte())
                 Version.V2 -> buffer.putShort(dataSize.toShort())
@@ -280,13 +285,14 @@ class TinyPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback)
         }
 
         @VisibleForTesting
-        internal fun readDataSize(buffer: ByteBuffer, version: Byte): Int {
-            return when (version) {
-                Version.V1 -> 0xFF and buffer.get().toInt()
-                Version.V2 -> 0xFFFF and buffer.short.toInt()
-                Version.V3 -> buffer.int
-                else -> throw PacketsException("Unknown data version ($version")
-            }
+        internal fun readDataSize(
+            buffer: ByteBuffer,
+            version: Byte
+        ): Int = when (version) {
+            Version.V1 -> 0xFF and buffer.get().toInt()
+            Version.V2 -> 0xFFFF and buffer.short.toInt()
+            Version.V3 -> buffer.int
+            else -> throw PacketsException("Unknown data version ($version")
         }
     }
 }

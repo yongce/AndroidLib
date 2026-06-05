@@ -1,7 +1,5 @@
 package me.ycdev.android.lib.common.net
 
-import me.ycdev.android.lib.common.utils.IoUtils
-import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -9,6 +7,8 @@ import java.net.HttpURLConnection
 import java.util.HashMap
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
+import me.ycdev.android.lib.common.utils.IoUtils
+import me.ycdev.android.lib.common.utils.LibLogger
 
 @Suppress("unused")
 class HttpClient {
@@ -16,7 +16,10 @@ class HttpClient {
     private var connectTimeout: Int = 10_000 // ms
     private var readTimeout: Int = 10_1000 // ms
 
-    fun setTimeout(connectTimeout: Int, readTimeout: Int) {
+    fun setTimeout(
+        connectTimeout: Int,
+        readTimeout: Int
+    ) {
         this.connectTimeout = connectTimeout
         this.readTimeout = readTimeout
     }
@@ -41,7 +44,10 @@ class HttpClient {
     }
 
     @Throws(IOException::class)
-    fun post(url: String, body: String): String {
+    fun post(
+        url: String,
+        body: String
+    ): String {
         val httpConn = getHttpConnection(url, true, null)
         var os: DataOutputStream? = null
 
@@ -62,7 +68,10 @@ class HttpClient {
     }
 
     @Throws(IOException::class)
-    fun post(url: String, body: ByteArray): String {
+    fun post(
+        url: String,
+        body: ByteArray
+    ): String {
         val httpConn = getHttpConnection(url, true, null)
         var os: DataOutputStream? = null
 
@@ -121,7 +130,8 @@ class HttpClient {
     private fun getResponse(httpConn: HttpURLConnection): String {
         val contentEncoding = httpConn.contentEncoding
         LibLogger.d(
-            TAG, "response code: " + httpConn.responseCode +
+            TAG,
+            "response code: " + httpConn.responseCode +
                 ", encoding: " + contentEncoding + ", method: " + httpConn.requestMethod
         )
 
@@ -144,13 +154,14 @@ class HttpClient {
             throw IOException("HttpURLConnection.getInputStream() returned null")
         }
 
-        val input: InputStream = if (contentEncoding != null && contentEncoding.contains("gzip")) {
-            GZIPInputStream(httpInputStream)
-        } else if (contentEncoding != null && contentEncoding.contains("deflate")) {
-            InflaterInputStream(httpInputStream)
-        } else {
-            httpInputStream
-        }
+        val input: InputStream =
+            if (contentEncoding != null && contentEncoding.contains("gzip")) {
+                GZIPInputStream(httpInputStream)
+            } else if (contentEncoding != null && contentEncoding.contains("deflate")) {
+                InflaterInputStream(httpInputStream)
+            } else {
+                httpInputStream
+            }
 
         // Read the response content
         try {

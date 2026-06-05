@@ -119,13 +119,13 @@ android {
 
         buildTypes {
             debug {
-                signingConfig signingConfigs.androidTestKey
+                signingConfig = signingConfigs.androidTestKey
             }
 
             release {
-                signingConfig signingConfigs.androidTestKey
+                signingConfig = signingConfigs.androidTestKey
 
-                minifyEnabled true
+                minifyEnabled = true
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
         }
@@ -174,10 +174,10 @@ android {
     }
 
     lint {
-        textReport true
+        textReport = true
 
-        abortOnError true
-        ignoreWarnings isIgnoreLintWarnings()
+        abortOnError = true
+        ignoreWarnings = isIgnoreLintWarnings()
     }
 
     compileOptions {

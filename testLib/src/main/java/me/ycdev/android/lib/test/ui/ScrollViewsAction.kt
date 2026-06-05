@@ -14,18 +14,18 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.Matcher
 
-class ScrollViewsAction(scrollTo: ViewAction = ViewActions.scrollTo()) : ViewAction by scrollTo {
-    override fun getConstraints(): Matcher<View> {
-        return allOf(
-            withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE),
-            isDescendantOfA(
-                anyOf(
-                    ViewMatchers.isAssignableFrom(NestedScrollView::class.java),
-                    ViewMatchers.isAssignableFrom(ScrollView::class.java),
-                    ViewMatchers.isAssignableFrom(HorizontalScrollView::class.java),
-                    ViewMatchers.isAssignableFrom(ListView::class.java)
-                )
+class ScrollViewsAction(
+    scrollTo: ViewAction = ViewActions.scrollTo()
+) : ViewAction by scrollTo {
+    override fun getConstraints(): Matcher<View> = allOf(
+        withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE),
+        isDescendantOfA(
+            anyOf(
+                ViewMatchers.isAssignableFrom(NestedScrollView::class.java),
+                ViewMatchers.isAssignableFrom(ScrollView::class.java),
+                ViewMatchers.isAssignableFrom(HorizontalScrollView::class.java),
+                ViewMatchers.isAssignableFrom(ListView::class.java)
             )
         )
-    }
+    )
 }

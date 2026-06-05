@@ -7,18 +7,17 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.MediumTest
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import me.ycdev.android.lib.common.utils.MainHandler
 import me.ycdev.android.lib.common.utils.ThreadUtils
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class AsyncTaskQueueTest {
-
     @Test
     @LargeTest
     @Throws(InterruptedException::class)
@@ -30,20 +29,22 @@ class AsyncTaskQueueTest {
         assertThat(taskQueue.taskHandler).isNull()
 
         val latch = CountDownLatch(2)
-        val task1 = Runnable {
-            Timber.tag(TAG).d("Executing task1 BEGIN")
-            SystemClock.sleep(1000)
-            latch.countDown()
-            Timber.tag(TAG).d("Executing task1 END")
-        }
-        val task2 = Runnable {
-            Timber.tag(TAG).d("Executing task2 BEGIN")
-            // Task1 must be done
-            assertThat(latch.count).isEqualTo(1)
-            SystemClock.sleep(2000)
-            latch.countDown()
-            Timber.tag(TAG).d("Executing task2 END")
-        }
+        val task1 =
+            Runnable {
+                Timber.tag(TAG).d("Executing task1 BEGIN")
+                SystemClock.sleep(1000)
+                latch.countDown()
+                Timber.tag(TAG).d("Executing task1 END")
+            }
+        val task2 =
+            Runnable {
+                Timber.tag(TAG).d("Executing task2 BEGIN")
+                // Task1 must be done
+                assertThat(latch.count).isEqualTo(1)
+                SystemClock.sleep(2000)
+                latch.countDown()
+                Timber.tag(TAG).d("Executing task2 END")
+            }
 
         // Add tasks
         taskQueue.addTask(task1)
@@ -190,11 +191,15 @@ class AsyncTaskQueueTest {
         assertThat(countTask.executedCount).isEqualTo(1)
     }
 
-    private fun waitForTasksDone(taskQueue: AsyncTaskQueue, delay: Long) {
+    private fun waitForTasksDone(
+        taskQueue: AsyncTaskQueue,
+        delay: Long
+    ) {
         val guardLatch = CountDownLatch(1)
-        val guardTask = Runnable {
-            guardLatch.countDown()
-        }
+        val guardTask =
+            Runnable {
+                guardLatch.countDown()
+            }
         taskQueue.addTask(delay, guardTask)
         guardLatch.await()
     }
@@ -266,8 +271,9 @@ class AsyncTaskQueueTest {
         assertThat(taskTidHolder1[0]).isNotEqualTo(taskTidHolder2[0])
     }
 
-    private class CountTask(@param:Nullable private val mTask: Runnable?) :
-        Runnable {
+    private class CountTask(
+        @param:Nullable private val mTask: Runnable?
+    ) : Runnable {
         var executedCount: Int = 0
             private set
 
@@ -305,18 +311,19 @@ class AsyncTaskQueueTest {
             taskTidHolder: LongArray
         ) {
             for (i in 0 until taskCount) {
-                val task = Runnable {
-                    // check tid (should only one task thread created)
-                    val curTid = Thread.currentThread().id
-                    if (taskTidHolder[0] != -1L) {
-                        assertThat(curTid).isEqualTo(taskTidHolder[0])
-                    } else {
-                        taskTidHolder[0] = curTid // init
+                val task =
+                    Runnable {
+                        // check tid (should only one task thread created)
+                        val curTid = Thread.currentThread().id
+                        if (taskTidHolder[0] != -1L) {
+                            assertThat(curTid).isEqualTo(taskTidHolder[0])
+                        } else {
+                            taskTidHolder[0] = curTid // init
+                        }
+                        // check order
+                        assertThat(latch.count).isEqualTo(taskCount - i)
+                        latch.countDown()
                     }
-                    // check order
-                    assertThat(latch.count).isEqualTo(taskCount - i)
-                    latch.countDown()
-                }
                 taskQueue.addTask(taskDelay, task)
             }
         }

@@ -12,6 +12,8 @@ import androidx.test.filters.LargeTest
 import androidx.test.filters.MediumTest
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
+import java.lang.ref.WeakReference
+import java.util.concurrent.CountDownLatch
 import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.demo.service.LocalServiceConnector
 import me.ycdev.android.lib.common.demo.service.RemoteService
@@ -21,13 +23,10 @@ import me.ycdev.android.lib.common.utils.GcHelper
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.lang.ref.WeakReference
-import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class ServiceConnectorTest {
-
     @Test
     @MediumTest
     fun connect_disconnect_remoteService() {
@@ -38,7 +37,11 @@ class ServiceConnectorTest {
 
         // BinderProxy
 
-        assertThat(connector.service!!.asBinder().javaClass.name).isEqualTo("android.os.BinderProxy")
+        assertThat(
+            connector.service!!
+                .asBinder()
+                .javaClass.name
+        ).isEqualTo("android.os.BinderProxy")
         disconnectSync(connector)
     }
 
@@ -51,8 +54,11 @@ class ServiceConnectorTest {
         connectSync(connector)
 
         // Local object
-        assertThat(connector.service!!.asBinder().javaClass.name)
-            .isEqualTo("me.ycdev.android.lib.common.demo.service.LocalService\$BinderServer")
+        assertThat(
+            connector.service!!
+                .asBinder()
+                .javaClass.name
+        ).isEqualTo("me.ycdev.android.lib.common.demo.service.LocalService\$BinderServer")
         disconnectSync(connector)
     }
 
@@ -99,9 +105,11 @@ class ServiceConnectorTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         run {
             val connector = RemoteServiceConnector(context)
-            val servicesList = context.packageManager.queryIntentServices(
-                connector.getServiceIntent(), 0
-            )
+            val servicesList =
+                context.packageManager.queryIntentServices(
+                    connector.getServiceIntent(),
+                    0
+                )
             assertThat(servicesList).isNotNull()
             val cn = connector.selectTargetService(servicesList)
             assertThat(cn).isNotNull()
@@ -109,9 +117,11 @@ class ServiceConnectorTest {
         }
         run {
             val connector = NoPermServiceConnector(context)
-            val servicesList = context.packageManager.queryIntentServices(
-                connector.getServiceIntent(), 0
-            )
+            val servicesList =
+                context.packageManager.queryIntentServices(
+                    connector.getServiceIntent(),
+                    0
+                )
             assertThat(servicesList).isNotNull()
             assertThat(connector.selectTargetService(servicesList)).isNull()
         }
@@ -125,20 +135,22 @@ class ServiceConnectorTest {
 
         val latch1 = CountDownLatch(2)
         val latch2 = CountDownLatch(2)
-        val listener1 = object : ConnectStateListener {
-            override fun onStateChanged(newState: Int) {
-                if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
-                    latch1.countDown()
+        val listener1 =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
+                        latch1.countDown()
+                    }
                 }
             }
-        }
-        val listener2 = object : ConnectStateListener {
-            override fun onStateChanged(newState: Int) {
-                if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
-                    latch2.countDown()
+        val listener2 =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
+                        latch2.countDown()
+                    }
                 }
             }
-        }
         connector.addListener(listener1)
         connector.addListener(listener2)
 
@@ -184,14 +196,15 @@ class ServiceConnectorTest {
         connectSync(connector)
         val latch = CountDownLatch(1)
         val stateChangeCount = IntegerHolder(0)
-        val listener = object : ConnectStateListener {
-            override fun onStateChanged(newState: Int) {
-                stateChangeCount.value++
-                if (newState == ServiceConnector.STATE_DISCONNECTED) {
-                    latch.countDown()
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    stateChangeCount.value++
+                    if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                        latch.countDown()
+                    }
                 }
             }
-        }
         connector.addListener(listener)
         connector.disconnect()
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
@@ -220,14 +233,15 @@ class ServiceConnectorTest {
     private fun test_waitForConnected_forever(connector: ServiceConnector<*>) {
         val stateChangeCount = IntegerHolder(0)
         val latch = CountDownLatch(1)
-        val listener = object : ConnectStateListener {
-            override fun onStateChanged(newState: Int) {
-                stateChangeCount.value++
-                if (newState == ServiceConnector.STATE_CONNECTED) {
-                    latch.countDown()
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    stateChangeCount.value++
+                    if (newState == ServiceConnector.STATE_CONNECTED) {
+                        latch.countDown()
+                    }
                 }
             }
-        }
         connector.addListener(listener)
 
         connector.waitForConnected()
@@ -269,14 +283,15 @@ class ServiceConnectorTest {
 
         val stateChangeCount = IntegerHolder(0)
         val latch = CountDownLatch(1)
-        val listener = object : ConnectStateListener {
-            override fun onStateChanged(newState: Int) {
-                stateChangeCount.value++
-                if (newState == ServiceConnector.STATE_CONNECTED) {
-                    latch.countDown()
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    stateChangeCount.value++
+                    if (newState == ServiceConnector.STATE_CONNECTED) {
+                        latch.countDown()
+                    }
                 }
             }
-        }
         connector.addListener(listener)
 
         connector.waitForConnected(100) //
@@ -301,16 +316,17 @@ class ServiceConnectorTest {
         assertThat(connector.service).isNull()
 
         val latch = CountDownLatch(1)
-        val listener = object : ConnectStateListener {
-            override fun onStateChanged(newState: Int) {
-                if (newState == ServiceConnector.STATE_CONNECTED) {
-                    assertThat(connector.service).isNotNull()
-                    latch.countDown()
-                } else if (newState == ServiceConnector.STATE_DISCONNECTED) {
-                    assertThat(connector.service).isNull()
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_CONNECTED) {
+                        assertThat(connector.service).isNotNull()
+                        latch.countDown()
+                    } else if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                        assertThat(connector.service).isNull()
+                    }
                 }
             }
-        }
         connector.addListener(listener)
 
         connector.waitForConnected()
@@ -321,22 +337,18 @@ class ServiceConnectorTest {
         assertThat(connector.service).isNull()
     }
 
-    private class FakeServiceConnector(cxt: Context) :
-        ServiceConnector<IDemoService>(cxt, "FakeService") {
-
+    private class FakeServiceConnector(
+        cxt: Context
+    ) : ServiceConnector<IDemoService>(cxt, "FakeService") {
         @NonNull
-        override fun getServiceIntent(): Intent {
-            return Intent("me.ycdev.android.lib.common.demo.action.FAKE_SERVICE")
-        }
+        override fun getServiceIntent(): Intent = Intent("me.ycdev.android.lib.common.demo.action.FAKE_SERVICE")
 
-        override fun asInterface(service: IBinder): IDemoService {
-            return IDemoService.Stub.asInterface(service)
-        }
+        override fun asInterface(service: IBinder): IDemoService = IDemoService.Stub.asInterface(service)
     }
 
-    private class NoPermServiceConnector(cxt: Context) :
-        RemoteServiceConnector(cxt) {
-
+    private class NoPermServiceConnector(
+        cxt: Context
+    ) : RemoteServiceConnector(cxt) {
         override fun validatePermission(permission: String?): Boolean {
             return false // test no permission
         }
@@ -346,7 +358,6 @@ class ServiceConnectorTest {
         cxt: Context,
         var mConnectDelay: Long
     ) : RemoteServiceConnector(cxt) {
-
         override fun asInterface(service: IBinder): IDemoService {
             SystemClock.sleep(mConnectDelay)
             return super.asInterface(service)
@@ -358,13 +369,14 @@ class ServiceConnectorTest {
 
         private fun connectSync(connector: ServiceConnector<*>) {
             val latch = CountDownLatch(1)
-            val listener = object : ConnectStateListener {
-                override fun onStateChanged(newState: Int) {
-                    if (newState == ServiceConnector.STATE_CONNECTED) {
-                        latch.countDown()
+            val listener =
+                object : ConnectStateListener {
+                    override fun onStateChanged(newState: Int) {
+                        if (newState == ServiceConnector.STATE_CONNECTED) {
+                            latch.countDown()
+                        }
                     }
                 }
-            }
             connector.addListener(listener)
 
             assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
@@ -389,13 +401,14 @@ class ServiceConnectorTest {
             assertThat(connector.service).isNotNull()
 
             val latch = CountDownLatch(1)
-            val listener = object : ConnectStateListener {
-                override fun onStateChanged(newState: Int) {
-                    if (newState == ServiceConnector.STATE_DISCONNECTED) {
-                        latch.countDown()
+            val listener =
+                object : ConnectStateListener {
+                    override fun onStateChanged(newState: Int) {
+                        if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                            latch.countDown()
+                        }
                     }
                 }
-            }
             connector.addListener(listener)
             connector.disconnect()
             assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
@@ -407,14 +420,13 @@ class ServiceConnectorTest {
             }
         }
 
-        private fun addNotReferencedListener(
-            connector: RemoteServiceConnector
-        ): WeakReference<ConnectStateListener> {
-            val listener = object : ConnectStateListener {
-                override fun onStateChanged(newState: Int) {
-                    // ignore
+        private fun addNotReferencedListener(connector: RemoteServiceConnector): WeakReference<ConnectStateListener> {
+            val listener =
+                object : ConnectStateListener {
+                    override fun onStateChanged(newState: Int) {
+                        // ignore
+                    }
                 }
-            }
             connector.addListener(listener)
             return WeakReference(listener)
         }

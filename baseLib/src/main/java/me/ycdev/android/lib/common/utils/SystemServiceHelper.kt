@@ -37,7 +37,10 @@ object SystemServiceHelper {
         return pm
     }
 
-    fun getRunningServices(am: ActivityManager, maxNum: Int): List<RunningServiceInfo> {
+    fun getRunningServices(
+        am: ActivityManager,
+        maxNum: Int
+    ): List<RunningServiceInfo> {
         var runServiceList: List<RunningServiceInfo>? = null
         try {
             @Suppress("DEPRECATION")
@@ -68,7 +71,10 @@ object SystemServiceHelper {
         return runProcessList
     }
 
-    fun getInstalledPackages(pm: PackageManager, flags: Int): List<PackageInfo> {
+    fun getInstalledPackages(
+        pm: PackageManager,
+        flags: Int
+    ): List<PackageInfo> {
         var installedPackages: List<PackageInfo>? = null
         try {
             installedPackages = pm.getInstalledPackages(flags)

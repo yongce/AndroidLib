@@ -9,7 +9,6 @@ import java.io.File
 
 @Suppress("unused")
 object StorageUtils {
-
     /**
      * Check if the external storage is built-in or removable.
      * @return true if the external storage is removable (like an SD card), false
@@ -25,8 +24,7 @@ object StorageUtils {
      */
     fun isExternalStorageEmulated(): Boolean = Environment.isExternalStorageEmulated()
 
-    fun isExternalStorageAvailable(): Boolean =
-        Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+    fun isExternalStorageAvailable(): Boolean = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
 
     fun getExternalStoragePath(): String = Environment.getExternalStorageDirectory().absolutePath
 
@@ -36,7 +34,10 @@ object StorageUtils {
      * @see File.getUsableSpace
      */
     @WorkerThread
-    fun getUsableSpace(path: File, context: Context): Long {
+    fun getUsableSpace(
+        path: File,
+        context: Context
+    ): Long {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val storageMgr = context.getSystemService(StorageManager::class.java) ?: return 0
             val uuid = storageMgr.getUuidForPath(path)
@@ -51,18 +52,14 @@ object StorageUtils {
      * Returns 0 if this path does not exist.
      * @see File.getFreeSpace
      */
-    fun getFreeSpace(path: File): Long {
-        return path.freeSpace
-    }
+    fun getFreeSpace(path: File): Long = path.freeSpace
 
     /**
      * Returns the total size in bytes of the partition containing this path.
      * Returns 0 if this path does not exist.
      * @see File.getTotalSpace
      */
-    fun getTotalSpace(path: File): Long {
-        return path.totalSpace
-    }
+    fun getTotalSpace(path: File): Long = path.totalSpace
 
     /**
      * Get the external app cache directory.
@@ -70,7 +67,5 @@ object StorageUtils {
      * @return The external cache dir
      * @see Context.getExternalCacheDir
      */
-    fun getExternalCacheDir(context: Context): File? {
-        return context.externalCacheDir
-    }
+    fun getExternalCacheDir(context: Context): File? = context.externalCacheDir
 }

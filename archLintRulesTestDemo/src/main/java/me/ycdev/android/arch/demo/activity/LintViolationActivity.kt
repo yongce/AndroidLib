@@ -13,11 +13,15 @@ import androidx.appcompat.app.AppCompatActivity
  */
 class LintViolationActivity : AppCompatActivity() { // lint violation
 
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            // nothing to do
+    private val receiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            ) {
+                // nothing to do
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

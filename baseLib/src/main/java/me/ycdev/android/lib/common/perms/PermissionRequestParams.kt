@@ -4,7 +4,6 @@ import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 
 class PermissionRequestParams {
-
     var requestCode: Int = 0
     var permissions: Array<String>? = null
 

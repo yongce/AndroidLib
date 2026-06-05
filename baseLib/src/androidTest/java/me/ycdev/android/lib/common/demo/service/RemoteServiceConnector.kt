@@ -6,17 +6,13 @@ import android.os.IBinder
 import androidx.annotation.NonNull
 import me.ycdev.android.lib.common.ipc.ServiceConnector
 
-open class RemoteServiceConnector(cxt: Context) :
-    ServiceConnector<IDemoService>(cxt, SERVICE_NAME) {
-
+open class RemoteServiceConnector(
+    cxt: Context
+) : ServiceConnector<IDemoService>(cxt, SERVICE_NAME) {
     @NonNull
-    public override fun getServiceIntent(): Intent {
-        return Intent(appContext, RemoteService::class.java)
-    }
+    public override fun getServiceIntent(): Intent = Intent(appContext, RemoteService::class.java)
 
-    override fun asInterface(service: IBinder): IDemoService {
-        return IDemoService.Stub.asInterface(service)
-    }
+    override fun asInterface(service: IBinder): IDemoService = IDemoService.Stub.asInterface(service)
 
     companion object {
         private const val SERVICE_NAME = "RemoteService"

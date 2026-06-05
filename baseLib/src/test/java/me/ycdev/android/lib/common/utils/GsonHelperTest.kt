@@ -101,7 +101,6 @@ class GsonHelperTest {
     }
 
     companion object {
-
         private const val FOO_DEMO =
             "{\"name\":\"Task1\",\"done\":true,\"count\":11," + "\"time_stamp\":1512881633817,\"radius\":4.5,\"distance\":12345.67}"
 

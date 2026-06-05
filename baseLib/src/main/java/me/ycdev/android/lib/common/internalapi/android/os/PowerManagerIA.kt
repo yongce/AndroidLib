@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.IBinder
 import androidx.annotation.RestrictTo
-import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import timber.log.Timber
 
 @Suppress("unused")
 @SuppressLint("PrivateApi")
@@ -49,13 +49,15 @@ object PowerManagerIA {
     init {
         try {
             val stubClass = Class.forName(
-                "android.os.IPowerManager\$Stub", false,
+                "android.os.IPowerManager\$Stub",
+                false,
                 Thread.currentThread().contextClassLoader
             )
             sMtd_asInterface = stubClass.getMethod("asInterface", IBinder::class.java)
 
             sClass_IPowerManager = Class.forName(
-                "android.os.IPowerManager", false,
+                "android.os.IPowerManager",
+                false,
                 Thread.currentThread().contextClassLoader
             )
         } catch (e: ClassNotFoundException) {
@@ -151,7 +153,8 @@ object PowerManagerIA {
                 // Android 4.2: void shutdown(boolean confirm, boolean wait);
                 sMtd_shutdown = sClass_IPowerManager!!.getMethod(
                     "shutdown",
-                    Boolean::class.javaPrimitiveType, Boolean::class.javaPrimitiveType
+                    Boolean::class.javaPrimitiveType,
+                    Boolean::class.javaPrimitiveType
                 )
                 sVersion_shutdown = API_VERSION_1
             } catch (e: NoSuchMethodException) {

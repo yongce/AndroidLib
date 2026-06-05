@@ -3,9 +3,9 @@ package me.ycdev.android.lib.common.internalapi.android.os
 import android.annotation.SuppressLint
 import android.os.IBinder
 import androidx.annotation.RestrictTo
-import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import timber.log.Timber
 
 @Suppress("unused")
 @SuppressLint("PrivateApi")
@@ -22,7 +22,8 @@ object ServiceManagerIA {
     init {
         try {
             sClass_ServiceManager = Class.forName(
-                "android.os.ServiceManager", false,
+                "android.os.ServiceManager",
+                false,
                 Thread.currentThread().contextClassLoader
             )
         } catch (e: ClassNotFoundException) {
@@ -128,7 +129,8 @@ object ServiceManagerIA {
             // public static void addService(String name, IBinder service)
             sMtd_addService = sClass_ServiceManager!!.getMethod(
                 "addService",
-                String::class.java, IBinder::class.java
+                String::class.java,
+                IBinder::class.java
             )
         } catch (e: NoSuchMethodException) {
             Timber.tag(TAG).w(e, "method not found")

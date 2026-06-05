@@ -27,23 +27,28 @@ object IntentUtils {
 
     const val EXTRA_FOREGROUND_SERVICE = "extra.foreground_service"
 
-    fun canStartActivity(cxt: Context, intent: Intent): Boolean {
+    fun canStartActivity(
+        cxt: Context,
+        intent: Intent
+    ): Boolean {
         // Use PackageManager.MATCH_DEFAULT_ONLY to behavior same as Context#startAcitivty()
-        val resolveInfo = cxt.packageManager.resolveActivity(
-            intent,
-            PackageManager.MATCH_DEFAULT_ONLY
-        )
+        val resolveInfo =
+            cxt.packageManager.resolveActivity(
+                intent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
         return resolveInfo != null
     }
 
-    fun startActivity(context: Context, intent: Intent): Boolean {
-        return if (canStartActivity(context, intent)) {
-            context.startActivity(intent)
-            true
-        } else {
-            Timber.tag(TAG).w("cannot start Activity: $intent")
-            false
-        }
+    fun startActivity(
+        context: Context,
+        intent: Intent
+    ): Boolean = if (canStartActivity(context, intent)) {
+        context.startActivity(intent)
+        true
+    } else {
+        Timber.tag(TAG).w("cannot start Activity: $intent")
+        false
     }
 
     fun needForegroundService(
@@ -76,12 +81,16 @@ object IntentUtils {
         return true
     }
 
-    fun needForegroundService(context: Context, listenSensor: Boolean): Boolean {
-        return needForegroundService(context, context.applicationInfo, listenSensor)
-    }
+    fun needForegroundService(
+        context: Context,
+        listenSensor: Boolean
+    ): Boolean = needForegroundService(context, context.applicationInfo, listenSensor)
 
     @SuppressLint("NewApi")
-    fun startService(context: Context, intent: Intent): Boolean {
+    fun startService(
+        context: Context,
+        intent: Intent
+    ): Boolean {
         val resolveInfo = context.packageManager.resolveService(intent, 0) ?: return false
         intent.setClassName(
             resolveInfo.serviceInfo.packageName,
@@ -99,7 +108,10 @@ object IntentUtils {
         return true
     }
 
-    fun startForegroundService(context: Context, intent: Intent): Boolean {
+    fun startForegroundService(
+        context: Context,
+        intent: Intent
+    ): Boolean {
         val resolveInfo = context.packageManager.resolveService(intent, 0) ?: return false
         intent.setClassName(
             resolveInfo.serviceInfo.packageName,

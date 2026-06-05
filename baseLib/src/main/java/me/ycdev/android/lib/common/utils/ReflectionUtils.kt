@@ -35,7 +35,10 @@ object ReflectionUtils {
     }
 
     @Throws(NoSuchFieldException::class)
-    fun findField(classObj: Class<*>, fieldName: String): Field {
+    fun findField(
+        classObj: Class<*>,
+        fieldName: String
+    ): Field {
         // first, search public fields
         try {
             return classObj.getField(fieldName)

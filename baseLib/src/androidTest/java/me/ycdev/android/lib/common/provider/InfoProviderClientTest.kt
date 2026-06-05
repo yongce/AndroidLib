@@ -6,23 +6,23 @@ import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class InfoProviderClientTest {
-
     private var mInfoClient: InfoProviderClient? = null
 
     @Before
     fun setup() {
-        mInfoClient = InfoProviderClient(
-            ApplicationProvider.getApplicationContext(),
-            "me.ycdev.android.lib.common.provider.InfoProvider"
-        )
+        mInfoClient =
+            InfoProviderClient(
+                ApplicationProvider.getApplicationContext(),
+                "me.ycdev.android.lib.common.provider.InfoProvider"
+            )
 
         // clear dirty data
         mInfoClient!!.remove(TABLE_TEST, KEY_STR_1)
@@ -82,13 +82,14 @@ class InfoProviderClientTest {
         assertThat(value).isNull()
 
         val latch = CountDownLatch(1)
-        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean) {
-                val curValue = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
-                assertThat(curValue).isEqualTo("value_str1")
-                latch.countDown()
+        val observer =
+            object : ContentObserver(Handler(Looper.getMainLooper())) {
+                override fun onChange(selfChange: Boolean) {
+                    val curValue = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
+                    assertThat(curValue).isEqualTo("value_str1")
+                    latch.countDown()
+                }
             }
-        }
         mInfoClient!!.registerObserver(TABLE_TEST, KEY_STR_1, observer)
 
         val result = mInfoClient!!.putString(TABLE_TEST, KEY_STR_1, "value_str1")
@@ -111,13 +112,14 @@ class InfoProviderClientTest {
         assertThat(value).isEqualTo("value_str1")
 
         val latch = CountDownLatch(1)
-        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean) {
-                val curValue = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
-                assertThat(curValue).isNull()
-                latch.countDown()
+        val observer =
+            object : ContentObserver(Handler(Looper.getMainLooper())) {
+                override fun onChange(selfChange: Boolean) {
+                    val curValue = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
+                    assertThat(curValue).isNull()
+                    latch.countDown()
+                }
             }
-        }
         mInfoClient!!.registerObserver(TABLE_TEST, KEY_STR_1, observer)
 
         result = mInfoClient!!.remove(TABLE_TEST, KEY_STR_1)
@@ -137,13 +139,14 @@ class InfoProviderClientTest {
         assertThat(value).isNull()
 
         val latch = CountDownLatch(2)
-        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean) {
-                val curValue = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
-                assertThat(curValue).isEqualTo("value_str1")
-                latch.countDown()
+        val observer =
+            object : ContentObserver(Handler(Looper.getMainLooper())) {
+                override fun onChange(selfChange: Boolean) {
+                    val curValue = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
+                    assertThat(curValue).isEqualTo("value_str1")
+                    latch.countDown()
+                }
             }
-        }
         mInfoClient!!.registerObserver(TABLE_TEST, KEY_STR_1, observer)
 
         // put 1

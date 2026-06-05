@@ -8,7 +8,6 @@ import org.junit.Test
 
 @SmallTest
 class MiscUtilsTest {
-
     @Before
     @Throws(Exception::class)
     fun setUp() {

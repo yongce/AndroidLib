@@ -57,7 +57,8 @@ class NetworkUtilsTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
         @NetworkType val networkType = NetworkUtils.getMixedNetworkType(context)
-        assertWithMessage("check all return values").that(networkType)
+        assertWithMessage("check all return values")
+            .that(networkType)
             .isAnyOf(
                 NETWORK_TYPE_WIFI,
                 NETWORK_TYPE_2G,

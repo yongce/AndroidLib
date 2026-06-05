@@ -6,16 +6,16 @@ import android.os.Looper
 import android.os.Message
 import android.os.RemoteException
 import androidx.annotation.WorkerThread
-import timber.log.Timber
 import java.util.LinkedList
+import timber.log.Timber
 
 open class ServiceClientBase<IService> protected constructor(
     context: Context,
     private val serviceName: String,
     workLooper: Looper,
     var serviceConnector: ServiceConnector<IService>
-) : ConnectStateListener, Handler.Callback {
-
+) : ConnectStateListener,
+    Handler.Callback {
     protected var appContext: Context = context.applicationContext
 
     @Suppress("LeakingThis")
@@ -36,7 +36,10 @@ open class ServiceClientBase<IService> protected constructor(
      * @param autoDisconnect Disconnect automatically if true
      * @param delayToDisconnect The delay time to disconnect if no operations, in milliseconds.
      */
-    fun setAutoDisconnect(autoDisconnect: Boolean, delayToDisconnect: Long) {
+    fun setAutoDisconnect(
+        autoDisconnect: Boolean,
+        delayToDisconnect: Long
+    ) {
         isAutoDisconnectEnabled = autoDisconnect
         if (autoDisconnect) {
             this.delayToDisconnect = if (delayToDisconnect > 0L) delayToDisconnect else 0L
@@ -90,19 +93,24 @@ open class ServiceClientBase<IService> protected constructor(
                 operation.execute(service)
                 Timber.tag(TAG).d(
                     "[%s] Succeeded to handle incoming operation: %s",
-                    serviceName, operation
+                    serviceName,
+                    operation
                 )
                 return // Success
             } catch (e: RemoteException) {
                 Timber.tag(TAG).w(
-                    e, "[%s] Failed to handle incoming operation: %s",
-                    serviceName, operation
+                    e,
+                    "[%s] Failed to handle incoming operation: %s",
+                    serviceName,
+                    operation
                 )
                 // add it into the queue again
             } catch (e: Exception) {
                 Timber.tag(TAG).e(
-                    e, "[%s] Cannot execute incoming operation: %s. Discard it.",
-                    serviceName, operation
+                    e,
+                    "[%s] Cannot execute incoming operation: %s. Discard it.",
+                    serviceName,
+                    operation
                 )
                 return // discard the operation
             }
@@ -122,7 +130,8 @@ open class ServiceClientBase<IService> protected constructor(
         }
         Timber.tag(TAG).d(
             "[%s] handlePendingOperations done: %d",
-            serviceName, pendingOperations.size
+            serviceName,
+            pendingOperations.size
         )
     }
 

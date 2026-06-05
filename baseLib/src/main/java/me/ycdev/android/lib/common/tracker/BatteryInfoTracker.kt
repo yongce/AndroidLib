@@ -11,19 +11,23 @@ import me.ycdev.android.lib.common.wrapper.BroadcastHelper
 import me.ycdev.android.lib.common.wrapper.IntentHelper
 
 @Suppress("unused")
-class BatteryInfoTracker private constructor(cxt: Context) :
-    WeakTracker<BatteryInfoTracker.BatteryInfoListener>() {
-
+class BatteryInfoTracker private constructor(
+    cxt: Context
+) : WeakTracker<BatteryInfoTracker.BatteryInfoListener>() {
     private val context: Context = cxt.applicationContext
     private var batteryInfo: BatteryInfo? = null
     private var batteryScale = 100
 
-    private val batteryInfoReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            LibLogger.i(TAG, "Received: ${intent.action}")
-            updateBatteryInfo(intent)
+    private val batteryInfoReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            ) {
+                LibLogger.i(TAG, "Received: ${intent.action}")
+                updateBatteryInfo(intent)
+            }
         }
-    }
 
     data class BatteryInfo(
         var level: Int = 0,
@@ -65,25 +69,29 @@ class BatteryInfoTracker private constructor(cxt: Context) :
         val data = BatteryInfo()
         data.level = IntentHelper.getIntExtra(intent, BatteryManager.EXTRA_LEVEL, 0)
         data.scale = IntentHelper.getIntExtra(intent, BatteryManager.EXTRA_SCALE, 100)
-        data.status = IntentHelper.getIntExtra(
-            intent,
-            BatteryManager.EXTRA_STATUS,
-            BatteryManager.BATTERY_STATUS_UNKNOWN
-        )
+        data.status =
+            IntentHelper.getIntExtra(
+                intent,
+                BatteryManager.EXTRA_STATUS,
+                BatteryManager.BATTERY_STATUS_UNKNOWN
+            )
         data.plugged = IntentHelper.getIntExtra(intent, BatteryManager.EXTRA_PLUGGED, 0)
         data.voltage = IntentHelper.getIntExtra(intent, BatteryManager.EXTRA_VOLTAGE, 0)
         data.temperature = IntentHelper.getIntExtra(
-            intent, BatteryManager.EXTRA_TEMPERATURE, 0
+            intent,
+            BatteryManager.EXTRA_TEMPERATURE,
+            0
         ) * 0.1
 
         fixData(data)
 
         val reportedPercent = if (data.scale < 1) data.level else data.level * 100 / data.scale
-        data.percent = when {
-            reportedPercent < 0 -> 0
-            reportedPercent > 100 -> 100
-            else -> reportedPercent
-        }
+        data.percent =
+            when {
+                reportedPercent < 0 -> 0
+                reportedPercent > 100 -> 100
+                else -> reportedPercent
+            }
 
         LibLogger.d(TAG, "battery info updated: $data")
         batteryInfo = data
@@ -94,8 +102,11 @@ class BatteryInfoTracker private constructor(cxt: Context) :
         // We may need to update 'batteryScale'
         if (data.level > data.scale) {
             LibLogger.e(
-                TAG, "Bad battery data! level: %d, scale: %d, batteryScale: %d",
-                data.level, data.scale, batteryScale
+                TAG,
+                "Bad battery data! level: %d, scale: %d, batteryScale: %d",
+                data.level,
+                data.scale,
+                batteryScale
             )
             if (data.level % 100 == 0) {
                 batteryScale = data.level

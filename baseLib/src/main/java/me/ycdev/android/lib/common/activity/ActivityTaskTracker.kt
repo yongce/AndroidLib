@@ -6,8 +6,8 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
-import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
+import timber.log.Timber
 
 /**
  * This class can be used to track Activity/task state changes.
@@ -76,12 +76,13 @@ object ActivityTaskTracker {
         }
     }
 
-    fun getTotalActivitiesCount(): Int {
-        return totalActivitiesCount.get()
-    }
+    fun getTotalActivitiesCount(): Int = totalActivitiesCount.get()
 
     @GuardedBy("tasksLock")
-    private fun getOrCreateTaskLocked(activity: Activity, taskId: Int): ActivityTask {
+    private fun getOrCreateTaskLocked(
+        activity: Activity,
+        taskId: Int
+    ): ActivityTask {
         var task = allTasks[taskId]
         if (task == null) {
             val meta = ActivityMeta.get(app, activity.componentName)
@@ -92,7 +93,10 @@ object ActivityTaskTracker {
     }
 
     @GuardedBy("tasksLock")
-    private fun handleActivityReParentLocked(activity: Activity, taskId: Int) {
+    private fun handleActivityReParentLocked(
+        activity: Activity,
+        taskId: Int
+    ) {
         val oldTaskId = activityTaskIds[activity]
         if (oldTaskId != null && oldTaskId != taskId) {
             // the Activity was re-parented, need to handle it
@@ -112,8 +116,9 @@ object ActivityTaskTracker {
             }
 
             // Step 2: check if the Activity is in the old task
-            val oldTask = allTasks[oldTaskId]
-                ?: throw RuntimeException("Activity re-parenting error: the old task doesn't exist")
+            val oldTask =
+                allTasks[oldTaskId]
+                    ?: throw RuntimeException("Activity re-parenting error: the old task doesn't exist")
             val state = oldTask.topActivity()
             if (state.componentName != activity.componentName || state.taskId != oldTaskId) {
                 throw RuntimeException("Activity re-parenting error: $state is not matched to ${activity.componentName}")
@@ -125,9 +130,11 @@ object ActivityTaskTracker {
                 throw RuntimeException("Activity re-parenting error: android:allowTaskReparenting was 'false'")
             }
             if (activityMeta.taskAffinity != newTask.taskAffinity) {
-                throw RuntimeException("Activity re-parenting error: the Activity's " +
-                    "taskAffinity[${activityMeta.taskAffinity}] is not matched with " +
-                    "the target task's taskAffinity[${newTask.taskAffinity}]")
+                throw RuntimeException(
+                    "Activity re-parenting error: the Activity's " +
+                        "taskAffinity[${activityMeta.taskAffinity}] is not matched with " +
+                        "the target task's taskAffinity[${newTask.taskAffinity}]"
+                )
             }
 
             // Step 3: do the re-parenting
@@ -149,7 +156,11 @@ object ActivityTaskTracker {
         }
     }
 
-    private fun updateLastActivityState(activity: Activity, taskId: Int, state: ActivityRunningState.State) {
+    private fun updateLastActivityState(
+        activity: Activity,
+        taskId: Int,
+        state: ActivityRunningState.State
+    ) {
         synchronized(tasksLock) {
             handleActivityReParentLocked(activity, taskId)
             val task = getOrCreateTaskLocked(activity, taskId)
@@ -171,17 +182,21 @@ object ActivityTaskTracker {
 
     @VisibleForTesting
     internal class MyLifecycleCallback : Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+        override fun onActivityCreated(
+            activity: Activity,
+            bundle: Bundle?
+        ) {
             val taskId = activity.taskId
             if (debugLog) {
                 Timber.tag(TAG).d("onCreate: %s (taskId=%d)", activity.componentName, taskId)
             }
             synchronized(tasksLock) {
-                val appActivity = ActivityRunningState(
-                    activity.componentName,
-                    activity.hashCode(),
-                    taskId
-                )
+                val appActivity =
+                    ActivityRunningState(
+                        activity.componentName,
+                        activity.hashCode(),
+                        taskId
+                    )
                 appActivity.state = ActivityRunningState.State.Created
                 val task = getOrCreateTaskLocked(activity, taskId)
                 task.addActivity(appActivity)
@@ -220,7 +235,10 @@ object ActivityTaskTracker {
             }
         }
 
-        override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+        override fun onActivitySaveInstanceState(
+            activity: Activity,
+            bundle: Bundle
+        ) {
             val taskId = activity.taskId
             if (debugLog) {
                 Timber.tag(TAG).d("onSaveState: %s (taskId=%d)", activity.componentName, taskId)

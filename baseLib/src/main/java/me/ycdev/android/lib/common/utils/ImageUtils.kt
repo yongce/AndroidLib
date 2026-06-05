@@ -204,7 +204,5 @@ object ImageUtils {
      * @param bitmap The bitmap to calculate.
      * @return size in bytes
      */
-    fun getBitmapSize(bitmap: Bitmap): Int {
-        return bitmap.byteCount
-    }
+    fun getBitmapSize(bitmap: Bitmap): Int = bitmap.byteCount
 }

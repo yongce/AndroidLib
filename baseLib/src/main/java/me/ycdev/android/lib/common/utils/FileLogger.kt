@@ -18,7 +18,6 @@ class FileLogger constructor(
     private val logFileNamePrefix: String,
     private val processNameSuffix: String? = null
 ) {
-
     private var fileWriter: Writer? = null
 
     // Each log file every day.
@@ -37,13 +36,21 @@ class FileLogger constructor(
     }
 
     @GuardedBy("this")
-    fun logToFile(tag: String, msg: String?, tr: Throwable?) {
+    fun logToFile(
+        tag: String,
+        msg: String?,
+        tr: Throwable?
+    ) {
         val builder = StringBuilder()
         builder.append(timeFormat.format(Date()))
         builder.append(" ")
         builder.append(tag)
         builder.append("\t")
-        builder.append(Process.myPid()).append(" ").append(Process.myTid()).append(" ")
+        builder
+            .append(Process.myPid())
+            .append(" ")
+            .append(Process.myTid())
+            .append(" ")
         if (!TextUtils.isEmpty(msg)) {
             builder.append(msg)
         }

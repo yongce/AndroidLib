@@ -7,13 +7,16 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.annotation.IntDef
 import androidx.annotation.VisibleForTesting
+import java.util.concurrent.atomic.AtomicInteger
 import me.ycdev.android.lib.common.annotation.HandlerWork
 import me.ycdev.android.lib.common.utils.DateTimeUtils
 import me.ycdev.android.lib.common.utils.Preconditions
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicInteger
 
-class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
+class TaskScheduler(
+    schedulerLooper: Looper,
+    ownerTag: String
+) {
     private val ownerTag: String = taskSchedulerIdGenerator.incrementAndGet().toString() + "-" + ownerTag
     private var checkInterval = DEFAULT_CHECK_INTERVAL
     private var logEnabled = false
@@ -41,7 +44,11 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
         logEnabled = enable
     }
 
-    fun schedule(executor: ITaskExecutor, delayedMs: Long, task: Runnable) {
+    fun schedule(
+        executor: ITaskExecutor,
+        delayedMs: Long,
+        task: Runnable
+    ) {
         schedule(executor, delayedMs, SCHEDULE_POLICY_NO_CHECK, task)
     }
 
@@ -49,20 +56,27 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
         executor: ITaskExecutor,
         delayedMs: Long,
         @SchedulePolicy policy: Int,
-        task: Runnable,
+        task: Runnable
     ) {
         checkSchedulePolicy(policy)
         val taskInfo = TaskInfo(executor, task, delayedMs)
         if (logEnabled) {
             Timber.tag(TAG).d(
                 "[%s] schedule one-off task: %s, policy: %s",
-                ownerTag, taskInfo, schedulePolicyToString(policy)
+                ownerTag,
+                taskInfo,
+                schedulePolicyToString(policy)
             )
         }
         scheduleTask(taskInfo, policy)
     }
 
-    fun schedulePeriod(executor: ITaskExecutor, delayedMs: Long, periodMs: Long, task: Runnable) {
+    fun schedulePeriod(
+        executor: ITaskExecutor,
+        delayedMs: Long,
+        periodMs: Long,
+        task: Runnable
+    ) {
         schedulePeriod(executor, delayedMs, periodMs, SCHEDULE_POLICY_NO_CHECK, task)
     }
 
@@ -71,20 +85,25 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
         delayedMs: Long,
         periodMs: Long,
         @SchedulePolicy policy: Int,
-        task: Runnable,
+        task: Runnable
     ) {
         checkSchedulePolicy(policy)
         val taskInfo = TaskInfo(executor, task, delayedMs, periodMs)
         if (logEnabled) {
             Timber.tag(TAG).d(
                 "[%s] schedule period task: %s, policy: %s",
-                ownerTag, taskInfo, schedulePolicyToString(policy)
+                ownerTag,
+                taskInfo,
+                schedulePolicyToString(policy)
             )
         }
         scheduleTask(taskInfo, policy)
     }
 
-    private fun scheduleTask(taskInfo: TaskInfo, @SchedulePolicy policy: Int) {
+    private fun scheduleTask(
+        taskInfo: TaskInfo,
+        @SchedulePolicy policy: Int
+    ) {
         if (Looper.myLooper() == schedulerHandler.looper) {
             addTask(taskInfo, policy)
         } else {
@@ -126,7 +145,10 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
     }
 
     @HandlerWork("schedulerHandler")
-    private fun addTask(task: TaskInfo, @SchedulePolicy policy: Int) {
+    private fun addTask(
+        task: TaskInfo,
+        @SchedulePolicy policy: Int
+    ) {
         var taskAdded = false
         if (policy == SCHEDULE_POLICY_NO_CHECK) {
             tasks.add(task)
@@ -152,7 +174,9 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
             if (logEnabled) {
                 Timber.tag(TAG).d(
                     "[%s] addTask: %s, policy: %s",
-                    ownerTag, task, schedulePolicyToString(policy)
+                    ownerTag,
+                    task,
+                    schedulePolicyToString(policy)
                 )
             }
         }
@@ -182,7 +206,7 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
             } else {
                 i++
             }
-        } /* empty */
+        } // empty
     }
 
     @HandlerWork("schedulerHandler")
@@ -227,7 +251,8 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
 
         if (logEnabled) {
             Timber.tag(TAG).v(
-                "[%s] next check at %s", ownerTag,
+                "[%s] next check at %s",
+                ownerTag,
                 DateTimeUtils.getReadableTimeStamp(System.currentTimeMillis() + nextEventDelay)
             )
         }
@@ -254,7 +279,9 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
     }
 
     @SuppressLint("HandlerLeak")
-    private inner class SchedulerHandler(looper: Looper) : Handler(looper) {
+    private inner class SchedulerHandler(
+        looper: Looper
+    ) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_ADD_TASK -> {
@@ -300,20 +327,23 @@ class TaskScheduler(schedulerLooper: Looper, ownerTag: String) {
 
         private val taskSchedulerIdGenerator = AtomicInteger(0)
 
-        private fun schedulePolicyToString(@SchedulePolicy policy: Int): String {
-            return when (policy) {
-                SCHEDULE_POLICY_NO_CHECK -> "NO_CHECK"
-                SCHEDULE_POLICY_IGNORE -> "IGNORE"
-                SCHEDULE_POLICY_REPLACE -> "REPLACE"
-                else -> throw RuntimeException("Unknown policy: $policy")
-            }
+        private fun schedulePolicyToString(
+            @SchedulePolicy policy: Int
+        ): String = when (policy) {
+            SCHEDULE_POLICY_NO_CHECK -> "NO_CHECK"
+            SCHEDULE_POLICY_IGNORE -> "IGNORE"
+            SCHEDULE_POLICY_REPLACE -> "REPLACE"
+            else -> throw RuntimeException("Unknown policy: $policy")
         }
 
-        private fun checkSchedulePolicy(@SchedulePolicy policy: Int) {
+        private fun checkSchedulePolicy(
+            @SchedulePolicy policy: Int
+        ) {
             when (policy) {
                 SCHEDULE_POLICY_NO_CHECK,
                 SCHEDULE_POLICY_IGNORE,
-                SCHEDULE_POLICY_REPLACE -> return
+                SCHEDULE_POLICY_REPLACE
+                -> return
                 else -> throw RuntimeException("Unknown policy: $policy")
             }
         }

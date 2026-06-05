@@ -8,16 +8,26 @@ import android.os.Bundle
 import android.text.TextUtils
 import me.ycdev.android.lib.common.utils.LibLogger
 
-class InfoProviderClient(cxt: Context, private val authority: String) {
+class InfoProviderClient(
+    cxt: Context,
+    private val authority: String
+) {
     private val resolver: ContentResolver = cxt.applicationContext.contentResolver
 
-    private fun getUriFor(table: String?, name: String): Uri {
+    private fun getUriFor(
+        table: String?,
+        name: String
+    ): Uri {
         var tableTmp = table
         if (TextUtils.isEmpty(tableTmp)) {
             tableTmp = InfoProvider.TABLE_DEFAULT
         }
-        return Uri.Builder().scheme("content").authority(authority)
-            .appendPath(tableTmp).appendPath(name)
+        return Uri
+            .Builder()
+            .scheme("content")
+            .authority(authority)
+            .appendPath(tableTmp)
+            .appendPath(name)
             .build()
     }
 
@@ -34,7 +44,10 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
         resolver.unregisterContentObserver(observer)
     }
 
-    fun remove(table: String?, name: String): Boolean {
+    fun remove(
+        table: String?,
+        name: String
+    ): Boolean {
         try {
             val uri = getUriFor(table, name)
             val args = Bundle()
@@ -59,7 +72,11 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
         }
     }
 
-    fun getString(table: String?, name: String, defValue: String?): String? {
+    fun getString(
+        table: String?,
+        name: String,
+        defValue: String?
+    ): String? {
         try {
             val uri = getUriFor(table, name)
             val args = Bundle()
@@ -83,7 +100,11 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
         return defValue
     }
 
-    fun putString(table: String?, name: String, value: String): Boolean {
+    fun putString(
+        table: String?,
+        name: String,
+        value: String
+    ): Boolean {
         try {
             val uri = getUriFor(table, name)
             val args = Bundle()
@@ -110,7 +131,11 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
         return false
     }
 
-    fun getBoolean(table: String?, name: String, defValue: Boolean): Boolean {
+    fun getBoolean(
+        table: String?,
+        name: String,
+        defValue: Boolean
+    ): Boolean {
         try {
             val result = getString(table, name, null)
             if (!TextUtils.isEmpty(result)) {
@@ -123,11 +148,17 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
         return defValue
     }
 
-    fun putBoolean(table: String?, name: String, value: Boolean): Boolean {
-        return putString(table, name, java.lang.Boolean.toString(value))
-    }
+    fun putBoolean(
+        table: String?,
+        name: String,
+        value: Boolean
+    ): Boolean = putString(table, name, java.lang.Boolean.toString(value))
 
-    fun getInt(table: String?, name: String, defValue: Int): Int {
+    fun getInt(
+        table: String?,
+        name: String,
+        defValue: Int
+    ): Int {
         try {
             val result = getString(table, name, null)
             if (!TextUtils.isEmpty(result)) {
@@ -140,9 +171,11 @@ class InfoProviderClient(cxt: Context, private val authority: String) {
         return defValue
     }
 
-    fun putInt(table: String?, name: String, value: Int): Boolean {
-        return putString(table, name, value.toString())
-    }
+    fun putInt(
+        table: String?,
+        name: String,
+        value: Int
+    ): Boolean = putString(table, name, value.toString())
 
     companion object {
         private const val TAG = "InfoProviderClient"

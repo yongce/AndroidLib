@@ -15,19 +15,21 @@ object StringUtils {
         }
     }
 
-    fun parseInt(value: String, defValue: Int): Int {
-        return try {
-            value.toInt()
-        } catch (e: Exception) {
-            defValue
-        }
+    fun parseInt(
+        value: String,
+        defValue: Int
+    ): Int = try {
+        value.toInt()
+    } catch (e: Exception) {
+        defValue
     }
 
-    fun parseLong(value: String, defValue: Long): Long {
-        return try {
-            value.toLong()
-        } catch (e: Exception) {
-            defValue
-        }
+    fun parseLong(
+        value: String,
+        defValue: Long
+    ): Long = try {
+        value.toLong()
+    } catch (e: Exception) {
+        defValue
     }
 }

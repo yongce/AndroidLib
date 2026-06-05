@@ -2,18 +2,27 @@ package me.ycdev.android.arch.lint.base
 
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.JavaContext
+import java.util.HashSet
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
-import java.util.HashSet
 
-abstract class InheritDetectorBase : Detector(), Detector.UastScanner {
+abstract class InheritDetectorBase :
+    Detector(),
+    Detector.UastScanner {
     protected abstract val applicableClasses: List<String>
     protected abstract val wrapperClasses: HashSet<String>
-    protected abstract fun reportViolation(context: JavaContext, element: UElement)
+
+    protected abstract fun reportViolation(
+        context: JavaContext,
+        element: UElement
+    )
 
     override fun applicableSuperClasses(): List<String>? = applicableClasses
 
-    override fun visitClass(context: JavaContext, declaration: UClass) {
+    override fun visitClass(
+        context: JavaContext,
+        declaration: UClass
+    ) {
         val wrappers = wrapperClasses
         val className = declaration.qualifiedName
         if (wrappers.contains(className)) {

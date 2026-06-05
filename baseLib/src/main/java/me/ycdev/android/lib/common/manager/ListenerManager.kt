@@ -1,9 +1,9 @@
 package me.ycdev.android.lib.common.manager
 
 @Suppress("unused")
-open class ListenerManager<IListener : Any>(override val weakReference: Boolean) :
-    ObjectManager<IListener>(weakReference) {
-
+open class ListenerManager<IListener : Any>(
+    override val weakReference: Boolean
+) : ObjectManager<IListener>(weakReference) {
     /**
      * Only invoked when invoke [addListener]
      */
@@ -46,7 +46,10 @@ open class ListenerManager<IListener : Any>(override val weakReference: Boolean)
 
     fun addListener(listener: IListener) = super.addObject(listener)
 
-    fun addListener(listener: IListener, tag: String) = super.addObject(listener, tag)
+    fun addListener(
+        listener: IListener,
+        tag: String
+    ) = super.addObject(listener, tag)
 
     fun removeListener(listener: IListener) = super.removeObject(listener)
 

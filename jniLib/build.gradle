@@ -5,7 +5,7 @@ apply from: '../build_common.gradle'
 project.ext.archivesBaseName = 'android-common-jni'
 
 android {
-    namespace 'me.ycdev.android.lib.commonjni'
+    namespace = 'me.ycdev.android.lib.commonjni'
     defaultConfig {
         minSdk = versions.minSdk
 
@@ -14,17 +14,17 @@ android {
         }
     }
 
-    ndkVersion versions.ndkVersion
+    ndkVersion = versions.ndkVersion
     externalNativeBuild {
         cmake {
-            version "3.22.1"
-            path file('CMakeLists.txt')
+            version = "3.22.1"
+            path = file('CMakeLists.txt')
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

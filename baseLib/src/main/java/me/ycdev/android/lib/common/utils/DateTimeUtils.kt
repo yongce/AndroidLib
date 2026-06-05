@@ -38,19 +38,15 @@ object DateTimeUtils {
      * Generate file name from system time in the format "yyyyMMdd-HHmmss-SSS",
      * @param sysTime System time in milliseconds
      */
-    fun generateFileName(sysTime: Long): String {
-        return SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).format(Date(sysTime))
-    }
+    fun generateFileName(sysTime: Long): String = SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).format(Date(sysTime))
 
     /**
      * Parse system time from string in the format "yyyyMMdd-HHmmss-SSS",
      * @param timeStr Time string in the format "yyyyMMdd-HHmmss-SSS"
      */
     @Throws(ParseException::class)
-    fun parseFileName(timeStr: String): Long {
-        return SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).parse(timeStr)?.time
-            ?: throw ParseException("Cannot parse '$timeStr'", 0)
-    }
+    fun parseFileName(timeStr: String): Long = SimpleDateFormat("yyyyMMdd-HHmmss-SSS", Locale.US).parse(timeStr)?.time
+        ?: throw ParseException("Cannot parse '$timeStr'", 0)
 
     /**
      * Generate file name from system time in the format "yyyy-MM-dd HH:mm:ss:SSS",

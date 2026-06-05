@@ -13,9 +13,7 @@ import androidx.core.content.ContextCompat
 object BroadcastHelper {
     private const val PERM_INTERNAL_BROADCAST_SUFFIX = ".permission.INTERNAL"
 
-    fun getInternalBroadcastPerm(cxt: Context): String {
-        return cxt.packageName + PERM_INTERNAL_BROADCAST_SUFFIX
-    }
+    fun getInternalBroadcastPerm(cxt: Context): String = cxt.packageName + PERM_INTERNAL_BROADCAST_SUFFIX
 
     /**
      * Register a receiver for internal broadcast.
@@ -36,14 +34,15 @@ object BroadcastHelper {
         cxt: Context,
         receiver: BroadcastReceiver,
         filter: IntentFilter
-    ): Intent? {
-        return ContextCompat.registerReceiver(cxt, receiver, filter, ContextCompat.RECEIVER_EXPORTED)
-    }
+    ): Intent? = ContextCompat.registerReceiver(cxt, receiver, filter, ContextCompat.RECEIVER_EXPORTED)
 
     /**
      * Send a broadcast to internal receivers.
      */
-    fun sendToInternal(cxt: Context, intent: Intent) {
+    fun sendToInternal(
+        cxt: Context,
+        intent: Intent
+    ) {
         val perm = cxt.packageName + PERM_INTERNAL_BROADCAST_SUFFIX
         intent.setPackage(cxt.packageName) // only works on Android 4.0 and higher versions
         cxt.sendBroadcast(intent, perm)
@@ -63,7 +62,10 @@ object BroadcastHelper {
     /**
      * Send a broadcast to external receivers.
      */
-    fun sendToExternal(cxt: Context, intent: Intent) {
+    fun sendToExternal(
+        cxt: Context,
+        intent: Intent
+    ) {
         cxt.sendBroadcast(intent)
     }
 }

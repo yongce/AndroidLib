@@ -55,7 +55,9 @@ class ProcessIATest {
         val myPid = ProcessIA.getProcessPid("me.ycdev.android.lib.common.test")
         assertEquals(
             "failed to validate the test app",
-            android.os.Process.myPid().toLong(),
+            android.os.Process
+                .myPid()
+                .toLong(),
             myPid.toLong()
         )
     }

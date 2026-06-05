@@ -46,7 +46,10 @@ object ApplicationUtils {
         this.app = app
     }
 
-    private fun getProcessNameFromAMS(cxt: Context, pid: Int): String? {
+    private fun getProcessNameFromAMS(
+        cxt: Context,
+        pid: Int
+    ): String? {
         val am = SystemServiceHelper.getActivityManager(cxt) ?: return null
         val runningApps = SystemServiceHelper.getRunningAppProcesses(am)
         for (procInfo in runningApps) {

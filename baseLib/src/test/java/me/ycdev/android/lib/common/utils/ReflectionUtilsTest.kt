@@ -15,39 +15,32 @@ class ReflectionUtilsTest {
         private val a3: String? = null
         private val a4: Long = 0
 
-        open fun a9(): String {
-            return "a9"
-        }
+        open fun a9(): String = "a9"
 
-        protected open fun a10(a: Int): Int {
-            return a
-        }
+        protected open fun a10(a: Int): Int = a
 
-        private fun a11(a: String, b: Long): String {
-            return a + b
-        }
+        private fun a11(
+            a: String,
+            b: Long
+        ): String = a + b
 
         companion object {
-
             var a5: String? = null
             var a6: Int = 0
             private var a7: String? = null
             private var a8: Long = 0
 
             @JvmStatic
-            fun a13(): String {
-                return "a13"
-            }
+            fun a13(): String = "a13"
 
             @JvmStatic
-            protected fun a14(a: Long): Long {
-                return a
-            }
+            protected fun a14(a: Long): Long = a
 
             @JvmStatic
-            private fun a15(a: Int, b: String): String {
-                return b + a
-            }
+            private fun a15(
+                a: Int,
+                b: String
+            ): String = b + a
         }
     }
 
@@ -57,39 +50,32 @@ class ReflectionUtilsTest {
         private val b3: String? = null
         private val b4: Long = 0
 
-        override fun a9(): String {
-            return "a9"
-        }
+        override fun a9(): String = "a9"
 
-        override fun a10(a: Int): Int {
-            return a
-        }
+        override fun a10(a: Int): Int = a
 
-        private fun b11(a: String, b: Long): String {
-            return a + b
-        }
+        private fun b11(
+            a: String,
+            b: Long
+        ): String = a + b
 
         companion object {
-
             var b5: String? = null
             var b6: Int = 0
             private var b7: String? = null
             private var b8: Long = 0
 
             @JvmStatic
-            fun b13(): String {
-                return "b13"
-            }
+            fun b13(): String = "b13"
 
             @JvmStatic
-            protected fun b14(a: Long): Long {
-                return a
-            }
+            protected fun b14(a: Long): Long = a
 
             @JvmStatic
-            private fun b15(a: Int, b: String): String {
-                return b + a
-            }
+            private fun b15(
+                a: Int,
+                b: String
+            ): String = b + a
         }
     }
 
@@ -99,12 +85,13 @@ class ReflectionUtilsTest {
             val objB = TestB()
 
             // TestA part
-            val a11 = ReflectionUtils.findMethod(
-                TestB::class.java,
-                "a11",
-                String::class.java,
-                Long::class.java
-            )
+            val a11 =
+                ReflectionUtils.findMethod(
+                    TestB::class.java,
+                    "a11",
+                    String::class.java,
+                    Long::class.java
+                )
             assertTrue(a11.declaringClass == TestA::class.java && a11.name == "a11")
             assertTrue(a11.invoke(objB, "a", 11L) == "a11")
 
@@ -137,12 +124,13 @@ class ReflectionUtilsTest {
             assertTrue(a10.declaringClass == TestB::class.java && a10.name == "a10")
             assertTrue(a10.invoke(objB, 10) as Int == 10)
 
-            val b11 = ReflectionUtils.findMethod(
-                TestB::class.java,
-                "b11",
-                String::class.java,
-                Long::class.java
-            )
+            val b11 =
+                ReflectionUtils.findMethod(
+                    TestB::class.java,
+                    "b11",
+                    String::class.java,
+                    Long::class.java
+                )
             assertTrue(b11.declaringClass == TestB::class.java && b11.name == "b11")
             assertTrue(b11.invoke(objB, "b", 11L) == "b11")
 

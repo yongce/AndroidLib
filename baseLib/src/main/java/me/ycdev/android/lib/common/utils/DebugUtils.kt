@@ -8,18 +8,22 @@ object DebugUtils {
      */
     fun enableStrictMode() {
         // thread policy
-        val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
-            .detectAll()
-            .penaltyLog()
+        val threadPolicyBuilder =
+            StrictMode.ThreadPolicy
+                .Builder()
+                .detectAll()
+                .penaltyLog()
         threadPolicyBuilder.penaltyFlashScreen()
         threadPolicyBuilder.penaltyDeathOnNetwork()
         StrictMode.setThreadPolicy(threadPolicyBuilder.build())
 
         // VM policy
-        val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
-            .detectAll()
-            .penaltyLog()
-            .penaltyDeath()
+        val vmPolicyBuilder =
+            StrictMode.VmPolicy
+                .Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
         StrictMode.setVmPolicy(vmPolicyBuilder.build())
     }
 }

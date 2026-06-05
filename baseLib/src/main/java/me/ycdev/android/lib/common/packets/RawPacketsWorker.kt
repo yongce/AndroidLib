@@ -1,9 +1,9 @@
 package me.ycdev.android.lib.common.packets
 
-class RawPacketsWorker(callback: ParserCallback) : PacketsWorker(TAG, callback) {
-    override fun packetData(data: ByteArray): List<ByteArray> {
-        return arrayListOf(data)
-    }
+class RawPacketsWorker(
+    callback: ParserCallback
+) : PacketsWorker(TAG, callback) {
+    override fun packetData(data: ByteArray): List<ByteArray> = arrayListOf(data)
 
     override fun parsePackets(data: ByteArray) {
         // support empty data & ignore it

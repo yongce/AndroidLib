@@ -9,11 +9,11 @@ import android.text.TextUtils
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
-import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import me.ycdev.android.lib.common.utils.LibLogger
 
 @Suppress("unused")
 object NetworkUtils {
@@ -146,18 +146,21 @@ object NetworkUtils {
             TelephonyManager.NETWORK_TYPE_EVDO_B,
             TelephonyManager.NETWORK_TYPE_EHRPD,
             TelephonyManager.NETWORK_TYPE_TD_SCDMA,
-            TelephonyManager.NETWORK_TYPE_UMTS -> NETWORK_TYPE_3G
+            TelephonyManager.NETWORK_TYPE_UMTS
+            -> NETWORK_TYPE_3G
 
             TelephonyManager.NETWORK_TYPE_HSDPA,
             TelephonyManager.NETWORK_TYPE_HSUPA,
             TelephonyManager.NETWORK_TYPE_HSPA,
-            TelephonyManager.NETWORK_TYPE_HSPAP -> NETWORK_TYPE_3G // H
+            TelephonyManager.NETWORK_TYPE_HSPAP
+            -> NETWORK_TYPE_3G // H
 
             TelephonyManager.NETWORK_TYPE_GPRS,
             TelephonyManager.NETWORK_TYPE_EDGE,
             TelephonyManager.NETWORK_TYPE_CDMA,
             TelephonyManager.NETWORK_TYPE_GSM,
-            TelephonyManager.NETWORK_TYPE_1xRTT -> NETWORK_TYPE_2G
+            TelephonyManager.NETWORK_TYPE_1xRTT
+            -> NETWORK_TYPE_2G
 
             else -> NETWORK_TYPE_2G
         }

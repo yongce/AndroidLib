@@ -32,51 +32,103 @@ object LibLogger {
         }
     }
 
-    fun v(tag: String, msg: String, vararg args: Any?) {
+    fun v(
+        tag: String,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.VERBOSE, tag, null, msg, *args)
     }
 
-    fun d(tag: String, msg: String, vararg args: Any?) {
+    fun d(
+        tag: String,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.DEBUG, tag, null, msg, *args)
     }
 
-    fun d(tag: String, e: Throwable, msg: String, vararg args: Any?) {
+    fun d(
+        tag: String,
+        e: Throwable,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.DEBUG, tag, e, msg, *args)
     }
 
-    fun i(tag: String, msg: String, vararg args: Any?) {
+    fun i(
+        tag: String,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.INFO, tag, null, msg, *args)
     }
 
-    fun i(tag: String, e: Throwable, msg: String, vararg args: Any?) {
+    fun i(
+        tag: String,
+        e: Throwable,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.INFO, tag, e, msg, *args)
     }
 
-    fun w(tag: String, msg: String, vararg args: Any?) {
+    fun w(
+        tag: String,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.WARN, tag, null, msg, *args)
     }
 
-    fun w(tag: String, e: Throwable, msg: String, vararg args: Any?) {
+    fun w(
+        tag: String,
+        e: Throwable,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.WARN, tag, e, msg, *args)
     }
 
-    fun w(tag: String, e: Throwable) {
+    fun w(
+        tag: String,
+        e: Throwable
+    ) {
         log(Log.WARN, tag, e, null)
     }
 
-    fun e(tag: String, msg: String, vararg args: Any?) {
+    fun e(
+        tag: String,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.ERROR, tag, null, msg, *args)
     }
 
-    fun e(tag: String, e: Throwable, msg: String, vararg args: Any?) {
+    fun e(
+        tag: String,
+        e: Throwable,
+        msg: String,
+        vararg args: Any?
+    ) {
         log(Log.ERROR, tag, e, msg, *args)
     }
 
-    fun e(tag: String, e: Throwable) {
+    fun e(
+        tag: String,
+        e: Throwable
+    ) {
         log(Log.ERROR, tag, e, null)
     }
 
-    fun log(level: Int, tag: String, tr: Throwable?, msg: String?, vararg args: Any?) {
+    fun log(
+        level: Int,
+        tag: String,
+        tr: Throwable?,
+        msg: String?,
+        vararg args: Any?
+    ) {
         var msgFull = msg
         if (jvmLogger) {
             if (msgFull != null && args.isNotEmpty()) {
@@ -106,7 +158,13 @@ object LibLogger {
             this.fileLogger = fileLogger
         }
 
-        fun log(level: Int, tag: String, tr: Throwable?, msg: String?, vararg args: Any?) {
+        fun log(
+            level: Int,
+            tag: String,
+            tr: Throwable?,
+            msg: String?,
+            vararg args: Any?
+        ) {
             var msgFull = msg
             if (showLog(level, tag)) {
                 if (msgFull != null && args.isNotEmpty()) {
@@ -121,12 +179,16 @@ object LibLogger {
             }
         }
 
-        private fun showLog(level: Int, tag: String): Boolean {
-            return isLoggable(tag, level) || isLogEnabled
-        }
+        private fun showLog(
+            level: Int,
+            tag: String
+        ): Boolean = isLoggable(tag, level) || isLogEnabled
 
         @SuppressLint("LogNotTimber")
-        private fun isLoggable(tag: String, level: Int): Boolean {
+        private fun isLoggable(
+            tag: String,
+            level: Int
+        ): Boolean {
             try {
                 return Log.isLoggable(tag, level)
             } catch (e: Exception) {
@@ -139,7 +201,11 @@ object LibLogger {
             return false
         }
 
-        private fun logToFile(tag: String, msg: String?, tr: Throwable?) {
+        private fun logToFile(
+            tag: String,
+            msg: String?,
+            tr: Throwable?
+        ) {
             if (isLogEnabled && fileLogger != null) {
                 fileLogger!!.logToFile(tag, msg, tr)
             }

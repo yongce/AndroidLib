@@ -1,9 +1,9 @@
 package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.annotation.SuppressLint
-import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import timber.log.Timber
 
 @SuppressLint("PrivateApi")
 object SystemPropertiesIA {
@@ -17,7 +17,8 @@ object SystemPropertiesIA {
     init {
         try {
             val classObj = Class.forName(
-                "android.os.SystemProperties", false,
+                "android.os.SystemProperties",
+                false,
                 Thread.currentThread().contextClassLoader
             )
             sMtd_get = classObj.getMethod("get", String::class.java, String::class.java)

@@ -9,12 +9,13 @@ object EncodingUtils {
     /**
      * Encode the data with HEX (Base16) encoding
      */
-    fun encodeWithHex(bytes: ByteArray?, uppercase: Boolean = true): String {
-        return if (bytes == null) {
-            "null"
-        } else {
-            encodeWithHex(bytes, 0, bytes.size, uppercase)
-        }
+    fun encodeWithHex(
+        bytes: ByteArray?,
+        uppercase: Boolean = true
+    ): String = if (bytes == null) {
+        "null"
+    } else {
+        encodeWithHex(bytes, 0, bytes.size, uppercase)
     }
 
     /**
@@ -60,12 +61,13 @@ object EncodingUtils {
         return result
     }
 
-    private fun fromHexChar(hexStr: String, index: Int): Int {
-        return when (val ch = hexStr[index]) {
-            in '0'..'9' -> ch - '0'
-            in 'a'..'f' -> 10 + (ch - 'a')
-            in 'A'..'F' -> 10 + (ch - 'A')
-            else -> throw IllegalArgumentException("Not hex string: $hexStr")
-        }
+    private fun fromHexChar(
+        hexStr: String,
+        index: Int
+    ): Int = when (val ch = hexStr[index]) {
+        in '0'..'9' -> ch - '0'
+        in 'a'..'f' -> 10 + (ch - 'a')
+        in 'A'..'F' -> 10 + (ch - 'A')
+        else -> throw IllegalArgumentException("Not hex string: $hexStr")
     }
 }

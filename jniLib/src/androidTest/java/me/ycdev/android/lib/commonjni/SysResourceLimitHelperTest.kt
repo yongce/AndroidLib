@@ -10,7 +10,6 @@ import timber.log.Timber
 
 @RunWith(AndroidJUnit4::class)
 class SysResourceLimitHelperTest {
-
     @Test
     fun test_getOpenFilesNumberLimit() {
         val ofLimit = SysResourceLimitHelper.getOpenFilesLimit()

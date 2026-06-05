@@ -2,14 +2,14 @@ package me.ycdev.android.lib.common.packets
 
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import me.ycdev.android.lib.common.packets.PacketsWorker.ParserState
 import me.ycdev.android.lib.common.packets.PacketsWorker.Version
 import me.ycdev.android.lib.common.utils.EncodingUtils.encodeWithHex
 import me.ycdev.android.lib.test.log.TimberJvmTree
 import org.junit.Test
 import timber.log.Timber
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
     @Test
@@ -35,9 +35,17 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
         var data = byteArrayOf(0x2F.toByte(), 0x12, 0xa3.toByte())
         assertThat(TinyPacketsWorker.calculateDataCrc(data)).isEqualTo(0x9E.toByte())
 
-        data = byteArrayOf(
-            0xa3.toByte(), 0x3d, 0x26, 0xf3.toByte(), 0x3d, 0x6b, 0xc8.toByte(), 0x2e
-        )
+        data =
+            byteArrayOf(
+                0xa3.toByte(),
+                0x3d,
+                0x26,
+                0xf3.toByte(),
+                0x3d,
+                0x6b,
+                0xc8.toByte(),
+                0x2e
+            )
         assertThat(TinyPacketsWorker.calculateDataCrc(data)).isEqualTo(0xFB.toByte())
     }
 
@@ -223,7 +231,11 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
         }
     }
 
-    private fun packetData_once(packetsWorker: TinyPacketsWorker, maxPackageSize: Int, dataSize: Int) {
+    private fun packetData_once(
+        packetsWorker: TinyPacketsWorker,
+        maxPackageSize: Int,
+        dataSize: Int
+    ) {
         val data = generateData(dataSize)
         val version = TinyPacketsWorker.calculateVersion(dataSize)
         val crc = TinyPacketsWorker.calculateDataCrc(data)

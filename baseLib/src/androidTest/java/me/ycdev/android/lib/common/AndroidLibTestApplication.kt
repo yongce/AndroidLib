@@ -6,7 +6,6 @@ import me.ycdev.android.lib.common.utils.LibLogger
 import timber.log.Timber
 
 class AndroidLibTestApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
         LibLogger.d(TAG, "onCreate")

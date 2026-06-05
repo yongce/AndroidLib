@@ -5,12 +5,12 @@ apply from: '../build_common.gradle'
 project.ext.archivesBaseName = 'android-common-ui'
 
 android {
-    namespace 'me.ycdev.android.lib.commonui'
+    namespace = 'me.ycdev.android.lib.commonui'
     defaultConfig {
         minSdk = versions.minSdk
     }
 
-    resourcePrefix 'ycdev'
+    resourcePrefix = 'ycdev'
     buildFeatures {
         viewBinding = true
     }

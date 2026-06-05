@@ -110,20 +110,21 @@ object PermissionUtils {
         }
 
         if (shouldShowRationale) {
-            val dialog = AlertDialog.Builder(getActivity(caller))
-                .setTitle(params.rationaleTitle)
-                .setMessage(params.rationaleContent)
-                .setPositiveButton(params.positiveBtnResId) { _, _ ->
-                    doRequestPermissions(
-                        caller,
-                        params.permissions!!,
-                        params.requestCode
-                    )
-                }
-                .setNegativeButton(params.negativeBtnResId) { _, _ ->
-                    // act as if all permissions were denied
-                    params.callback!!.onRationaleDenied(params.requestCode)
-                }.create()
+            val dialog =
+                AlertDialog
+                    .Builder(getActivity(caller))
+                    .setTitle(params.rationaleTitle)
+                    .setMessage(params.rationaleContent)
+                    .setPositiveButton(params.positiveBtnResId) { _, _ ->
+                        doRequestPermissions(
+                            caller,
+                            params.permissions!!,
+                            params.requestCode
+                        )
+                    }.setNegativeButton(params.negativeBtnResId) { _, _ ->
+                        // act as if all permissions were denied
+                        params.callback!!.onRationaleDenied(params.requestCode)
+                    }.create()
             dialog.show()
         } else {
             doRequestPermissions(caller, params.permissions!!, params.requestCode)
@@ -142,20 +143,16 @@ object PermissionUtils {
     private fun shouldShowRequestPermissionRationale(
         caller: Any,
         permission: String
-    ): Boolean {
-        return if (caller is Activity) {
-            ActivityCompat.shouldShowRequestPermissionRationale(caller, permission)
-        } else {
-            (caller as? Fragment)?.shouldShowRequestPermissionRationale(permission) ?: false
-        }
+    ): Boolean = if (caller is Activity) {
+        ActivityCompat.shouldShowRequestPermissionRationale(caller, permission)
+    } else {
+        (caller as? Fragment)?.shouldShowRequestPermissionRationale(permission) ?: false
     }
 
-    private fun getActivity(caller: Any): Activity? {
-        return caller as? Activity ?: if (caller is Fragment) {
-            caller.activity
-        } else {
-            null
-        }
+    private fun getActivity(caller: Any): Activity? = caller as? Activity ?: if (caller is Fragment) {
+        caller.activity
+    } else {
+        null
     }
 
     private fun doRequestPermissions(

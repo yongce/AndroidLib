@@ -16,7 +16,5 @@ abstract class AppCompatBaseActivity : AppCompatActivity() {
         }
     }
 
-    protected open fun shouldSetDisplayHomeAsUpEnabled(): Boolean {
-        return true
-    }
+    protected open fun shouldSetDisplayHomeAsUpEnabled(): Boolean = true
 }

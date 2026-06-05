@@ -10,15 +10,13 @@ object AndroidLogHelper {
     const val ERROR = 6
     const val ASSERT = 7
 
-    fun getPriorityName(priority: Int): String {
-        return when (priority) {
-            VERBOSE -> "V"
-            DEBUG -> "D"
-            INFO -> "I"
-            WARN -> "W"
-            ERROR -> "E"
-            ASSERT -> "A"
-            else -> "U"
-        }
+    fun getPriorityName(priority: Int): String = when (priority) {
+        VERBOSE -> "V"
+        DEBUG -> "D"
+        INFO -> "I"
+        WARN -> "W"
+        ERROR -> "E"
+        ASSERT -> "A"
+        else -> "U"
     }
 }

@@ -9,10 +9,21 @@ import android.text.TextUtils
 import me.ycdev.android.lib.common.utils.LibLogger
 
 abstract class InfoProvider : ContentProvider() {
+    protected abstract fun remove(
+        table: String,
+        name: String
+    ): Boolean
 
-    protected abstract fun remove(table: String, name: String): Boolean
-    protected abstract fun get(table: String, name: String): String?
-    protected abstract fun put(table: String, name: String, value: String): Boolean
+    protected abstract fun get(
+        table: String,
+        name: String
+    ): String?
+
+    protected abstract fun put(
+        table: String,
+        name: String,
+        value: String
+    ): Boolean
 
     override fun onCreate(): Boolean {
         LibLogger.d(TAG, "onCreate")
@@ -35,12 +46,19 @@ abstract class InfoProvider : ContentProvider() {
         return null
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+    override fun insert(
+        uri: Uri,
+        values: ContentValues?
+    ): Uri? {
         LibLogger.d(TAG, "insert: %s", uri)
         return null
     }
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
         LibLogger.d(TAG, "delete: %s", uri)
         return 0
     }
@@ -55,7 +73,11 @@ abstract class InfoProvider : ContentProvider() {
         return 0
     }
 
-    override fun call(method: String, arg: String?, extras: Bundle?): Bundle? {
+    override fun call(
+        method: String,
+        arg: String?,
+        extras: Bundle?
+    ): Bundle? {
         if (extras == null) {
             LibLogger.e(TAG, "no args for method [%s]", method)
             return null

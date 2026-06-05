@@ -9,4 +9,6 @@ package me.ycdev.android.lib.common.annotation
     AnnotationTarget.PROPERTY_SETTER
 )
 @Retention(AnnotationRetention.SOURCE)
-annotation class HandlerWork(val value: String)
+annotation class HandlerWork(
+    val value: String
+)

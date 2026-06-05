@@ -5,12 +5,12 @@ apply from: '../build_common.gradle'
 project.ext.archivesBaseName = 'android-common-base'
 
 android {
-    namespace 'me.ycdev.android.lib.common'
+    namespace = 'me.ycdev.android.lib.common'
     defaultConfig {
         minSdk = versions.minSdk
     }
     buildFeatures {
-        aidl true
+        aidl = true
     }
 
     lint {

@@ -2,10 +2,10 @@ package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.annotation.SuppressLint
 import android.os.Environment
-import timber.log.Timber
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import timber.log.Timber
 
 @Suppress("unused")
 @SuppressLint("PrivateApi")
@@ -65,11 +65,13 @@ object EnvironmentIA {
                 return sMtd_getExternalStorageAndroidDataDir!!.invoke(null) as File
             } catch (e: IllegalAccessException) {
                 Timber.tag(TAG).w(
-                    e, "Failed to invoke #getExternalStorageAndroidDataDir()"
+                    e,
+                    "Failed to invoke #getExternalStorageAndroidDataDir()"
                 )
             } catch (e: InvocationTargetException) {
                 Timber.tag(TAG).w(
-                    e, "Failed to invoke #getExternalStorageAndroidDataDir() ag"
+                    e,
+                    "Failed to invoke #getExternalStorageAndroidDataDir() ag"
                 )
             }
         } else {
@@ -87,11 +89,13 @@ object EnvironmentIA {
                 return sMtd_isEncryptedFilesystemEnabled!!.invoke(null) as Boolean
             } catch (e: IllegalAccessException) {
                 Timber.tag(TAG).w(
-                    e, "Failed to invoke #isEncryptedFilesystemEnabled()"
+                    e,
+                    "Failed to invoke #isEncryptedFilesystemEnabled()"
                 )
             } catch (e: InvocationTargetException) {
                 Timber.tag(TAG).w(
-                    e, "Failed to invoke #isEncryptedFilesystemEnabled() ag"
+                    e,
+                    "Failed to invoke #isEncryptedFilesystemEnabled() ag"
                 )
             }
         } else {

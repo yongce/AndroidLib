@@ -21,7 +21,10 @@ object PackageUtils {
      */
     private const val FLAG_PRIVILEGED = 1 shl 3
 
-    fun isPkgEnabled(cxt: Context, pkgName: String): Boolean {
+    fun isPkgEnabled(
+        cxt: Context,
+        pkgName: String
+    ): Boolean {
         try {
             val state = cxt.packageManager.getApplicationEnabledSetting(pkgName)
             return state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT ||
@@ -33,25 +36,17 @@ object PackageUtils {
         return true // by default
     }
 
-    fun isPkgEnabled(appInfo: ApplicationInfo): Boolean {
-        return appInfo.enabled
-    }
+    fun isPkgEnabled(appInfo: ApplicationInfo): Boolean = appInfo.enabled
 
-    fun isPkgSystem(appInfo: ApplicationInfo): Boolean {
-        return appInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
-    }
+    fun isPkgSystem(appInfo: ApplicationInfo): Boolean = appInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
 
     /**
      * Check if an app is residing in "/system" (Android 4.3 and old versions)
      * or "/system/priv-app" (Android 4.4 and new versions) and has "signatureOrSystem" permission.
      */
-    fun isPkgPrivileged(appInfo: ApplicationInfo): Boolean {
-        return appInfo.flags and FLAG_PRIVILEGED != 0
-    }
+    fun isPkgPrivileged(appInfo: ApplicationInfo): Boolean = appInfo.flags and FLAG_PRIVILEGED != 0
 
-    fun isPkgStopped(appInfo: ApplicationInfo): Boolean {
-        return appInfo.flags and ApplicationInfo.FLAG_STOPPED != 0
-    }
+    fun isPkgStopped(appInfo: ApplicationInfo): Boolean = appInfo.flags and ApplicationInfo.FLAG_STOPPED != 0
 
     /**
      * @return An empty list if no launcher apps.
@@ -59,10 +54,11 @@ object PackageUtils {
     fun getLauncherApps(cxt: Context): List<String> {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_HOME)
-        val apps = cxt.packageManager.queryIntentActivities(
-            intent,
-            PackageManager.MATCH_DEFAULT_ONLY
-        )
+        val apps =
+            cxt.packageManager.queryIntentActivities(
+                intent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
         val pkgNames = hashSetOf<String>()
         for (info in apps) {
             pkgNames.add(info.activityInfo.packageName)
@@ -74,8 +70,9 @@ object PackageUtils {
      * @return An empty list if no input method apps.
      */
     fun getInputMethodApps(cxt: Context): List<String> {
-        val imm = cxt.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-            ?: return emptyList()
+        val imm =
+            cxt.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+                ?: return emptyList()
 
         val apps = imm.enabledInputMethodList
         val pkgNames = ArrayList<String>(apps.size)
@@ -118,7 +115,11 @@ object PackageUtils {
         return emptyArray()
     }
 
-    fun getAllServices(cxt: Context, pkgName: String, onlyExported: Boolean): Array<ServiceInfo> {
+    fun getAllServices(
+        cxt: Context,
+        pkgName: String,
+        onlyExported: Boolean
+    ): Array<ServiceInfo> {
         try {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_SERVICES or PackageManager.MATCH_DISABLED_COMPONENTS

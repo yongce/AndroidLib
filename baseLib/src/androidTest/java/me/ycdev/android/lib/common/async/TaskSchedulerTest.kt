@@ -6,12 +6,12 @@ import android.os.SystemClock
 import androidx.test.filters.LargeTest
 import androidx.test.filters.MediumTest
 import com.google.common.truth.Truth.assertThat
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import org.junit.After
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 @LargeTest
 class TaskSchedulerTest {
@@ -47,7 +47,10 @@ class TaskSchedulerTest {
         scheduleAt_basic(false, handlerThreadExecutor)
     }
 
-    private fun scheduleAt_basic(mainThreadScheduler: Boolean, executor: ITaskExecutor) {
+    private fun scheduleAt_basic(
+        mainThreadScheduler: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThreadScheduler)
         val latch = CountDownLatch(1)
         val startTime = SystemClock.elapsedRealtime()
@@ -67,14 +70,18 @@ class TaskSchedulerTest {
         scheduleAt_policy_noCheck(false, handlerThreadExecutor)
     }
 
-    private fun scheduleAt_policy_noCheck(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun scheduleAt_policy_noCheck(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         val startTime = SystemClock.elapsedRealtime()
-        val task = Runnable {
-            assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
+                latch.countDown()
+            }
         taskScheduler.schedule(executor, 500, task)
         taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_NO_CHECK, task)
         taskScheduler.schedule(executor, 500, task)
@@ -90,15 +97,30 @@ class TaskSchedulerTest {
         scheduleAt_policy_ignore(false, handlerThreadExecutor)
     }
 
-    private fun scheduleAt_policy_ignore(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun scheduleAt_policy_ignore(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
-        taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_IGNORE,
-            SameTaskWrapper({ latch.countDown() }, 101))
-        taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_IGNORE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
-        taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_IGNORE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
+        taskScheduler.schedule(
+            executor,
+            500,
+            TaskScheduler.SCHEDULE_POLICY_IGNORE,
+            SameTaskWrapper({ latch.countDown() }, 101)
+        )
+        taskScheduler.schedule(
+            executor,
+            500,
+            TaskScheduler.SCHEDULE_POLICY_IGNORE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
+        taskScheduler.schedule(
+            executor,
+            500,
+            TaskScheduler.SCHEDULE_POLICY_IGNORE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
     }
@@ -111,15 +133,30 @@ class TaskSchedulerTest {
         scheduleAt_policy_replace(false, handlerThreadExecutor)
     }
 
-    private fun scheduleAt_policy_replace(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun scheduleAt_policy_replace(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
-        taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_REPLACE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
-        taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_REPLACE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
-        taskScheduler.schedule(executor, 500, TaskScheduler.SCHEDULE_POLICY_REPLACE,
-            SameTaskWrapper({ latch.countDown() }, 101))
+        taskScheduler.schedule(
+            executor,
+            500,
+            TaskScheduler.SCHEDULE_POLICY_REPLACE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
+        taskScheduler.schedule(
+            executor,
+            500,
+            TaskScheduler.SCHEDULE_POLICY_REPLACE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
+        taskScheduler.schedule(
+            executor,
+            500,
+            TaskScheduler.SCHEDULE_POLICY_REPLACE,
+            SameTaskWrapper({ latch.countDown() }, 101)
+        )
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
     }
@@ -132,14 +169,18 @@ class TaskSchedulerTest {
         schedulePeriod_basic(false, handlerThreadExecutor)
     }
 
-    private fun schedulePeriod_basic(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun schedulePeriod_basic(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         val startTime = SystemClock.elapsedRealtime()
-        val task = Runnable {
-            assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
+                latch.countDown()
+            }
         // at +500ms, +1100ms, + 1700ms
         taskScheduler.schedulePeriod(executor, 500, 600, task)
         latch.await(2, TimeUnit.SECONDS)
@@ -156,14 +197,18 @@ class TaskSchedulerTest {
         schedulePeriod_noCheck(false, handlerThreadExecutor)
     }
 
-    private fun schedulePeriod_noCheck(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun schedulePeriod_noCheck(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         val startTime = SystemClock.elapsedRealtime()
-        val task = Runnable {
-            assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
+                latch.countDown()
+            }
         taskScheduler.schedulePeriod(executor, 500, 1000, task)
         taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_NO_CHECK, task)
         taskScheduler.schedulePeriod(executor, 500, 1000, task)
@@ -180,19 +225,33 @@ class TaskSchedulerTest {
         schedulePeriod_policy_ignore(false, handlerThreadExecutor)
     }
 
-    private fun schedulePeriod_policy_ignore(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun schedulePeriod_policy_ignore(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         val startTime = SystemClock.elapsedRealtime()
-        val task = SameTaskWrapper({
-            assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
-            latch.countDown()
-        }, 101)
+        val task =
+            SameTaskWrapper({
+                assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
+                latch.countDown()
+            }, 101)
         taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_IGNORE, task)
-        taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_IGNORE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
-        taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_IGNORE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
+        taskScheduler.schedulePeriod(
+            executor,
+            500,
+            1000,
+            TaskScheduler.SCHEDULE_POLICY_IGNORE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
+        taskScheduler.schedulePeriod(
+            executor,
+            500,
+            1000,
+            TaskScheduler.SCHEDULE_POLICY_IGNORE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
         taskScheduler.cancel(task)
@@ -206,18 +265,32 @@ class TaskSchedulerTest {
         schedulePeriod_policy_replace(false, handlerThreadExecutor)
     }
 
-    private fun schedulePeriod_policy_replace(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun schedulePeriod_policy_replace(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(3)
         val startTime = SystemClock.elapsedRealtime()
-        val task = SameTaskWrapper({
-            assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
-            latch.countDown()
-        }, 101)
-        taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_REPLACE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
-        taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_REPLACE,
-            SameTaskWrapper({ fail("Should be ignored") }, 101))
+        val task =
+            SameTaskWrapper({
+                assertThat(SystemClock.elapsedRealtime() - startTime).isAtLeast(500)
+                latch.countDown()
+            }, 101)
+        taskScheduler.schedulePeriod(
+            executor,
+            500,
+            1000,
+            TaskScheduler.SCHEDULE_POLICY_REPLACE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
+        taskScheduler.schedulePeriod(
+            executor,
+            500,
+            1000,
+            TaskScheduler.SCHEDULE_POLICY_REPLACE,
+            SameTaskWrapper({ fail("Should be ignored") }, 101)
+        )
         taskScheduler.schedulePeriod(executor, 500, 1000, TaskScheduler.SCHEDULE_POLICY_REPLACE, task)
         latch.await(1, TimeUnit.SECONDS) // will timeout
         assertThat(latch.count).isEqualTo(2)
@@ -232,14 +305,18 @@ class TaskSchedulerTest {
         setCheckInterval_once(false, handlerThreadExecutor)
     }
 
-    private fun setCheckInterval_once(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun setCheckInterval_once(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         taskScheduler.setCheckInterval(1000) // 1 second
 
         val latch = CountDownLatch(1)
-        val task = Runnable {
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                latch.countDown()
+            }
         taskScheduler.schedule(executor, 2500, task)
         latch.await(3, TimeUnit.SECONDS)
 
@@ -256,14 +333,18 @@ class TaskSchedulerTest {
         setCheckInterval_period(false, handlerThreadExecutor)
     }
 
-    private fun setCheckInterval_period(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun setCheckInterval_period(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         taskScheduler.setCheckInterval(1000) // 1 second
 
         val latch = CountDownLatch(2)
-        val task = Runnable {
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                latch.countDown()
+            }
         // at 500, 2700
         taskScheduler.schedulePeriod(executor, 500, 2200, task)
         latch.await(3, TimeUnit.SECONDS)
@@ -279,9 +360,10 @@ class TaskSchedulerTest {
         val taskScheduler = createScheduler(true)
         val executor = HandlerTaskExecutor.withMainLooper()
         val latch = CountDownLatch(1)
-        val task = Runnable {
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                latch.countDown()
+            }
         taskScheduler.schedule(executor, TaskScheduler.DEFAULT_CHECK_INTERVAL + 2000, task)
 
         latch.await(TaskScheduler.DEFAULT_CHECK_INTERVAL - 1000, TimeUnit.MILLISECONDS)
@@ -301,12 +383,16 @@ class TaskSchedulerTest {
         trigger(false, handlerThreadExecutor)
     }
 
-    private fun trigger(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun trigger(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(1)
-        val task = Runnable {
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                latch.countDown()
+            }
         taskScheduler.schedule(executor, 2000, task)
 
         SystemClock.sleep(500)
@@ -328,12 +414,16 @@ class TaskSchedulerTest {
         cancel_once(false, handlerThreadExecutor)
     }
 
-    private fun cancel_once(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun cancel_once(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(1)
-        val task = Runnable {
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                latch.countDown()
+            }
         taskScheduler.schedule(executor, 1500, task)
         SystemClock.sleep(1000)
         taskScheduler.cancel(task)
@@ -349,12 +439,16 @@ class TaskSchedulerTest {
         cancel_period(false, handlerThreadExecutor)
     }
 
-    private fun cancel_period(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun cancel_period(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(2)
-        val task = Runnable {
-            latch.countDown()
-        }
+        val task =
+            Runnable {
+                latch.countDown()
+            }
         taskScheduler.schedulePeriod(executor, 500, 1000, task)
         SystemClock.sleep(1000)
         taskScheduler.cancel(task)
@@ -370,7 +464,10 @@ class TaskSchedulerTest {
         clear(false, handlerThreadExecutor)
     }
 
-    private fun clear(mainThread: Boolean, executor: ITaskExecutor) {
+    private fun clear(
+        mainThread: Boolean,
+        executor: ITaskExecutor
+    ) {
         val taskScheduler = createScheduler(mainThread)
         val latch = CountDownLatch(2)
         taskScheduler.schedule(executor, 1500) { latch.countDown() }
@@ -382,7 +479,10 @@ class TaskSchedulerTest {
     }
 }
 
-class SameTaskWrapper(private val target: Runnable, private val id: Int) : Runnable {
+class SameTaskWrapper(
+    private val target: Runnable,
+    private val id: Int
+) : Runnable {
     override fun run() {
         target.run()
     }

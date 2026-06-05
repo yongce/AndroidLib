@@ -2,9 +2,9 @@ package me.ycdev.android.lib.common.packets
 
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
-import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import timber.log.Timber
 
 abstract class PacketsWorker(
     private val ownerTag: String,

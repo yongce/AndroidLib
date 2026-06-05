@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SystemPropertiesIATest {
-
     @Test
     fun test_get() {
         val defValue = "test.defValue"

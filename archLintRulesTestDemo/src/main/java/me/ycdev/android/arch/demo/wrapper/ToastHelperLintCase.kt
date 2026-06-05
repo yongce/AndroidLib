@@ -21,19 +21,35 @@ object ToastHelperLintCase {
         Foo().makeText()
     }
 
-    fun showGood(cxt: Context, msgResId: Int, duration: Int) {
+    fun showGood(
+        cxt: Context,
+        msgResId: Int,
+        duration: Int
+    ) {
         ToastHelper.show(cxt, msgResId, duration) // lint good
     }
 
-    fun showGood(cxt: Context, msg: CharSequence, duration: Int) {
+    fun showGood(
+        cxt: Context,
+        msg: CharSequence,
+        duration: Int
+    ) {
         ToastHelper.show(cxt, msg, duration) // lint good
     }
 
-    fun showViolation(cxt: Context, msgResId: Int, duration: Int) {
+    fun showViolation(
+        cxt: Context,
+        msgResId: Int,
+        duration: Int
+    ) {
         Toast.makeText(cxt, msgResId, duration).show() // lint violation
     }
 
-    fun showViolation(cxt: Context, msg: CharSequence, duration: Int) {
+    fun showViolation(
+        cxt: Context,
+        msg: CharSequence,
+        duration: Int
+    ) {
         Toast.makeText(cxt, msg, duration).show() // lint violation
     }
 }

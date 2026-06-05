@@ -3,21 +3,21 @@ apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
 android {
-    namespace 'me.ycdev.android.lib.commonjni.demo'
+    namespace = 'me.ycdev.android.lib.commonjni.demo'
     defaultConfig {
         minSdk = versions.minSdk
         targetSdk = 34
 
-        applicationId "me.ycdev.android.lib.commonjni.demo"
-        versionCode 1
-        versionName "1.0"
+        applicationId = "me.ycdev.android.lib.commonjni.demo"
+        versionCode = 1
+        versionName = "1.0"
     }
 
-    ndkVersion versions.ndkVersion
+    ndkVersion = versions.ndkVersion
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

@@ -13,25 +13,29 @@ import me.ycdev.android.lib.common.wrapper.BroadcastHelper
  * A tracker to track the interactive state of the device.
  */
 @Suppress("unused")
-class InteractiveStateTracker private constructor(cxt: Context) :
-    WeakTracker<InteractiveStateTracker.InteractiveStateListener>() {
-
+class InteractiveStateTracker private constructor(
+    cxt: Context
+) : WeakTracker<InteractiveStateTracker.InteractiveStateListener>() {
     private val appContext: Context = cxt.applicationContext
     private var interactive: Boolean = false
     private var needRefreshInteractiveState: Boolean = false
 
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            LibLogger.i(TAG, "Received: $action")
-            if (Intent.ACTION_USER_PRESENT == action) {
-                notifyUserPresent()
-            } else {
-                interactive = Intent.ACTION_SCREEN_ON == action
-                notifyInteractiveChanged(interactive)
+    private val receiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            ) {
+                val action = intent.action
+                LibLogger.i(TAG, "Received: $action")
+                if (Intent.ACTION_USER_PRESENT == action) {
+                    notifyUserPresent()
+                } else {
+                    interactive = Intent.ACTION_SCREEN_ON == action
+                    notifyInteractiveChanged(interactive)
+                }
             }
         }
-    }
 
     val isInteractive: Boolean
         get() {

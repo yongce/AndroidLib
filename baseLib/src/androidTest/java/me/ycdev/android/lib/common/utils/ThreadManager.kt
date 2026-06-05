@@ -4,7 +4,6 @@ import android.os.HandlerThread
 import android.os.Looper
 
 class ThreadManager {
-
     private var mLocalServiceRequestIpcThread: HandlerThread? = null
     private var mRemoteServiceRequestIpcThread: HandlerThread? = null
 

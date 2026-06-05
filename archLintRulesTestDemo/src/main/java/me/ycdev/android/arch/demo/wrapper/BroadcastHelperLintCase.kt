@@ -25,19 +25,33 @@ object BroadcastHelperLintCase {
         Foo().sendBroadcast()
     }
 
-    fun registerGood(cxt: Context, receiver: BroadcastReceiver, filter: IntentFilter): Intent? {
+    fun registerGood(
+        cxt: Context,
+        receiver: BroadcastReceiver,
+        filter: IntentFilter
+    ): Intent? {
         return BroadcastHelper.registerForInternal(cxt, receiver, filter) // lint good
     }
 
-    fun sendToInternalGood(cxt: Context, intent: Intent) {
+    fun sendToInternalGood(
+        cxt: Context,
+        intent: Intent
+    ) {
         BroadcastHelper.sendToInternal(cxt, intent) // lint good
     }
 
-    fun sendToExternalGood(cxt: Context, intent: Intent, perm: String) {
+    fun sendToExternalGood(
+        cxt: Context,
+        intent: Intent,
+        perm: String
+    ) {
         BroadcastHelper.sendToExternal(cxt, intent, perm) // lint good
     }
 
-    fun sendToExternal(cxt: Context, intent: Intent) {
+    fun sendToExternal(
+        cxt: Context,
+        intent: Intent
+    ) {
         BroadcastHelper.sendToExternal(cxt, intent) // lint good
     }
 
@@ -57,11 +71,18 @@ object BroadcastHelperLintCase {
         return cxt.registerReceiver(receiver, filter, null, null) // lint violation
     }
 
-    fun sendViolation(cxt: Context, intent: Intent, perm: String) {
+    fun sendViolation(
+        cxt: Context,
+        intent: Intent,
+        perm: String
+    ) {
         cxt.sendBroadcast(intent, perm) // lint violation
     }
 
-    fun sendViolation2(cxt: Context, intent: Intent) {
+    fun sendViolation2(
+        cxt: Context,
+        intent: Intent
+    ) {
         cxt.sendBroadcast(intent) // lint violation
     }
 }

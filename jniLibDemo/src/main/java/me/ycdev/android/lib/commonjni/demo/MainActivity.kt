@@ -9,8 +9,9 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
-
+class MainActivity :
+    AppCompatActivity(),
+    View.OnClickListener {
     private lateinit var resourceLimitBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {

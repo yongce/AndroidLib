@@ -37,17 +37,19 @@ class EncodingUtilsTest {
 
     @Test
     fun test_illegalLength() {
-        val e = Assert.assertThrows(IllegalArgumentException::class.java) {
-            EncodingUtils.fromHexString("10101")
-        }
+        val e =
+            Assert.assertThrows(IllegalArgumentException::class.java) {
+                EncodingUtils.fromHexString("10101")
+            }
         assertThat(e).hasMessageThat().startsWith("Bad length: 10101")
     }
 
     @Test
     fun test_illegalCharacter() {
-        val e = Assert.assertThrows(IllegalArgumentException::class.java) {
-            EncodingUtils.fromHexString("10101X")
-        }
+        val e =
+            Assert.assertThrows(IllegalArgumentException::class.java) {
+                EncodingUtils.fromHexString("10101X")
+            }
         assertThat(e).hasMessageThat().startsWith("Not hex string: 10101X")
     }
 }

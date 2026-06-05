@@ -16,20 +16,28 @@ class MyToastHelperDetector : WrapperDetectorBase() {
 
     override val targetClassNames = arrayOf("android.widget.Toast")
 
-    override fun reportViolation(context: JavaContext, element: UElement) {
+    override fun reportViolation(
+        context: JavaContext,
+        element: UElement
+    ) {
         context.report(
-            ISSUE, element, context.getLocation(element),
+            ISSUE,
+            element,
+            context.getLocation(element),
             "Please use the wrapper class 'ToastHelper'."
         )
     }
 
     companion object {
-        internal val ISSUE = Issue.create(
-            "MyToastHelper",
-            "ToastHelper should be used.",
-            "Please use the wrapper class 'ToastHelper' to show toast." + " So that we can customize and unify the UI in future.",
-            Category.CORRECTNESS, 5, Severity.ERROR,
-            Implementation(MyToastHelperDetector::class.java, Scope.JAVA_FILE_SCOPE)
-        )
+        internal val ISSUE =
+            Issue.create(
+                "MyToastHelper",
+                "ToastHelper should be used.",
+                "Please use the wrapper class 'ToastHelper' to show toast." + " So that we can customize and unify the UI in future.",
+                Category.CORRECTNESS,
+                5,
+                Severity.ERROR,
+                Implementation(MyToastHelperDetector::class.java, Scope.JAVA_FILE_SCOPE)
+            )
     }
 }

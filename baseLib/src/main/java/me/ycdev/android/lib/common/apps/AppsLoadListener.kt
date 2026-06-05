@@ -13,5 +13,8 @@ interface AppsLoadListener {
      * @param percent Value range [1, 2, ..., 100]
      * @param appInfo May be null
      */
-    fun onProgressUpdated(percent: Int, appInfo: AppInfo)
+    fun onProgressUpdated(
+        percent: Int,
+        appInfo: AppInfo
+    )
 }

@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.annotation.IntDef
 
 object ArchConstants {
-
     /*
      * Durations for toast
      */

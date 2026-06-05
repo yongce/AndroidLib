@@ -12,10 +12,11 @@ class ObjectManagerTest {
 
     @Test
     fun basic() {
-        val managersList = arrayListOf<ObjectManager<DemoObject>>(
-            ObjectManager(true),
-            ObjectManager(false)
-        )
+        val managersList =
+            arrayListOf<ObjectManager<DemoObject>>(
+                ObjectManager(true),
+                ObjectManager(false)
+            )
         for (manager in managersList) {
             val obj1 = DemoObject(manager)
             val obj2 = DemoObject(manager)
@@ -39,10 +40,11 @@ class ObjectManagerTest {
 
     @Test
     fun objectLeak() {
-        val managersList = arrayListOf<ObjectManager<DemoObject>>(
-            ObjectManager(true),
-            ObjectManager(false)
-        )
+        val managersList =
+            arrayListOf<ObjectManager<DemoObject>>(
+                ObjectManager(true),
+                ObjectManager(false)
+            )
         for (manager in managersList) {
             val obj1 = DemoObject(manager)
 
@@ -73,10 +75,11 @@ class ObjectManagerTest {
 
     @Test
     fun objectRemovedWhenNotify() {
-        val managersList = arrayListOf<ObjectManager<DemoObject>>(
-            ObjectManager(true),
-            ObjectManager(false)
-        )
+        val managersList =
+            arrayListOf<ObjectManager<DemoObject>>(
+                ObjectManager(true),
+                ObjectManager(false)
+            )
         for (manager in managersList) {
             val obj1 = DemoObject(manager, true)
             val obj2 = DemoObject(manager)

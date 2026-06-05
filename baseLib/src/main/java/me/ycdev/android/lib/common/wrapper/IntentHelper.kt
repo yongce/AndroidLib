@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import me.ycdev.android.lib.common.utils.LibLogger
 import java.io.Serializable
+import me.ycdev.android.lib.common.utils.LibLogger
 
 /**
  * A wrapper class to avoid security issues when parsing Intent extras.
@@ -16,13 +16,19 @@ import java.io.Serializable
 object IntentHelper {
     private const val TAG = "IntentUtils"
 
-    private fun onIntentAttacked(intent: Intent, e: Throwable) {
+    private fun onIntentAttacked(
+        intent: Intent,
+        e: Throwable
+    ) {
         // prevent OOM for Android 5.0~?
         intent.replaceExtras(null)
         LibLogger.w(TAG, "attacked?", e)
     }
 
-    fun hasExtra(intent: Intent?, key: String): Boolean {
+    fun hasExtra(
+        intent: Intent?,
+        key: String
+    ): Boolean {
         if (intent == null) {
             return false
         }
@@ -36,7 +42,11 @@ object IntentHelper {
         return false
     }
 
-    fun getBooleanExtra(intent: Intent?, key: String, defValue: Boolean): Boolean {
+    fun getBooleanExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Boolean
+    ): Boolean {
         if (intent == null) {
             return defValue
         }
@@ -50,7 +60,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getByteExtra(intent: Intent?, key: String, defValue: Byte): Byte {
+    fun getByteExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Byte
+    ): Byte {
         if (intent == null) {
             return defValue
         }
@@ -64,7 +78,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getShortExtra(intent: Intent?, key: String, defValue: Short): Short {
+    fun getShortExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Short
+    ): Short {
         if (intent == null) {
             return defValue
         }
@@ -78,7 +96,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getIntExtra(intent: Intent?, key: String, defValue: Int): Int {
+    fun getIntExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Int
+    ): Int {
         if (intent == null) {
             return defValue
         }
@@ -92,7 +114,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getLongExtra(intent: Intent?, key: String, defValue: Long): Long {
+    fun getLongExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Long
+    ): Long {
         if (intent == null) {
             return defValue
         }
@@ -106,7 +132,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getFloatExtra(intent: Intent?, key: String, defValue: Float): Float {
+    fun getFloatExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Float
+    ): Float {
         if (intent == null) {
             return defValue
         }
@@ -120,7 +150,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getDoubleExtra(intent: Intent?, key: String, defValue: Double): Double {
+    fun getDoubleExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Double
+    ): Double {
         if (intent == null) {
             return defValue
         }
@@ -134,7 +168,11 @@ object IntentHelper {
         return defValue
     }
 
-    fun getCharExtra(intent: Intent?, key: String, defValue: Char): Char {
+    fun getCharExtra(
+        intent: Intent?,
+        key: String,
+        defValue: Char
+    ): Char {
         if (intent == null) {
             return defValue
         }
@@ -148,7 +186,10 @@ object IntentHelper {
         return defValue
     }
 
-    fun getStringExtra(intent: Intent?, key: String): String? {
+    fun getStringExtra(
+        intent: Intent?,
+        key: String
+    ): String? {
         if (intent == null) {
             return null
         }
@@ -162,7 +203,10 @@ object IntentHelper {
         return null
     }
 
-    fun getCharSequenceExtra(intent: Intent?, key: String): CharSequence? {
+    fun getCharSequenceExtra(
+        intent: Intent?,
+        key: String
+    ): CharSequence? {
         if (intent == null) {
             return null
         }
@@ -176,7 +220,11 @@ object IntentHelper {
         return null
     }
 
-    fun <T : Serializable> getSerializableExtra(intent: Intent?, key: String?, clazz: Class<T>): Serializable? {
+    fun <T : Serializable> getSerializableExtra(
+        intent: Intent?,
+        key: String?,
+        clazz: Class<T>
+    ): Serializable? {
         if (intent == null) {
             return null
         }
@@ -195,7 +243,11 @@ object IntentHelper {
         return null
     }
 
-    fun <T : Parcelable> getParcelableExtra(intent: Intent?, key: String?, clazz: Class<T>): T? {
+    fun <T : Parcelable> getParcelableExtra(
+        intent: Intent?,
+        key: String?,
+        clazz: Class<T>
+    ): T? {
         if (intent == null) {
             return null
         }
@@ -214,7 +266,10 @@ object IntentHelper {
         return null
     }
 
-    fun getBooleanArrayExtra(intent: Intent?, key: String): BooleanArray? {
+    fun getBooleanArrayExtra(
+        intent: Intent?,
+        key: String
+    ): BooleanArray? {
         if (intent == null) {
             return null
         }
@@ -228,7 +283,10 @@ object IntentHelper {
         return null
     }
 
-    fun getIntArrayExtra(intent: Intent?, key: String): IntArray? {
+    fun getIntArrayExtra(
+        intent: Intent?,
+        key: String
+    ): IntArray? {
         if (intent == null) {
             return null
         }
@@ -242,7 +300,10 @@ object IntentHelper {
         return null
     }
 
-    fun getLongArrayExtra(intent: Intent?, key: String): LongArray? {
+    fun getLongArrayExtra(
+        intent: Intent?,
+        key: String
+    ): LongArray? {
         if (intent == null) {
             return null
         }
@@ -256,7 +317,10 @@ object IntentHelper {
         return null
     }
 
-    fun getStringArrayExtra(intent: Intent?, key: String): Array<String>? {
+    fun getStringArrayExtra(
+        intent: Intent?,
+        key: String
+    ): Array<String>? {
         if (intent == null) {
             return null
         }
@@ -270,7 +334,11 @@ object IntentHelper {
         return null
     }
 
-    fun <T : Parcelable> getParcelableArrayExtra(intent: Intent?, key: String?, clazz: Class<T>): Array<out Parcelable>? {
+    fun <T : Parcelable> getParcelableArrayExtra(
+        intent: Intent?,
+        key: String?,
+        clazz: Class<T>
+    ): Array<out Parcelable>? {
         if (intent == null) {
             return null
         }
@@ -289,7 +357,10 @@ object IntentHelper {
         return null
     }
 
-    fun getStringArrayListExtra(intent: Intent?, key: String): ArrayList<String>? {
+    fun getStringArrayListExtra(
+        intent: Intent?,
+        key: String
+    ): ArrayList<String>? {
         if (intent == null) {
             return null
         }
@@ -303,7 +374,11 @@ object IntentHelper {
         return null
     }
 
-    fun <T : Parcelable> getParcelableArrayListExtra(intent: Intent?, key: String, clazz: Class<T>): ArrayList<T>? {
+    fun <T : Parcelable> getParcelableArrayListExtra(
+        intent: Intent?,
+        key: String,
+        clazz: Class<T>
+    ): ArrayList<T>? {
         if (intent == null) {
             return null
         }
@@ -322,7 +397,10 @@ object IntentHelper {
         return null
     }
 
-    fun getBundleExtra(intent: Intent?, key: String): Bundle? {
+    fun getBundleExtra(
+        intent: Intent?,
+        key: String
+    ): Bundle? {
         if (intent == null) {
             return null
         }
