@@ -99,7 +99,7 @@ object ProcessIA {
     fun getProcessName(pid: Int): String? {
         val cmdlineFile = "/proc/$pid/cmdline"
         try {
-            return IoUtils.readAllLines(cmdlineFile).trim { it <= ' ' }
+            return IoUtils.readAllLines(cmdlineFile).trim()
         } catch (e: IOException) {
             Timber.tag(TAG).w(e, "cannot read cmdline file")
         }
@@ -112,6 +112,7 @@ object ProcessIA {
      * @param procName The process name
      * @return -1 if the specified process not found
      */
+    @SuppressLint("UseKtx")
     fun getProcessPid(procName: String): Int {
         val procList = File("/proc").listFiles()
         if (procList != null && procList.isNotEmpty()) {

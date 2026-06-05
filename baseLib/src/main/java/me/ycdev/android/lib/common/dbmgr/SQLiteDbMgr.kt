@@ -26,7 +26,7 @@ class SQLiteDbMgr private constructor(
             if (info == null) {
                 try {
                     Timber.tag(TAG).d("create DB: %s", dbInfoClass.name)
-                    val helper = dbInfoClass.newInstance()
+                    val helper = dbInfoClass.getDeclaredConstructor().newInstance()
                     info = DbInfo()
                     info.db = helper.createDb(mAppContext)
                     info.referenceCount = 0

@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.apps
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -19,6 +20,7 @@ class AppsLoader private constructor(
     private val pm: PackageManager = cxt.packageManager
     private val myselfPkgName: String = cxt.packageName
 
+    @SuppressLint("QueryPermissionsNeeded")
     fun loadInstalledApps(
         filter: AppsLoadFilter,
         config: AppsLoadConfig,

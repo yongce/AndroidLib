@@ -9,6 +9,7 @@ object ThreadUtils {
     fun isThreadRunning(tid: Long): Boolean {
         val threadSet = Thread.getAllStackTraces().keys
         for (t in threadSet) {
+            @Suppress("DEPRECATION")
             if (t.id == tid) {
                 return true
             }

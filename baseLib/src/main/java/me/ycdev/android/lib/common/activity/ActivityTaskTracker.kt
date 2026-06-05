@@ -20,7 +20,7 @@ object ActivityTaskTracker {
     private lateinit var app: Application
     internal val lifecycleCallback = MyLifecycleCallback()
 
-    private val tasksLock = Object()
+    private val tasksLock = Any()
 
     @GuardedBy("tasksLock")
     private val allTasks: HashMap<Int, ActivityTask> = hashMapOf()

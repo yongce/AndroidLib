@@ -2,6 +2,7 @@
 
 package me.ycdev.android.lib.common.utils
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.ActivityManager.RunningServiceInfo
@@ -71,6 +72,7 @@ object SystemServiceHelper {
         return runProcessList
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     fun getInstalledPackages(
         pm: PackageManager,
         flags: Int

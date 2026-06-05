@@ -70,7 +70,7 @@ object ApplicationUtils {
         }
 
         if (processName != null) {
-            processName = processName.trim { it <= ' ' }
+            processName = processName.trim()
         }
         return processName
     }

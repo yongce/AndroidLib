@@ -115,6 +115,7 @@ object NetworkUtils {
      */
     @NetworkType
     @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
+    @Suppress("DEPRECATION")
     fun getMobileNetworkType(cxt: Context): Int {
         // #1 Code from android-5.1.1_r4:
         //    frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/policy/NetworkControllerImpl.java

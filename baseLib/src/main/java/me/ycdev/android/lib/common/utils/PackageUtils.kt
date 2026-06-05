@@ -2,6 +2,7 @@
 
 package me.ycdev.android.lib.common.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -51,6 +52,7 @@ object PackageUtils {
     /**
      * @return An empty list if no launcher apps.
      */
+    @SuppressLint("QueryPermissionsNeeded")
     fun getLauncherApps(cxt: Context): List<String> {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_HOME)

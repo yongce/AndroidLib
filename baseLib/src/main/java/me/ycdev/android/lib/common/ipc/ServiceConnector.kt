@@ -1,5 +1,6 @@
 package me.ycdev.android.lib.common.ipc
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -60,6 +61,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         return true // Skip to validate permission by default
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     fun isServiceExist(): Boolean {
         val intent = getServiceIntent()
         val servicesList = appContext.packageManager.queryIntentServices(intent, 0)
@@ -126,6 +128,7 @@ abstract class ServiceConnector<IServiceInterface> protected constructor(
         updateConnectState(STATE_DISCONNECTED)
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun connectServiceIfNeeded(rebind: Boolean) {
         if (service != null) {
             Timber.tag(TAG).d("[%s] service is connected", serviceName)
