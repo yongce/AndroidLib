@@ -110,7 +110,9 @@ object ActivityManagerIA {
             try {
                 when (version_forceStopPackage) {
                     API_VERSION_1 -> mtd_forceStopPackage!!.invoke(service, pkgName)
+
                     API_VERSION_2 -> mtd_forceStopPackage!!.invoke(service, pkgName, UserHandleIA.myUserId())
+
                     else -> Timber.tag(TAG).e(
                         "reboot, unknown api version: $version_forceStopPackage"
                     )

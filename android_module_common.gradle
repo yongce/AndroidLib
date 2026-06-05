@@ -187,6 +187,8 @@ android {
 
     testOptions {
         unitTests.all {
+            systemProperty "robolectric.enabledSdks", "34"
+
             // All the usual Gradle options.
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"

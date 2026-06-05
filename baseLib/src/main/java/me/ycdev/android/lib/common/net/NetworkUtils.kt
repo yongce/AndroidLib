@@ -138,7 +138,9 @@ object NetworkUtils {
 
         return when (tmType) {
             TelephonyManager.NETWORK_TYPE_UNKNOWN -> NETWORK_TYPE_NONE
+
             TelephonyManager.NETWORK_TYPE_LTE -> NETWORK_TYPE_4G
+
             TelephonyManager.NETWORK_TYPE_NR -> NETWORK_TYPE_5G
 
             TelephonyManager.NETWORK_TYPE_EVDO_0,
@@ -153,7 +155,9 @@ object NetworkUtils {
             TelephonyManager.NETWORK_TYPE_HSUPA,
             TelephonyManager.NETWORK_TYPE_HSPA,
             TelephonyManager.NETWORK_TYPE_HSPAP
-            -> NETWORK_TYPE_3G // H
+            -> NETWORK_TYPE_3G
+
+            // H
 
             TelephonyManager.NETWORK_TYPE_GPRS,
             TelephonyManager.NETWORK_TYPE_EDGE,

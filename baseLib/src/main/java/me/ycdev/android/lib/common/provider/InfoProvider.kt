@@ -101,9 +101,11 @@ abstract class InfoProvider : ContentProvider() {
                 result.putString(KEY_VALUE, get(table!!, name!!)) // old value
                 result.putBoolean(KEY_STATUS, remove(table, name))
             }
+
             METHOD_GET -> {
                 result.putString(KEY_VALUE, get(table!!, name!!))
             }
+
             METHOD_PUT -> {
                 if (TextUtils.isEmpty(value)) {
                     LibLogger.w(TAG, "no value for the request")
@@ -112,6 +114,7 @@ abstract class InfoProvider : ContentProvider() {
                 result.putString(KEY_VALUE, get(table!!, name!!)) // old value
                 result.putBoolean(KEY_STATUS, put(table, name, value!!))
             }
+
             else -> {
                 LibLogger.e(TAG, "unknown method [%s]", method)
                 return null

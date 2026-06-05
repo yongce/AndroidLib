@@ -91,14 +91,12 @@ object PackageUtils {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_RECEIVERS or PackageManager.MATCH_DISABLED_COMPONENTS
             val pkgInfo = pm.getPackageInfo(pkgName, flags)
-            if (pkgInfo.receivers == null) {
-                return emptyArray()
-            }
+            val receivers = pkgInfo.receivers ?: return emptyArray()
 
             if (onlyExported) {
-                val tmpArray = arrayOfNulls<ActivityInfo>(pkgInfo.receivers.size)
+                val tmpArray = arrayOfNulls<ActivityInfo>(receivers.size)
                 var size = 0
-                for (item in pkgInfo.receivers) {
+                for (item in receivers) {
                     if (!item.exported) continue
                     tmpArray[size] = item
                     size++
@@ -106,7 +104,7 @@ object PackageUtils {
                 @Suppress("UNCHECKED_CAST")
                 return if (size == 0) emptyArray() else tmpArray.copyOf(size) as Array<ActivityInfo>
             } else {
-                return pkgInfo.receivers
+                return receivers
             }
         } catch (e: PackageManager.NameNotFoundException) {
             LibLogger.w(TAG, "app not found", e)
@@ -124,14 +122,12 @@ object PackageUtils {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_SERVICES or PackageManager.MATCH_DISABLED_COMPONENTS
             val pkgInfo = pm.getPackageInfo(pkgName, flags)
-            if (pkgInfo.services == null) {
-                return emptyArray()
-            }
+            val services = pkgInfo.services ?: return emptyArray()
 
             if (onlyExported) {
-                val tmpArray = arrayOfNulls<ServiceInfo>(pkgInfo.services.size)
+                val tmpArray = arrayOfNulls<ServiceInfo>(services.size)
                 var size = 0
-                for (item in pkgInfo.services) {
+                for (item in services) {
                     if (!item.exported) continue
                     tmpArray[size] = item
                     size++
@@ -139,7 +135,7 @@ object PackageUtils {
                 @Suppress("UNCHECKED_CAST")
                 return if (size == 0) emptyArray() else tmpArray.copyOf(size) as Array<ServiceInfo>
             } else {
-                return pkgInfo.services
+                return services
             }
         } catch (e: PackageManager.NameNotFoundException) {
             LibLogger.w(TAG, "app not found", e)
@@ -157,14 +153,12 @@ object PackageUtils {
             val pm = cxt.packageManager
             val flags = PackageManager.GET_ACTIVITIES or PackageManager.MATCH_DISABLED_COMPONENTS
             val pkgInfo = pm.getPackageInfo(pkgName, flags)
-            if (pkgInfo.activities == null) {
-                return emptyArray()
-            }
+            val activities = pkgInfo.activities ?: return emptyArray()
 
             if (onlyExported) {
-                val tmpArray = arrayOfNulls<ActivityInfo>(pkgInfo.activities.size)
+                val tmpArray = arrayOfNulls<ActivityInfo>(activities.size)
                 var size = 0
-                for (item in pkgInfo.activities) {
+                for (item in activities) {
                     if (!item.exported) continue
                     tmpArray[size] = item
                     size++
@@ -172,7 +166,7 @@ object PackageUtils {
                 @Suppress("UNCHECKED_CAST")
                 return if (size == 0) emptyArray() else tmpArray.copyOf(size) as Array<ActivityInfo>
             } else {
-                return pkgInfo.activities
+                return activities
             }
         } catch (e: PackageManager.NameNotFoundException) {
             LibLogger.w(TAG, "app not found", e)

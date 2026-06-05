@@ -6,18 +6,18 @@ buildscript {
     apply from: "${androidProjectCommon}"
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:9.2.0'
+        classpath 'com.android.tools.build:gradle:9.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
     }
 }
 
 plugins {
-    id("com.diffplug.spotless") version "8.5.1"
+    id("com.diffplug.spotless") version "8.6.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
 
 ext {
-    versions.ndkVersion = "21.3.6528147"
+    versions.ndkVersion = "29.0.14206865"
 
     publishEnabled = true
     mavenMeta = [

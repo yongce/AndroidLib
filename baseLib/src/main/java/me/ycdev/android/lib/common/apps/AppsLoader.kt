@@ -79,11 +79,12 @@ class AppsLoader private constructor(
         filter: AppsLoadFilter,
         config: AppsLoadConfig
     ): AppInfo? {
+        val appInfo = pkgInfo.applicationInfo ?: return null
         val item = AppInfo(pkgInfo.packageName)
-        item.appUid = pkgInfo.applicationInfo.uid
+        item.appUid = appInfo.uid
         item.sharedUid = pkgInfo.sharedUserId
 
-        val aiFlag = pkgInfo.applicationInfo.flags
+        val aiFlag = appInfo.flags
         item.isSysApp = aiFlag and ApplicationInfo.FLAG_SYSTEM != 0
         item.isUpdatedSysApp = aiFlag and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
 
@@ -95,11 +96,11 @@ class AppsLoader private constructor(
             item.versionCode = pkgInfo.versionCode.toLong()
         }
 
-        item.apkPath = pkgInfo.applicationInfo.sourceDir
+        item.apkPath = appInfo.sourceDir
         item.isDisabled = !PackageUtils.isPkgEnabled(appContext, pkgInfo.packageName)
         // pkgInfo.applicationInfo.sourceDir may be null if the app is unmounted
         item.isUnmounted =
-            pkgInfo.applicationInfo.sourceDir == null || !File(pkgInfo.applicationInfo.sourceDir).exists()
+            appInfo.sourceDir == null || !File(appInfo.sourceDir).exists()
         item.installTime = pkgInfo.firstInstallTime
         item.updateTime = pkgInfo.lastUpdateTime
 
@@ -123,14 +124,14 @@ class AppsLoader private constructor(
         // do heavy loading
         if (config.loadLabel) {
             item.appName =
-                StringUtils.trimPrefixSpaces(pkgInfo.applicationInfo.loadLabel(pm).toString())
+                StringUtils.trimPrefixSpaces(appInfo.loadLabel(pm).toString())
         }
         if (config.loadIcon) {
-            item.appIcon = pkgInfo.applicationInfo.loadIcon(pm)
+            item.appIcon = appInfo.loadIcon(pm)
         }
 
-        item.targetSdkVersion = pkgInfo.applicationInfo.targetSdkVersion
-        item.minSdkVersion = pkgInfo.applicationInfo.minSdkVersion
+        item.targetSdkVersion = appInfo.targetSdkVersion
+        item.minSdkVersion = appInfo.minSdkVersion
 
         return item
     }

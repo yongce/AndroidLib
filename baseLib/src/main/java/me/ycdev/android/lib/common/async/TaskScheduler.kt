@@ -344,6 +344,7 @@ class TaskScheduler(
                 SCHEDULE_POLICY_IGNORE,
                 SCHEDULE_POLICY_REPLACE
                 -> return
+
                 else -> throw RuntimeException("Unknown policy: $policy")
             }
         }
