@@ -1,14 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
-project.archivesBaseName = 'android-common-ui'
+project.ext.archivesBaseName = 'android-common-ui'
 
 android {
     namespace 'me.ycdev.android.lib.commonui'
     defaultConfig {
-        minSdkVersion versions.minSdk
+        minSdk = versions.minSdk
     }
 
     resourcePrefix 'ycdev'

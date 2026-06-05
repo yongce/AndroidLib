@@ -5,6 +5,41 @@
  * All android projects can copy and include this file.
  */
 
+import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
+
+abstract class CopyApksToAppsOutTask extends DefaultTask {
+    @InputFiles
+    abstract DirectoryProperty getApkFolder()
+
+    @Internal
+    abstract Property<Object> getBuiltArtifactsLoader()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDirectory()
+
+    @TaskAction
+    void copyApks() {
+        def builtArtifacts = builtArtifactsLoader.get().load(apkFolder.get())
+        if (builtArtifacts == null) {
+            throw new GradleException("Cannot load APKs from ${apkFolder.get().asFile}")
+        }
+
+        builtArtifacts.elements.each { artifact ->
+            project.copy {
+                from artifact.outputFile
+                into outputDirectory
+            }
+        }
+    }
+}
+
 // Define some common closures (methods) for code share
 ext.getModuleProjectCommitCount = {
     String gitCommitCountCmd = "git rev-list HEAD --count"
@@ -54,7 +89,7 @@ ext {
 }
 
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdk = versions.compileSdk
 
     defaultConfig {
         manifestPlaceholders = [
@@ -91,43 +126,55 @@ android {
                 signingConfig signingConfigs.androidTestKey
 
                 minifyEnabled true
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
         }
 
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                String buildType = variant.buildType.name
-                String abi = output.getFilter("ABI")
-                if (buildType != "debug") {
+    }
+
+    if (project.plugins.hasPlugin("com.android.application")) {
+        androidComponents {
+            onVariants(selector().withBuildType("release")) { variant ->
+                variant.outputs.each { output ->
                     String fileName = "${project.name}"
                     if (variant.flavorName != null && !variant.flavorName.isEmpty()) {
                         fileName += "-${variant.flavorName}"
                     }
+
+                    String abi = output.filters.find {
+                        it.filterType.name() == "ABI"
+                    }?.identifier
                     if (abi != null && !abi.isEmpty()) {
                         fileName += "-${abi}"
                     }
-                    fileName += "-${variant.versionName}-${variant.versionCode}"
-                    output.outputFileName = "${fileName}.apk"
+
+                    fileName += "-${output.versionName.get()}-${output.versionCode.get()}"
+                    output.outputFileName.set("${fileName}.apk")
                 }
 
-                if (buildType == 'release') {
-                    variant.getAssembleProvider().configure() {
-                        it.doLast {
-                            copy {
-                                from output.outputFile.getAbsolutePath()
-                                into "${rootProject.ext.appsOutDir}"
-                            }
-                        }
+                def copyApksTask = tasks.register("copy${variant.name.capitalize()}ApksToAppsOut", CopyApksToAppsOutTask) {
+                    def apkArtifact = variant.artifacts.class.classLoader
+                            .loadClass("com.android.build.api.artifact.SingleArtifact\$APK")
+                            .INSTANCE
+                    apkFolder.set(variant.artifacts.get(apkArtifact))
+                    builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
+                    outputDirectory.set(project.layout.dir(project.provider {
+                        project.file(rootProject.ext.appsOutDir)
+                    }))
+                }
+
+                String assembleTaskName = "assemble${variant.name.capitalize()}"
+                tasks.configureEach {
+                    if (name == assembleTaskName) {
+                        finalizedBy(copyApksTask)
                     }
                 }
             }
         }
     }
 
-    lintOptions {
+    lint {
         textReport true
-        textOutput 'stdout'
 
         abortOnError true
         ignoreWarnings isIgnoreLintWarnings()
@@ -136,12 +183,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-    }
-
-    pluginManager.withPlugin('kotlin-android') {
-        kotlinOptions {
-            jvmTarget = "11"
-        }
     }
 
     testOptions {

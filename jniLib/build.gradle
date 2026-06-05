@@ -1,14 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply from: "${androidModuleCommon}"
 apply from: '../build_common.gradle'
 
-project.archivesBaseName = 'android-common-jni'
+project.ext.archivesBaseName = 'android-common-jni'
 
 android {
     namespace 'me.ycdev.android.lib.commonjni'
     defaultConfig {
-        minSdkVersion versions.minSdk
+        minSdk = versions.minSdk
 
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
@@ -26,7 +25,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
