@@ -11,5 +11,5 @@ object FileStatusHelper {
         var mode: Int = 0
     )
 
-    external fun getFileStatus(filePath: String): FileStatus
+    external fun getFileStatus(filePath: String): FileStatus?
 }

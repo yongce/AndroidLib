@@ -47,7 +47,7 @@ jobs:
         cores: 4
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
-        script: ./gradlew connectedCheck mergeAndroidReports --continue
+        script: ./gradlew connectedCheck --continue
 
     - name: Archive the test reports
       uses: actions/upload-artifact@v7

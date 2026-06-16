@@ -8,33 +8,38 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.provider.Property
-import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
-abstract class CopyApksToAppsOutTask extends DefaultTask {
-    @InputFiles
-    abstract DirectoryProperty getApkFolder()
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
-    @Internal
-    abstract Property<Object> getBuiltArtifactsLoader()
+abstract class CopyApksToAppsOutTask extends DefaultTask {
+    @InputDirectory
+    abstract DirectoryProperty getApkFolder()
 
     @OutputDirectory
     abstract DirectoryProperty getOutputDirectory()
 
     @TaskAction
     void copyApks() {
-        def builtArtifacts = builtArtifactsLoader.get().load(apkFolder.get())
-        if (builtArtifacts == null) {
-            throw new GradleException("Cannot load APKs from ${apkFolder.get().asFile}")
+        def sourceDir = apkFolder.get().asFile
+        if (!sourceDir.exists()) {
+            throw new GradleException("Cannot load APKs from ${sourceDir}")
         }
 
-        builtArtifacts.elements.each { artifact ->
-            project.copy {
-                from artifact.outputFile
-                into outputDirectory
+        def targetDir = outputDirectory.get().asFile
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+        sourceDir.eachFileRecurse { file ->
+            if (file.isFile() && file.name.endsWith(".apk")) {
+                Files.copy(
+                        file.toPath(),
+                        new File(targetDir, file.name).toPath(),
+                        StandardCopyOption.REPLACE_EXISTING
+                )
             }
         }
     }
@@ -152,15 +157,13 @@ android {
                     output.outputFileName.set("${fileName}.apk")
                 }
 
+                File appsOutDir = rootProject.file(rootProject.ext.appsOutDir)
                 def copyApksTask = tasks.register("copy${variant.name.capitalize()}ApksToAppsOut", CopyApksToAppsOutTask) {
                     def apkArtifact = variant.artifacts.class.classLoader
                             .loadClass("com.android.build.api.artifact.SingleArtifact\$APK")
                             .INSTANCE
                     apkFolder.set(variant.artifacts.get(apkArtifact))
-                    builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
-                    outputDirectory.set(project.layout.dir(project.provider {
-                        project.file(rootProject.ext.appsOutDir)
-                    }))
+                    outputDirectory.set(appsOutDir)
                 }
 
                 String assembleTaskName = "assemble${variant.name.capitalize()}"
