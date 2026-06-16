@@ -9,10 +9,13 @@ if (project.plugins.findPlugin("com.android.library")) {
         publishing {
             singleVariant("release") {
                 withSourcesJar()
-                withJavadocJar()
             }
         }
     }
+}
+
+def androidJavadocsJar = tasks.register("androidJavadocsJar", Jar) {
+    archiveClassifier = "javadoc"
 }
 
 afterEvaluate {
@@ -21,6 +24,7 @@ afterEvaluate {
             release(MavenPublication) {
                 if (project.plugins.findPlugin("com.android.library")) {
                     from components.release
+                    artifact androidJavadocsJar
                 } else {
                     from components.java
                 }
@@ -61,10 +65,20 @@ afterEvaluate {
 }
 
 signing {
-    useInMemoryPgpKeys(
-            rootProject.ext["signing.keyId"],
-            rootProject.ext["signing.key"],
-            rootProject.ext["signing.password"],
-    )
+    def hasSigningConfig = rootProject.ext["signing.keyId"] &&
+            rootProject.ext["signing.key"] &&
+            rootProject.ext["signing.password"]
+    def remotePublishRequested = gradle.startParameter.taskNames.any {
+        def taskName = it.toLowerCase(Locale.ROOT)
+        taskName.contains("publish") && !taskName.contains("publishtomavenlocal")
+    }
+    required = remotePublishRequested
+    if (hasSigningConfig) {
+        useInMemoryPgpKeys(
+                rootProject.ext["signing.keyId"],
+                rootProject.ext["signing.key"],
+                rootProject.ext["signing.password"],
+        )
+    }
     sign publishing.publications
 }
