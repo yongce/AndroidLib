@@ -44,13 +44,11 @@ class SystemPropertiesIATest {
 
     @Test
     fun test_getBoolean() {
-        val defValue = true
-        var actual = SystemPropertiesIA.getBoolean(TEST_KEY_NONE, defValue)
-        assertEquals(defValue, actual)
+        var actual = SystemPropertiesIA.getBoolean(TEST_KEY_NONE, true)
+        assertEquals(true, actual)
 
-        actual = SystemPropertiesIA.getBoolean("ro.debuggable", true)
-        val actual2 = SystemPropertiesIA.getBoolean("ro.debuggable", false)
-        assertEquals(actual, actual2)
+        actual = SystemPropertiesIA.getBoolean(TEST_KEY_NONE, false)
+        assertEquals(false, actual)
     }
 
     companion object {

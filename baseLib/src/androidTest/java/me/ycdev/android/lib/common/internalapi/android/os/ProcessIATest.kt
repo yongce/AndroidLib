@@ -1,9 +1,11 @@
 package me.ycdev.android.lib.common.internalapi.android.os
 
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.RequiresDevice
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -12,6 +14,7 @@ import org.junit.runner.RunWith
 class ProcessIATest {
     @Test
     fun test_setArgV0() {
+        assumeProcessHiddenApiReflectionAllowedForMaxTargetS()
         assertTrue("failed to reflect #setArgV0", ProcessIA.checkReflectSetArgV0())
     }
 
@@ -59,6 +62,13 @@ class ProcessIATest {
                 .myPid()
                 .toLong(),
             myPid.toLong()
+        )
+    }
+
+    private fun assumeProcessHiddenApiReflectionAllowedForMaxTargetS() {
+        assumeTrue(
+            "Process#setArgV0 hidden API reflection is blocked on Android S and newer",
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.S
         )
     }
 }

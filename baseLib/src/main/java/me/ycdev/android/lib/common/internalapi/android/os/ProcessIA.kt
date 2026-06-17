@@ -99,11 +99,16 @@ object ProcessIA {
     fun getProcessName(pid: Int): String? {
         val cmdlineFile = "/proc/$pid/cmdline"
         try {
-            return IoUtils.readAllLines(cmdlineFile).trim()
+            return parseCmdlineProcessName(IoUtils.readAllLines(cmdlineFile))
         } catch (e: IOException) {
             Timber.tag(TAG).w(e, "cannot read cmdline file")
         }
         return null
+    }
+
+    internal fun parseCmdlineProcessName(cmdline: String): String {
+        val endIndex = cmdline.indexOf('\u0000').let { if (it >= 0) it else cmdline.length }
+        return cmdline.substring(0, endIndex).trim()
     }
 
     /**
