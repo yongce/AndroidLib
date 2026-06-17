@@ -1,9 +1,11 @@
 package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.content.Context
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -30,16 +32,26 @@ class PowerManagerIATest {
 
     @Test
     fun test_shutdown() {
-        assertTrue(PowerManagerIA.checkReflectShutdown())
+        assumePowerManagerHiddenApiReflectionAllowed()
+        assertTrue("failed to reflect #shutdown", PowerManagerIA.checkReflectShutdown())
     }
 
     @Test
     fun test_crash() {
-        assertTrue(PowerManagerIA.checkReflectCrash())
+        assumePowerManagerHiddenApiReflectionAllowed()
+        assertTrue("failed to reflect #crash", PowerManagerIA.checkReflectCrash())
     }
 
     @Test
     fun test_goToSleep() {
-        assertTrue(PowerManagerIA.checkReflectGoToSleep())
+        assumePowerManagerHiddenApiReflectionAllowed()
+        assertTrue("failed to reflect #goToSleep", PowerManagerIA.checkReflectGoToSleep())
+    }
+
+    private fun assumePowerManagerHiddenApiReflectionAllowed() {
+        assumeTrue(
+            "PowerManager hidden API reflection is blocked on Android P and newer",
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.P
+        )
     }
 }
