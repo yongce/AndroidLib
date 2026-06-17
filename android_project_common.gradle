@@ -17,7 +17,8 @@ allprojects {
                     details.useVersion versions.room
                 } else if (details.requested.group == 'org.jetbrains.kotlin') {
                     details.useVersion versions.kotlin
-                } else if (details.requested.group == 'org.jetbrains.kotlinx') {
+                } else if (details.requested.group == 'org.jetbrains.kotlinx' &&
+                        details.requested.name.startsWith('kotlinx-coroutines-')) {
                     details.useVersion versions.kotlinCoroutine
                 }
             }
