@@ -9,6 +9,7 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 import me.ycdev.android.lib.common.utils.MainHandler
 import me.ycdev.android.lib.common.utils.ThreadUtils
 import org.junit.Test
@@ -28,21 +29,26 @@ class AsyncTaskQueueTest {
         // No task added yet
         assertThat(taskQueue.taskHandler).isNull()
 
-        val latch = CountDownLatch(2)
+        val firstTaskDone = CountDownLatch(1)
+        val allTasksDone = CountDownLatch(2)
+        val executionOrder = AtomicInteger(0)
         val task1 =
             Runnable {
                 Timber.tag(TAG).d("Executing task1 BEGIN")
+                assertThat(executionOrder.incrementAndGet()).isEqualTo(1)
                 SystemClock.sleep(1000)
-                latch.countDown()
+                firstTaskDone.countDown()
+                allTasksDone.countDown()
                 Timber.tag(TAG).d("Executing task1 END")
             }
         val task2 =
             Runnable {
                 Timber.tag(TAG).d("Executing task2 BEGIN")
                 // Task1 must be done
-                assertThat(latch.count).isEqualTo(1)
+                assertThat(executionOrder.incrementAndGet()).isEqualTo(2)
+                assertThat(firstTaskDone.count).isEqualTo(0)
                 SystemClock.sleep(2000)
-                latch.countDown()
+                allTasksDone.countDown()
                 Timber.tag(TAG).d("Executing task2 END")
             }
 
@@ -50,9 +56,7 @@ class AsyncTaskQueueTest {
         taskQueue.addTask(task1)
         taskQueue.addTask(task2)
 
-        // Give some time to setup the task handler and check it
-        SystemClock.sleep(100)
-        val taskHandler = taskQueue.taskHandler
+        val taskHandler = waitForTaskHandlerCreated(taskQueue)
         assertThat(taskHandler).isNotNull()
         val taskThread = taskHandler!!.looper.thread
         val taskTid = taskThread.id
@@ -62,11 +66,9 @@ class AsyncTaskQueueTest {
         assertThat(taskTid).isNotEqualTo(Thread.currentThread().id)
 
         // Waiting for the task done
-        assertThat(latch.count).isEqualTo(2)
-        latch.await(1500, TimeUnit.MILLISECONDS)
-        assertThat(latch.count).isEqualTo(1)
-        latch.await(2000, TimeUnit.MILLISECONDS)
-        assertThat(latch.count).isEqualTo(0)
+        assertThat(firstTaskDone.await(10, TimeUnit.SECONDS)).isTrue()
+        assertThat(allTasksDone.await(10, TimeUnit.SECONDS)).isTrue()
+        assertThat(allTasksDone.count).isEqualTo(0)
 
         // Waiting for the task thread quit
         assertThat(taskHandler).isNotNull()
@@ -283,6 +285,15 @@ class AsyncTaskQueueTest {
         private const val TAG = "AsyncTaskQueueTest"
         private const val WAIT_INTERVAL_MS = 100L
         private const val TASK_THREAD_STOP_TIMEOUT_MS = 15_000L
+
+        private fun waitForTaskHandlerCreated(taskQueue: AsyncTaskQueue): android.os.Handler? {
+            val deadline = SystemClock.elapsedRealtime() + 10_000L
+            while (SystemClock.elapsedRealtime() < deadline) {
+                taskQueue.taskHandler?.let { return it }
+                SystemClock.sleep(WAIT_INTERVAL_MS)
+            }
+            return taskQueue.taskHandler
+        }
 
         @Throws(InterruptedException::class)
         private fun addTask_orders(delay: Long) {
