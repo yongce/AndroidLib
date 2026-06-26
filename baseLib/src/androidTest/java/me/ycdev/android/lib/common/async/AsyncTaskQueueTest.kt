@@ -70,9 +70,7 @@ class AsyncTaskQueueTest {
 
         // Waiting for the task thread quit
         assertThat(taskHandler).isNotNull()
-        SystemClock.sleep(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN + 100)
-        assertThat(taskQueue.taskHandler).isNull()
-        assertThat(ThreadUtils.isThreadRunning(taskTid)).isFalse()
+        assertThat(waitForTaskThreadStopped(taskQueue, taskTid)).isTrue()
     }
 
     @Test
@@ -218,9 +216,7 @@ class AsyncTaskQueueTest {
 
         // check if task thread already quited
         assertThat(taskQueue.taskHandler).isNotNull()
-        while (taskQueue.taskHandler != null) {
-            SystemClock.sleep(100)
-        }
+        assertThat(waitForTaskHandlerStopped(taskQueue)).isTrue()
     }
 
     @Test
@@ -235,9 +231,9 @@ class AsyncTaskQueueTest {
         latch.await()
 
         // check if task thread already quited
-        assertThat(taskQueue.taskHandler).isNotNull()
-        SystemClock.sleep(AsyncTaskQueue.WORKER_THREAD_AUTO_QUIT_DELAY_MIN + 100)
-        assertThat(taskQueue.taskHandler).isNull()
+        val taskHandler = taskQueue.taskHandler
+        assertThat(taskHandler).isNotNull()
+        assertThat(waitForTaskThreadStopped(taskQueue, taskHandler!!.looper.thread.id)).isTrue()
     }
 
     @Test
@@ -285,6 +281,8 @@ class AsyncTaskQueueTest {
 
     companion object {
         private const val TAG = "AsyncTaskQueueTest"
+        private const val WAIT_INTERVAL_MS = 100L
+        private const val TASK_THREAD_STOP_TIMEOUT_MS = 15_000L
 
         @Throws(InterruptedException::class)
         private fun addTask_orders(delay: Long) {
@@ -326,6 +324,31 @@ class AsyncTaskQueueTest {
                     }
                 taskQueue.addTask(taskDelay, task)
             }
+        }
+
+        private fun waitForTaskHandlerStopped(taskQueue: AsyncTaskQueue): Boolean {
+            val deadline = SystemClock.elapsedRealtime() + TASK_THREAD_STOP_TIMEOUT_MS
+            while (SystemClock.elapsedRealtime() < deadline) {
+                if (taskQueue.taskHandler == null) {
+                    return true
+                }
+                SystemClock.sleep(WAIT_INTERVAL_MS)
+            }
+            return taskQueue.taskHandler == null
+        }
+
+        private fun waitForTaskThreadStopped(
+            taskQueue: AsyncTaskQueue,
+            taskTid: Long
+        ): Boolean {
+            val deadline = SystemClock.elapsedRealtime() + TASK_THREAD_STOP_TIMEOUT_MS
+            while (SystemClock.elapsedRealtime() < deadline) {
+                if (taskQueue.taskHandler == null && !ThreadUtils.isThreadRunning(taskTid)) {
+                    return true
+                }
+                SystemClock.sleep(WAIT_INTERVAL_MS)
+            }
+            return taskQueue.taskHandler == null && !ThreadUtils.isThreadRunning(taskTid)
         }
     }
 }

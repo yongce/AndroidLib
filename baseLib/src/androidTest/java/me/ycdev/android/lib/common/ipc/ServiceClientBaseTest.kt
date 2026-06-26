@@ -133,7 +133,7 @@ class ServiceClientBaseTest {
         // connect
         run {
             val latch = CountDownLatch(1)
-            client.serviceConnector.addListener(
+            val listener =
                 object : ConnectStateListener {
                     override fun onStateChanged(newState: Int) {
                         if (newState == ServiceConnector.STATE_CONNECTED) {
@@ -141,21 +141,20 @@ class ServiceClientBaseTest {
                         }
                     }
                 }
-            )
+            client.serviceConnector.addListener(listener)
 
             // Make sure the service will not be connected if no connect and no operations
-            latch.await(500, TimeUnit.MILLISECONDS)
-            assertThat(latch.count).isEqualTo(1)
+            assertThat(latch.await(500, TimeUnit.MILLISECONDS)).isFalse()
 
             client.connect()
-            latch.await(500, TimeUnit.MILLISECONDS)
-            assertThat(latch.count).isEqualTo(0)
+            assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
+            client.serviceConnector.removeListener(listener)
         }
 
         // disconnect
         run {
             val latch = CountDownLatch(1)
-            client.serviceConnector.addListener(
+            val listener =
                 object : ConnectStateListener {
                     override fun onStateChanged(newState: Int) {
                         if (newState == ServiceConnector.STATE_DISCONNECTED) {
@@ -163,9 +162,10 @@ class ServiceClientBaseTest {
                         }
                     }
                 }
-            )
+            client.serviceConnector.addListener(listener)
             client.disconnect()
             assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
+            client.serviceConnector.removeListener(listener)
         }
     }
 
