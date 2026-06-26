@@ -134,21 +134,25 @@ class ServiceConnectorTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val connector = RemoteServiceConnector(context)
 
-        val latch1 = CountDownLatch(2)
-        val latch2 = CountDownLatch(2)
+        val listener1Connected = CountDownLatch(1)
+        val listener1Disconnected = CountDownLatch(1)
+        val listener2Connected = CountDownLatch(1)
+        val listener2Disconnected = CountDownLatch(1)
         val listener1 =
             object : ConnectStateListener {
                 override fun onStateChanged(newState: Int) {
-                    if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
-                        latch1.countDown()
+                    when (newState) {
+                        ServiceConnector.STATE_CONNECTED -> listener1Connected.countDown()
+                        ServiceConnector.STATE_DISCONNECTED -> listener1Disconnected.countDown()
                     }
                 }
             }
         val listener2 =
             object : ConnectStateListener {
                 override fun onStateChanged(newState: Int) {
-                    if (newState == ServiceConnector.STATE_CONNECTED || newState == ServiceConnector.STATE_DISCONNECTED) {
-                        latch2.countDown()
+                    when (newState) {
+                        ServiceConnector.STATE_CONNECTED -> listener2Connected.countDown()
+                        ServiceConnector.STATE_DISCONNECTED -> listener2Disconnected.countDown()
                     }
                 }
             }
@@ -156,15 +160,16 @@ class ServiceConnectorTest {
         connector.addListener(listener2)
 
         connector.connect()
-        SystemClock.sleep(300)
-        assertThat(latch1.count).isEqualTo(1)
-        assertThat(latch2.count).isEqualTo(1)
+        assertThat(listener1Connected.awaitLatch()).isTrue()
+        assertThat(listener2Connected.awaitLatch()).isTrue()
+        assertThat(listener1Disconnected.count).isEqualTo(1)
+        assertThat(listener2Disconnected.count).isEqualTo(1)
 
         connector.removeListener(listener1)
         connector.disconnect()
-        SystemClock.sleep(300)
-        assertThat(latch1.count).isEqualTo(1)
-        assertThat(latch2.count).isEqualTo(0)
+        assertThat(listener2Disconnected.awaitLatch()).isTrue()
+        assertThat(listener1Disconnected.count).isEqualTo(1)
+        assertThat(listener2Disconnected.count).isEqualTo(0)
     }
 
     @Test
@@ -274,6 +279,87 @@ class ServiceConnectorTest {
             connector.waitForConnected() // should fail immediately
             assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
         }
+    }
+
+    @Test
+    @SmallTest
+    fun connect_unavailableServiceReturnsToDisconnected() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val connector = FakeServiceConnector(context)
+        val connectingLatch = CountDownLatch(1)
+        val disconnectedLatch = CountDownLatch(1)
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    when (newState) {
+                        ServiceConnector.STATE_CONNECTING -> connectingLatch.countDown()
+                        ServiceConnector.STATE_DISCONNECTED -> disconnectedLatch.countDown()
+                    }
+                }
+            }
+        connector.addListener(listener)
+
+        connector.connect()
+
+        assertThat(connectingLatch.awaitLatch()).isTrue()
+        assertThat(disconnectedLatch.awaitLatch()).isTrue()
+        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+        assertThat(connector.service).isNull()
+    }
+
+    @Test
+    @MediumTest
+    fun connect_whenAlreadyConnectedDoesNotNotifyAgain() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val connector = RemoteServiceConnector(context)
+        connectSync(connector)
+
+        val unexpectedStateChange = CountDownLatch(1)
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    unexpectedStateChange.countDown()
+                }
+            }
+        connector.addListener(listener)
+
+        connector.connect()
+
+        assertThat(unexpectedStateChange.await(300, TimeUnit.MILLISECONDS)).isFalse()
+        disconnectSync(connector)
+    }
+
+    @Test
+    @SmallTest
+    fun disconnect_afterFailedConnectIsSafe() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val connector = FakeServiceConnector(context)
+        val disconnectedLatch = CountDownLatch(1)
+        val listener =
+            object : ConnectStateListener {
+                override fun onStateChanged(newState: Int) {
+                    if (newState == ServiceConnector.STATE_DISCONNECTED) {
+                        disconnectedLatch.countDown()
+                    }
+                }
+            }
+        connector.addListener(listener)
+        connector.connect()
+        assertThat(disconnectedLatch.awaitLatch()).isTrue()
+
+        connector.disconnect()
+
+        assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
+        assertThat(connector.service).isNull()
+    }
+
+    @Test
+    @SmallTest
+    fun strConnectState_returnsDiagnosticNames() {
+        assertThat(ServiceConnector.strConnectState(ServiceConnector.STATE_DISCONNECTED)).isEqualTo("disconnected")
+        assertThat(ServiceConnector.strConnectState(ServiceConnector.STATE_CONNECTING)).isEqualTo("connecting")
+        assertThat(ServiceConnector.strConnectState(ServiceConnector.STATE_CONNECTED)).isEqualTo("connected")
+        assertThat(ServiceConnector.strConnectState(-1)).isEqualTo("unknown")
     }
 
     @Test
@@ -431,5 +517,7 @@ class ServiceConnectorTest {
             connector.addListener(listener)
             return WeakReference(listener)
         }
+
+        private fun CountDownLatch.awaitLatch(): Boolean = await(5, TimeUnit.SECONDS)
     }
 }

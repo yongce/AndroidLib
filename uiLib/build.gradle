@@ -28,6 +28,10 @@ dependencies {
     implementation deps.androidx.material
     implementation deps.androidx.recyclerview
     implementation deps.lifecycle.runtimeKtx
+
+    testImplementation deps.test.junit
+    testImplementation deps.test.truth
+    testImplementation deps.test.robolectric
 }
 
 project.ext {

@@ -136,38 +136,43 @@ object NetworkUtils {
             return NETWORK_TYPE_NONE
         }
 
-        return when (tmType) {
-            TelephonyManager.NETWORK_TYPE_UNKNOWN -> NETWORK_TYPE_NONE
+        return getMobileNetworkType(tmType)
+    }
 
-            TelephonyManager.NETWORK_TYPE_LTE -> NETWORK_TYPE_4G
+    @NetworkType
+    @VisibleForTesting
+    @Suppress("DEPRECATION")
+    internal fun getMobileNetworkType(tmType: Int): Int = when (tmType) {
+        TelephonyManager.NETWORK_TYPE_UNKNOWN -> NETWORK_TYPE_NONE
 
-            TelephonyManager.NETWORK_TYPE_NR -> NETWORK_TYPE_5G
+        TelephonyManager.NETWORK_TYPE_LTE -> NETWORK_TYPE_4G
 
-            TelephonyManager.NETWORK_TYPE_EVDO_0,
-            TelephonyManager.NETWORK_TYPE_EVDO_A,
-            TelephonyManager.NETWORK_TYPE_EVDO_B,
-            TelephonyManager.NETWORK_TYPE_EHRPD,
-            TelephonyManager.NETWORK_TYPE_TD_SCDMA,
-            TelephonyManager.NETWORK_TYPE_UMTS
-            -> NETWORK_TYPE_3G
+        TelephonyManager.NETWORK_TYPE_NR -> NETWORK_TYPE_5G
 
-            TelephonyManager.NETWORK_TYPE_HSDPA,
-            TelephonyManager.NETWORK_TYPE_HSUPA,
-            TelephonyManager.NETWORK_TYPE_HSPA,
-            TelephonyManager.NETWORK_TYPE_HSPAP
-            -> NETWORK_TYPE_3G
+        TelephonyManager.NETWORK_TYPE_EVDO_0,
+        TelephonyManager.NETWORK_TYPE_EVDO_A,
+        TelephonyManager.NETWORK_TYPE_EVDO_B,
+        TelephonyManager.NETWORK_TYPE_EHRPD,
+        TelephonyManager.NETWORK_TYPE_TD_SCDMA,
+        TelephonyManager.NETWORK_TYPE_UMTS
+        -> NETWORK_TYPE_3G
 
-            // H
+        TelephonyManager.NETWORK_TYPE_HSDPA,
+        TelephonyManager.NETWORK_TYPE_HSUPA,
+        TelephonyManager.NETWORK_TYPE_HSPA,
+        TelephonyManager.NETWORK_TYPE_HSPAP
+        -> NETWORK_TYPE_3G
 
-            TelephonyManager.NETWORK_TYPE_GPRS,
-            TelephonyManager.NETWORK_TYPE_EDGE,
-            TelephonyManager.NETWORK_TYPE_CDMA,
-            TelephonyManager.NETWORK_TYPE_GSM,
-            TelephonyManager.NETWORK_TYPE_1xRTT
-            -> NETWORK_TYPE_2G
+        // H
 
-            else -> NETWORK_TYPE_2G
-        }
+        TelephonyManager.NETWORK_TYPE_GPRS,
+        TelephonyManager.NETWORK_TYPE_EDGE,
+        TelephonyManager.NETWORK_TYPE_CDMA,
+        TelephonyManager.NETWORK_TYPE_GSM,
+        TelephonyManager.NETWORK_TYPE_1xRTT
+        -> NETWORK_TYPE_2G
+
+        else -> NETWORK_TYPE_2G
     }
 
     /**

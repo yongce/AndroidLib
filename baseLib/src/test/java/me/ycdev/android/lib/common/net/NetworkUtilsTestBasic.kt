@@ -1,10 +1,15 @@
 package me.ycdev.android.lib.common.net
 
 import android.net.NetworkCapabilities
+import android.telephony.TelephonyManager
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import java.net.MalformedURLException
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_2G
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_3G
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_4G
+import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_5G
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_COMPANION_PROXY
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_MOBILE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_NONE
@@ -65,6 +70,36 @@ class NetworkUtilsTestBasic {
         every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) } returns true
 
         assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_WIFI)
+    }
+
+    @Test
+    fun getNetworkType_mapsAdditionalTransports() {
+        val capabilities = mockk<NetworkCapabilities>()
+
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) } returns true
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) } returns false
+
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_WIFI)
+
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) } returns false
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) } returns true
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN) } returns true
+        every { capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE) } returns true
+
+        assertThat(NetworkUtils.getNetworkType(capabilities)).isEqualTo(NETWORK_TYPE_NONE)
+    }
+
+    @Test
+    fun getMobileNetworkType_mapsTelephonyTypes() {
+        assertThat(NetworkUtils.getMobileNetworkType(TelephonyManager.NETWORK_TYPE_UNKNOWN)).isEqualTo(NETWORK_TYPE_NONE)
+        assertThat(NetworkUtils.getMobileNetworkType(TelephonyManager.NETWORK_TYPE_LTE)).isEqualTo(NETWORK_TYPE_4G)
+        assertThat(NetworkUtils.getMobileNetworkType(TelephonyManager.NETWORK_TYPE_NR)).isEqualTo(NETWORK_TYPE_5G)
+        assertThat(NetworkUtils.getMobileNetworkType(TelephonyManager.NETWORK_TYPE_UMTS)).isEqualTo(NETWORK_TYPE_3G)
+        assertThat(NetworkUtils.getMobileNetworkType(TelephonyManager.NETWORK_TYPE_HSPAP)).isEqualTo(NETWORK_TYPE_3G)
+        assertThat(NetworkUtils.getMobileNetworkType(TelephonyManager.NETWORK_TYPE_EDGE)).isEqualTo(NETWORK_TYPE_2G)
+        assertThat(NetworkUtils.getMobileNetworkType(Int.MAX_VALUE)).isEqualTo(NETWORK_TYPE_2G)
     }
 
     @Test

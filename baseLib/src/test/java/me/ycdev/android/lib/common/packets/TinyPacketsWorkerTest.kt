@@ -349,6 +349,23 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
     }
 
     @Test
+    fun parsePackets_partialTrailingPacketWaitsForRemainingBytes() {
+        val packetsWorker = TinyPacketsWorker(parserCallback)
+        packetsWorker.maxPacketSize = 100
+
+        val data = generateData(300)
+        val packets = packetsWorker.packetData(data)
+        packets.dropLast(1).forEach { packetsWorker.parsePackets(it) }
+
+        val lastPacket = packets.last()
+        packetsWorker.parsePackets(lastPacket.copyOfRange(0, lastPacket.size - 1))
+        assertThat(parserCallback.getData()).isNull()
+
+        packetsWorker.parsePackets(lastPacket.copyOfRange(lastPacket.size - 1, lastPacket.size))
+        assertThat(parserCallback.getData()).isEqualTo(data)
+    }
+
+    @Test
     fun parsePackets_recoversAfterCorruptCrc() {
         val packetsWorker = TinyPacketsWorker(parserCallback)
         packetsWorker.maxPacketSize = 100
