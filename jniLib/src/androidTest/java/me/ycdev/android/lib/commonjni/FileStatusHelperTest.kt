@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
@@ -28,6 +30,7 @@ class FileStatusHelperTest {
         )
         assertEquals("check uid", targetUid.toLong(), fileStatus.uid.toLong())
         assertEquals("check gid", targetUid.toLong(), fileStatus.gid.toLong())
+        assertTrue("check mode", fileStatus.mode > 0)
     }
 
     @Test
@@ -36,6 +39,26 @@ class FileStatusHelperTest {
         val missingFile = targetContext.filesDir.resolve("missing-file-for-status-test")
 
         assertNull(FileStatusHelper.getFileStatus(missingFile.absolutePath))
+    }
+
+    @Test
+    fun test_getFileStatus_regularFileAndDirectory() {
+        val targetContext = ApplicationProvider.getApplicationContext<Context>()
+        val directory = targetContext.filesDir.resolve("file-status-test-dir")
+        val regularFile = directory.resolve("regular-file.txt")
+        directory.mkdirs()
+        regularFile.writeText("file status")
+
+        val directoryStatus = FileStatusHelper.getFileStatus(directory.absolutePath)
+        val fileStatus = FileStatusHelper.getFileStatus(regularFile.absolutePath)
+
+        assertNotNull(directoryStatus)
+        assertNotNull(fileStatus)
+        assertTrue("directory should be executable", directory.canExecute())
+        assertTrue("regular file should exist", regularFile.isFile)
+        assertFalse("regular file should not be directory", regularFile.isDirectory)
+        assertTrue("directory mode should be set", directoryStatus!!.mode > 0)
+        assertTrue("file mode should be set", fileStatus!!.mode > 0)
     }
 
     companion object {

@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.telephony.TelephonyManager
-import android.text.TextUtils
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
@@ -222,7 +221,7 @@ object NetworkUtils {
         // https://code.google.com/p/android/issues/detail?id=16895
         val linkUrl = URL(url)
         val host = linkUrl.host
-        if (TextUtils.isEmpty(host)) {
+        if (host.isEmpty()) {
             throw MalformedURLException("Malformed URL: $url")
         }
         // TODO if needed to support proxy

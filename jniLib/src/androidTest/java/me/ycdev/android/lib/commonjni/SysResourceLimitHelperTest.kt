@@ -14,6 +14,9 @@ class SysResourceLimitHelperTest {
     fun test_getOpenFilesNumberLimit() {
         val ofLimit = SysResourceLimitHelper.getOpenFilesLimit()
         assertNotNull("failed to get open files limit", ofLimit)
+        assertTrue("current limit should be positive", ofLimit.curLimit > 0)
+        assertTrue("max limit should be positive", ofLimit.maxLimit > 0)
+        assertTrue("current limit should not exceed max", ofLimit.curLimit <= ofLimit.maxLimit)
         Timber.tag(TAG).d("cur limit: " + ofLimit.curLimit + ", max limit: " + ofLimit.maxLimit)
     }
 

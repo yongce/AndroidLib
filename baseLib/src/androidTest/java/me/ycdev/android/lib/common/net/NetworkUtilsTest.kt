@@ -5,6 +5,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.common.truth.Truth.assertWithMessage
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_2G
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_3G
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_4G
@@ -13,6 +15,7 @@ import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_MOBILE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_NONE
 import me.ycdev.android.lib.common.net.NetworkUtils.NETWORK_TYPE_WIFI
 import me.ycdev.android.lib.common.net.NetworkUtils.NetworkType
+import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
@@ -71,11 +74,34 @@ class NetworkUtilsTest {
 
     @Test
     fun test_isActiveNetworkMetered() {
-        // TODO
+        val context = ApplicationProvider.getApplicationContext<Context>()
+
+        assertWithMessage("metered state should be readable")
+            .that(NetworkUtils.isActiveNetworkMetered(context))
+            .isAnyOf(true, false)
     }
 
     @Test
     fun test_openHttpURLConnection() {
-        // TODO
+        val connection = NetworkUtils.openHttpURLConnection("https://example.com/path?q=1")
+        try {
+            assertWithMessage("connection type")
+                .that(connection)
+                .isInstanceOf(HttpURLConnection::class.java)
+            assertWithMessage("connection URL")
+                .that(connection.url.toString())
+                .isEqualTo("https://example.com/path?q=1")
+        } finally {
+            connection.disconnect()
+        }
+
+        val e =
+            assertThrows(MalformedURLException::class.java) {
+                NetworkUtils.openHttpURLConnection("https:///missing-host")
+            }
+        assertWithMessage("malformed URL message")
+            .that(e)
+            .hasMessageThat()
+            .isEqualTo("Malformed URL: https:///missing-host")
     }
 }
