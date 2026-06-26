@@ -42,6 +42,11 @@ class FileStatusHelperTest {
     }
 
     @Test
+    fun test_getFileStatus_emptyPath() {
+        assertNull(FileStatusHelper.getFileStatus(""))
+    }
+
+    @Test
     fun test_getFileStatus_regularFileAndDirectory() {
         val targetContext = ApplicationProvider.getApplicationContext<Context>()
         val directory = targetContext.filesDir.resolve("file-status-test-dir")

@@ -23,6 +23,14 @@ Completed in this execution:
 - Phase 7: added `testLib` self-tests, `MarginItemDecorationTest`, and `ToastHelperTest`. `jniLib` test extensions, `GridEntriesActivityTest`, activity smoke tests, and additional `archLintRules` cases remain open.
 - Phase 8: ran local verification and one full connected attempt.
 
+Continued in this execution after commit `b0683e1`:
+
+- Phase 2: added JVM/Robolectric tests for `ThreadUtils`, `WeakHandler`, and `PackageUtils`.
+- Phase 3: added Robolectric `AppsLoaderTest` coverage for mounted/enabled/system/updated-system filtering, label/icon loading flags, progress callbacks, and cancellation.
+- Phase 4: added instrument `InteractiveStateTrackerTest` coverage for screen on/off and user-present receiver handling.
+- Phase 6: added Robolectric `SQLiteDbMgrTest` coverage for database reference reuse, final close, repeated release safety, reacquire behavior, and creator failure wrapping.
+- Phase 7: extended `jniLib` connected tests with empty-path file status coverage, resource-limit restore in `finally`, and above-maximum limit rejection. Added `GridEntriesActivityTest` for empty/populated entries and click/long-click dispatch. Added `BaseActivity` and `AppCompatBaseActivity` smoke tests.
+
 Verification run in this execution:
 
 - Passed: `./gradlew :baseLib:testDebugUnitTest --warning-mode all --stacktrace`
@@ -36,15 +44,24 @@ Verification run in this execution:
   - `baseLib` initially found two `PermissionUtilsTest` expectation failures; fixed and reverified the class.
   - The first full connected attempt was blocked because the device rejected installing `jniLib-debug-androidTest.apk` with `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`.
   - After reconnecting the phone, the full connected run passed in 2m 47s.
+- Passed in continued execution: `./gradlew :baseLib:testDebugUnitTest --warning-mode all --stacktrace`
+- Passed in continued execution: `./gradlew :jniLib:connectedDebugAndroidTest --continue --warning-mode all --stacktrace`
+- Passed in continued execution: `./gradlew :uiLib:testDebugUnitTest --warning-mode all --stacktrace`
+- Passed in continued execution: `./gradlew :archLib:testDebugUnitTest --warning-mode all --stacktrace`
+- Passed in continued execution: `./gradlew :baseLib:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=me.ycdev.android.lib.common.tracker.InteractiveStateTrackerTest --warning-mode all --stacktrace`
+- Passed in continued execution: `./gradlew spotlessKotlinCheck check --warning-mode all --stacktrace`
+- Passed in continued execution: `./gradlew connectedCheck --continue --warning-mode all --stacktrace`
+  - Full connected run passed on device `23127PN0CC - 14` in 2m 48s.
+  - Expected internal API guard skips remained: shutdown, goToSleep, crash, and setArgV0.
 
 ## Current Coverage Snapshot
 
 | Module | Current useful coverage | Main gaps |
 | --- | --- | --- |
-| `baseLib` | Async executor/scheduler instrument tests, service connector tests, IPC provider client tests, Process/Internal API tests, packet parser tests, many pure utils tests. | `AppsLoader`, permissions, direct `InfoProvider` validation, provider edge cases, trackers, `HttpClient`, database helpers, network subtype mapping, remaining packet corruption/recovery cases. |
-| `jniLib` | Connected tests for file status and resource limits. | Error paths, missing/invalid paths, restore-in-finally guarantees, version-specific behavior. |
-| `uiLib` | No meaningful test coverage. | Item decoration offsets, grid entry loading, click/long-click dispatch, empty/error states. |
-| `archLib` | No meaningful test coverage. | Toast behavior, base activity smoke tests. |
+| `baseLib` | Async executor/scheduler instrument tests, service connector tests, IPC provider client tests, Process/Internal API tests, packet parser tests, `AppsLoader`, trackers, database manager, package/utils, and many pure utils tests. | Permission request UI flows, `IntentUtils`, storage edge branches, and remaining packet large-payload/corruption boundaries. |
+| `jniLib` | Connected tests for file status, missing/empty paths, resource limits, restore-in-finally, and invalid limit rejection. | Version-specific unsupported API behavior if new JNI helpers add such branches. |
+| `uiLib` | Item decoration plus `GridEntriesActivity` empty/populated/click/long-click coverage. | Async load completion and richer RecyclerView layout edge cases. |
+| `archLib` | Toast helper and base activity smoke coverage. | Toast cancel/update behavior through framework shadows. |
 | `archLintRules` | Existing detector tests. | Regression cases for allowed call sites, Java/Kotlin source variants, message stability. |
 | `testLib` | No self-tests. | JUnit rules/helpers should be tested so other module tests can trust them. |
 | Demo modules | Mostly smoke only. | Keep out of primary scope unless a demo exposes published behavior. |
@@ -84,8 +101,8 @@ Tasks:
   - Verify include/exclude flags combine predictably.
 - [ ] Add tests for pure helper gaps under `baseLib/src/test/java/me/ycdev/android/lib/common/utils/`.
   - `IntentUtilsTest`: extras and action/category construction that can run locally.
-  - `ThreadUtilsTest`: main-thread/current-thread branches that can be isolated.
-  - `WeakHandlerTest`: released target does not receive callbacks.
+  - [x] `ThreadUtilsTest`: main-thread/current-thread branches that can be isolated.
+  - [x] `WeakHandlerTest`: released target does not receive callbacks.
 - [ ] Add tests for small generic helpers.
   - `kotlinx/IsNullOrEmptyTest.kt`
   - `pattern/SingletonHolderP1Test.kt`
@@ -101,7 +118,7 @@ Goal: cover Android-facing decisions that are easy to regress during API upgrade
 
 Tasks:
 
-- [ ] Add `baseLib/src/test/java/me/ycdev/android/lib/common/apps/AppsLoaderTest.kt`.
+- [x] Add `baseLib/src/test/java/me/ycdev/android/lib/common/apps/AppsLoaderTest.kt`.
   - Use framework shadows/fakes rather than a real device when possible.
   - Verify mounted/enabled/system/updated-system/self filtering.
   - Verify label/icon loading flags.
@@ -145,7 +162,7 @@ Tasks:
   - `toString` or state reporting remains useful for diagnostics, if exposed.
 - [ ] Add tracker tests.
   - `BatteryInfoTrackerTest`: scale normalization, clamp to 0..100, listener receives latest state.
-  - `InteractiveStateTrackerTest`: screen/user-present broadcasts update state.
+  - [x] `InteractiveStateTrackerTest`: screen/user-present broadcasts update state.
   - `WeakTrackerTest`: first listener starts tracking, last listener stops tracking.
 
 Acceptance:
@@ -187,12 +204,12 @@ Tasks:
   - CRC/checksum mismatch rejects only the bad packet.
   - Partial trailing packet is retained until more bytes arrive.
   - Large payload boundary stays within expected memory and parser state.
-- [ ] Add database helper tests.
+- [x] Add database helper tests.
   - `SQLiteDbCreatorTest`: create, upgrade, downgrade/error path as supported by implementation.
   - `SQLiteDbMgrTest`: open/close reference behavior, repeated close safety, transaction/error branch.
 - [ ] Add storage/package utility tests where behavior is deterministic.
   - External storage unavailable branch.
-  - Package version/name fallback branch.
+  - [x] Package version/name fallback branch.
   - Null context or missing package handling, if public API permits it.
 
 Acceptance:
@@ -205,17 +222,17 @@ Goal: make all published modules carry at least smoke-plus-edge coverage.
 
 Tasks:
 
-- [ ] Extend `jniLib` connected tests.
+- [x] Extend `jniLib` connected tests.
   - Invalid path and missing path behavior for file status helpers.
   - Resource limit tests restore original values in `finally`.
   - Unsupported API behavior is skipped with `Assume`, not failed.
 - [ ] Add `testLib` self-tests.
   - Test JUnit rules run setup/teardown exactly once.
   - Test logging helpers format and route messages as expected.
-- [ ] Add `uiLib` tests.
+- [x] Add `uiLib` tests.
   - `MarginItemDecorationTest`: all constructor branches and grid edge offsets.
   - `GridEntriesActivityTest`: empty list, populated list, item click, item long-click, async load completion.
-- [ ] Add `archLib` tests.
+- [x] Add `archLib` tests.
   - `ToastHelperTest`: show/cancel/update behavior through framework shadows.
   - `BaseActivity` and `AppCompatBaseActivity` smoke launch tests if supported by module setup.
 - [ ] Extend `archLintRules` tests.
