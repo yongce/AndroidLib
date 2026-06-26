@@ -1,13 +1,12 @@
 package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.text.TextUtils
 import androidx.annotation.RestrictTo
 import java.io.File
-import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-import me.ycdev.android.lib.common.utils.IoUtils
 import me.ycdev.android.lib.common.utils.StringUtils
 import timber.log.Timber
 
@@ -58,6 +57,16 @@ object ProcessIA {
         return sMtd_setArgV0 != null
     }
 
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal fun setArgV0Availability(): InternalApiAvailability {
+        InternalApiAccess.hiddenApiBlockedOnOrAfter(
+            "Process#setArgV0",
+            Build.VERSION_CODES.S
+        )?.let { return it }
+        reflectSetArgV0()
+        return InternalApiAccess.reflectedMethodAvailability("Process#setArgV0", sMtd_setArgV0)
+    }
+
     private fun reflectReadProcLines() {
         if (sMtd_readProcLines != null) {
             return
@@ -96,20 +105,7 @@ object ProcessIA {
         }
     }
 
-    fun getProcessName(pid: Int): String? {
-        val cmdlineFile = "/proc/$pid/cmdline"
-        try {
-            return parseCmdlineProcessName(IoUtils.readAllLines(cmdlineFile))
-        } catch (e: IOException) {
-            Timber.tag(TAG).w(e, "cannot read cmdline file")
-        }
-        return null
-    }
-
-    internal fun parseCmdlineProcessName(cmdline: String): String {
-        val endIndex = cmdline.indexOf('\u0000').let { if (it >= 0) it else cmdline.length }
-        return cmdline.substring(0, endIndex).trim()
-    }
+    fun getProcessName(pid: Int): String? = ProcUtils.readCmdlineProcessName(pid)
 
     /**
      * Return the pid of the specified process name. If there are multiple processes

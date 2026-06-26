@@ -337,6 +337,33 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
     }
 
     @Test
+    fun parsePackets_fragmentedInput() {
+        val packetsWorker = TinyPacketsWorker(parserCallback)
+        packetsWorker.maxPacketSize = 100
+
+        val data = generateData(1024)
+        val packets = packetsWorker.packetData(data)
+        packets.forEach { packet -> parsePacketByChunks(packetsWorker, packet, chunkSize = 3) }
+
+        assertThat(parserCallback.getData()).isEqualTo(data)
+    }
+
+    @Test
+    fun parsePackets_recoversAfterCorruptCrc() {
+        val packetsWorker = TinyPacketsWorker(parserCallback)
+        packetsWorker.maxPacketSize = 100
+
+        val corruptPackets = packetsWorker.packetData(generateData(300))
+        corruptPackets.last()[0] = corruptPackets.last()[0].inc()
+        corruptPackets.forEach { packetsWorker.parsePackets(it) }
+        assertThat(parserCallback.getData()).isNull()
+
+        val data = generateData(300)
+        packetsWorker.packetData(data).forEach { packetsWorker.parsePackets(it) }
+        assertThat(parserCallback.getData()).isEqualTo(data)
+    }
+
+    @Test
     fun parsePackets_corruptHeaderMagic() {
         val packetsWorker = TinyPacketsWorker(parserCallback)
         packetsWorker.maxPacketSize = 100
@@ -449,5 +476,18 @@ class TinyPacketsWorkerTest : PacketsWorkerTestBase() {
         assertThat(parserCallback.getData()).isEqualTo(data)
 
         assertThat(tree.hasLogs()).isTrue()
+    }
+
+    private fun parsePacketByChunks(
+        packetsWorker: TinyPacketsWorker,
+        packet: ByteArray,
+        chunkSize: Int
+    ) {
+        var offset = 0
+        while (offset < packet.size) {
+            val end = minOf(offset + chunkSize, packet.size)
+            packetsWorker.parsePackets(packet.copyOfRange(offset, end))
+            offset = end
+        }
     }
 }

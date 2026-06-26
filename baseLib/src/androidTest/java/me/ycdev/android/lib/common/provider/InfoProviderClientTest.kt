@@ -98,7 +98,7 @@ class InfoProviderClientTest {
         value = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
         assertThat(value).isEqualTo("value_str1")
 
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         mInfoClient!!.unregisterObserver(observer)
     }
 
@@ -128,7 +128,7 @@ class InfoProviderClientTest {
         value = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
         assertThat(value).isNull()
 
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         mInfoClient!!.unregisterObserver(observer)
     }
 
@@ -163,7 +163,7 @@ class InfoProviderClientTest {
         value = mInfoClient!!.getString(TABLE_TEST, KEY_STR_1, null)
         assertThat(value).isEqualTo("value_str1")
 
-        latch.await(5, TimeUnit.SECONDS)
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isFalse()
         assertThat(latch.count).isEqualTo(1)
 
         mInfoClient!!.unregisterObserver(observer)

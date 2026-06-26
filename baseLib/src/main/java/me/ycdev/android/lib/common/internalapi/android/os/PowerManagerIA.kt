@@ -2,6 +2,7 @@ package me.ycdev.android.lib.common.internalapi.android.os
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RestrictTo
 import java.lang.reflect.InvocationTargetException
@@ -200,6 +201,16 @@ object PowerManagerIA {
         return sMtd_shutdown != null
     }
 
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal fun shutdownAvailability(): InternalApiAvailability {
+        InternalApiAccess.hiddenApiBlockedOnOrAfter(
+            "PowerManager#shutdown",
+            Build.VERSION_CODES.P
+        )?.let { return it }
+        reflectShutdown()
+        return InternalApiAccess.reflectedMethodAvailability("PowerManager#shutdown", sMtd_shutdown)
+    }
+
     private fun reflectCrash() {
         if (sMtd_crash != null || sClass_IPowerManager == null) {
             return
@@ -235,6 +246,16 @@ object PowerManagerIA {
     internal fun checkReflectCrash(): Boolean {
         reflectCrash()
         return sMtd_crash != null
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal fun crashAvailability(): InternalApiAvailability {
+        InternalApiAccess.hiddenApiBlockedOnOrAfter(
+            "PowerManager#crash",
+            Build.VERSION_CODES.P
+        )?.let { return it }
+        reflectCrash()
+        return InternalApiAccess.reflectedMethodAvailability("PowerManager#crash", sMtd_crash)
     }
 
     private fun reflectGoToSleep() {
@@ -311,5 +332,15 @@ object PowerManagerIA {
     internal fun checkReflectGoToSleep(): Boolean {
         reflectGoToSleep()
         return sMtd_goToSleep != null
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal fun goToSleepAvailability(): InternalApiAvailability {
+        InternalApiAccess.hiddenApiBlockedOnOrAfter(
+            "PowerManager#goToSleep",
+            Build.VERSION_CODES.P
+        )?.let { return it }
+        reflectGoToSleep()
+        return InternalApiAccess.reflectedMethodAvailability("PowerManager#goToSleep", sMtd_goToSleep)
     }
 }

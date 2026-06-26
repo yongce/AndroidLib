@@ -14,6 +14,7 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import me.ycdev.android.lib.common.demo.service.IDemoService
 import me.ycdev.android.lib.common.demo.service.LocalServiceConnector
 import me.ycdev.android.lib.common.demo.service.RemoteService
@@ -210,7 +211,7 @@ class ServiceConnectorTest {
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
         assertThat(connector.service).isNull()
 
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         assertThat(stateChangeCount.value).isEqualTo(1)
     }
 
@@ -248,7 +249,7 @@ class ServiceConnectorTest {
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
         assertThat(connector.service).isNotNull()
 
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         assertThat(stateChangeCount.value).isEqualTo(2) // connecting & connected
 
         connector.waitForConnected()
@@ -301,7 +302,7 @@ class ServiceConnectorTest {
         connector.waitForConnected()
         assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_CONNECTED)
 
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         assertThat(stateChangeCount.value).isEqualTo(2) // connected
 
         disconnectSync(connector)
@@ -331,7 +332,7 @@ class ServiceConnectorTest {
 
         connector.waitForConnected()
         assertThat(connector.service).isNotNull()
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
 
         connector.disconnect()
         assertThat(connector.service).isNull()
@@ -387,7 +388,7 @@ class ServiceConnectorTest {
                 .isAnyOf(ServiceConnector.STATE_CONNECTING, ServiceConnector.STATE_CONNECTED)
 
             try {
-                latch.await()
+                assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
             } catch (e: InterruptedException) {
                 fail("Should not happen: $e")
             }
@@ -414,7 +415,7 @@ class ServiceConnectorTest {
             assertThat(connector.connectState).isEqualTo(ServiceConnector.STATE_DISCONNECTED)
             assertThat(connector.service).isNull()
             try {
-                latch.await()
+                assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
             } catch (e: InterruptedException) {
                 fail("Should not happen: $e")
             }

@@ -27,6 +27,11 @@ ext["signing.password"] = secretValue("signing.password", "SIGNING_PASSWORD")
 ext["signing.key"] = secretValue("signing.key", "SIGNING_KEY")
 ext["snapshot"] = secretValue("snapshot", "SNAPSHOT")
 
+tasks.register("verifyPublishConfig") {
+    group = "publishing"
+    description = "Verifies Maven publication metadata for all publishable modules."
+}
+
 // Set up Sonatype repository
 nexusPublishing {
     repositories {

@@ -43,7 +43,7 @@ class ServiceClientBaseTest {
             )
 
             // Waiting for service connected and operation executed
-            latch.await()
+            assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         }
 
         // Service already connected
@@ -60,7 +60,7 @@ class ServiceClientBaseTest {
             )
 
             // Waiting for service connected and operation executed
-            latch.await()
+            assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         }
 
         client.disconnect()
@@ -93,7 +93,7 @@ class ServiceClientBaseTest {
             assertThat(client.serviceConnector.service).isNull()
             val latch = CountDownLatch(1)
             client.addOperation(HelloOperation("Hello, world").setNotifier(latch))
-            latch.await()
+            assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
             assertThat(client.serviceConnector.service).isNotNull()
             timeStart = SystemClock.elapsedRealtime()
         }
@@ -110,7 +110,7 @@ class ServiceClientBaseTest {
                     }
                 }
             )
-            latch.await()
+            assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
             val timeUsed = SystemClock.elapsedRealtime() - timeStart
             assertThat(timeUsed).isGreaterThan(disconnectTimeout)
             assertThat(timeUsed).isLessThan(disconnectTimeout + 500)
@@ -165,7 +165,7 @@ class ServiceClientBaseTest {
                 }
             )
             client.disconnect()
-            latch.await()
+            assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
         }
     }
 
@@ -176,7 +176,7 @@ class ServiceClientBaseTest {
         val client = RemoteServiceClient(context)
         val latch = CountDownLatch(1)
         client.addOperation(HelloOperation("Hello").setNotifier(latch))
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
     }
 
     @Test
@@ -186,6 +186,6 @@ class ServiceClientBaseTest {
         val client = LocalServiceClient(context)
         val latch = CountDownLatch(1)
         client.addOperation(HelloOperation("Hello").setNotifier(latch))
-        latch.await()
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
     }
 }

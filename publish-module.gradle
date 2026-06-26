@@ -18,6 +18,43 @@ def androidJavadocsJar = tasks.register("androidJavadocsJar", Jar) {
     archiveClassifier = "javadoc"
 }
 
+def publicationProjectPath = project.path
+def publicationMetadata = [
+        "mavenMeta.groupId"                 : rootProject.ext.mavenMeta.groupId,
+        "mavenMeta.version"                 : rootProject.ext.mavenMeta.version,
+        "mavenMeta.projectUrl"              : rootProject.ext.mavenMeta.projectUrl,
+        "mavenMeta.projectScmConnection"    : rootProject.ext.mavenMeta.projectScmConnection,
+        "mavenMeta.projectScmDevConnection" : rootProject.ext.mavenMeta.projectScmDevConnection,
+        "mavenMeta.developerId"             : rootProject.ext.mavenMeta.developerId,
+        "mavenMeta.developerName"           : rootProject.ext.mavenMeta.developerName,
+        "mavenMeta.developerEmail"          : rootProject.ext.mavenMeta.developerEmail,
+        "project.ext.archivesBaseName"      : project.ext.has("archivesBaseName") ? project.ext.get("archivesBaseName") : null,
+        "project.ext.moduleName"            : project.ext.has("moduleName") ? project.ext.get("moduleName") : null,
+        "project.ext.moduleDesc"            : project.ext.has("moduleDesc") ? project.ext.get("moduleDesc") : null,
+]
+
+def verifyPublicationMetadata = tasks.register("verifyPublicationMetadata") {
+    group = "publishing"
+    description = "Verifies Maven publication metadata for ${publicationProjectPath}."
+
+    doLast {
+        def missing = []
+        publicationMetadata.each { key, value ->
+            if (!value?.toString()?.trim()) {
+                missing.add(key)
+            }
+        }
+
+        if (!missing.isEmpty()) {
+            throw new GradleException("Missing Maven publication metadata for ${publicationProjectPath}: ${missing.join(', ')}")
+        }
+    }
+}
+
+rootProject.tasks.named("verifyPublishConfig").configure {
+    dependsOn(verifyPublicationMetadata)
+}
+
 afterEvaluate {
     publishing {
         publications {
@@ -81,4 +118,10 @@ signing {
         )
     }
     sign publishing.publications
+}
+
+tasks.configureEach { task ->
+    if (task.name.startsWith("publish") || task.name.startsWith("sign")) {
+        task.dependsOn(verifyPublicationMetadata)
+    }
 }
