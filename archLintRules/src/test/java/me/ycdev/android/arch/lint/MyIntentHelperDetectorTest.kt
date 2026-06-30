@@ -159,4 +159,41 @@ class MyIntentHelperDetectorTest {
                     "3 errors, 0 warnings"
             )
     }
+
+    @Test
+    fun testIntentHelperLintCase_additionalExtras_java() {
+        val testFile = TestFiles.java(
+            "" +
+                "package me.ycdev.android.arch.demo.wrapper;\n" +
+                "\n" +
+                "import android.content.Intent;\n" +
+                "\n" +
+                "public class IntentHelperAdditionalLintCase {\n" +
+                "    public static void bad(Intent intent, String key) {\n" +
+                "        intent.getStringExtra(key); // lint violation\n" +
+                "        intent.getIntExtra(key, 0); // lint violation\n" +
+                "        intent.getByteArrayExtra(key); // lint violation\n" +
+                "        intent.getExtras(); // lint violation\n" +
+                "    }\n" +
+                "}\n"
+        )
+        lint().files(TestFileStubs.nonNull, TestFileStubs.nullable, TestFileStubs.libLogger, testFile)
+            .issues(MyIntentHelperDetector.ISSUE)
+            .run()
+            .expect(
+                "src/me/ycdev/android/arch/demo/wrapper/IntentHelperAdditionalLintCase.java:7: Error: Please use the wrapper class 'IntentHelper'. [MyIntentHelper]\n" +
+                    "        intent.getStringExtra(key); // lint violation\n" +
+                    "        ~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "src/me/ycdev/android/arch/demo/wrapper/IntentHelperAdditionalLintCase.java:8: Error: Please use the wrapper class 'IntentHelper'. [MyIntentHelper]\n" +
+                    "        intent.getIntExtra(key, 0); // lint violation\n" +
+                    "        ~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "src/me/ycdev/android/arch/demo/wrapper/IntentHelperAdditionalLintCase.java:9: Error: Please use the wrapper class 'IntentHelper'. [MyIntentHelper]\n" +
+                    "        intent.getByteArrayExtra(key); // lint violation\n" +
+                    "        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "src/me/ycdev/android/arch/demo/wrapper/IntentHelperAdditionalLintCase.java:10: Error: Please use the wrapper class 'IntentHelper'. [MyIntentHelper]\n" +
+                    "        intent.getExtras(); // lint violation\n" +
+                    "        ~~~~~~~~~~~~~~~~~~\n" +
+                    "4 errors, 0 warnings\n"
+            )
+    }
 }

@@ -20,4 +20,14 @@ class ToastHelperTest {
 
         assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("hello")
     }
+
+    @Test
+    fun show_displaysStringResourceToast() {
+        val context = RuntimeEnvironment.getApplication()
+
+        ToastHelper.show(context, android.R.string.ok, Toast.LENGTH_LONG)
+
+        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("OK")
+        assertThat(ShadowToast.getLatestToast().duration).isEqualTo(Toast.LENGTH_LONG)
+    }
 }
