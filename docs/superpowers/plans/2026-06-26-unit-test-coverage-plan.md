@@ -10,7 +10,7 @@ This plan records the renewed full-codebase review and turns the missing test co
 
 ## Execution Record - 2026-06-26
 
-Current status: partially executed. The broad local JVM/check gate passes, and full `connectedCheck` now passes on the connected phone.
+Current status: local unit/instrument coverage plan completed and merged into local `master` at commit `8e291ac`. Local `master` is ahead of `github/master` by 3 commits; only push-time GitHub Actions verification remains.
 
 Completed in this execution:
 
@@ -69,6 +69,7 @@ Verification run in this execution:
 - Passed in continued execution: `./gradlew spotlessKotlinCheck check --warning-mode all --stacktrace`
 - Passed in continued execution: `./gradlew :baseLib:testDebugUnitTest --tests me.ycdev.android.lib.common.perms.PermissionUtilsRequestTest --warning-mode all --stacktrace`
 - Passed in continued execution: `./gradlew :baseLib:testDebugUnitTest --warning-mode all --stacktrace`
+- Merged into local `master`: fast-forward merge from `codex/unit-test-coverage-plan` to `8e291ac`.
 
 ## Current Coverage Snapshot
 
@@ -283,6 +284,7 @@ Tasks:
 - [ ] After push, verify GitHub Actions.
   - Confirm build job passes.
   - Confirm connectedCheck API matrix passes for API 24, 29, 31, 34, and 36.
+  - Pending because local `master` has not been pushed yet.
 
 Acceptance:
 
@@ -290,6 +292,7 @@ Acceptance:
 - [x] Full local `check` passes.
 - [x] Full local `connectedCheck` passes on the connected device, or any device restriction is documented with exact error text.
 - [ ] GitHub Actions passes on the target branch.
+  - Pending push and remote workflow completion.
 
 ## Recommended Execution Order
 
